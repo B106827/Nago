@@ -1,0 +1,54 @@
+version: '3.8'
+services:
+  api:
+    container_name: nago-backend
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+      target: dev
+    restart: always
+    tty: true
+    volumes:
+      - ./backend:/go/src/app
+    ports:
+      - 8081:8081
+    depends_on:
+      - mysql
+  front:
+    container_name: nago-front
+    build:
+      context: ./front
+      dockerfile: ./Dockerfile
+      target: dev
+    tty: true
+    volumes:
+      - ./front:/usr/src/app
+      - front-node-modules:/usr/src/app/node_modules
+    ports:
+      - 3001:3001
+  mysql:
+    container_name: nago-mysql
+    image: mysql:8.0.27
+    restart: always
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      TZ: 'Asia/Tokyo'
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./etc/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./backend/misc/ddl/:/tmp/ddl/
+      - ./backend/misc/ddl/initialize_database.sh:/docker-entrypoint-initdb.d/0-initialize_database.sh
+      - db-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    tty: true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "3m"
+        max-file: "5"
+volumes:
+  front-node-modules:
+  db-data:

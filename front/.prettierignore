@@ -1,0 +1,8 @@
+# prettier で処理しないファイル・フォルダ
+public/
+node_modules/
+.git/
+.eslintrc.js
+package.json
+package-lock.json
+README.md
