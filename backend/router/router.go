@@ -1,7 +1,7 @@
 package router
 
 import (
-    "NagoBackend/handlers"
+    "NagoBackend/api"
     "github.com/labstack/echo/v4"
 )
 
@@ -9,7 +9,7 @@ func New() *echo.Echo {
     e := echo.New()
 
     // set main routes
-    handlers.MainGroup(e)
+    api.MainGroup(e)
 
     return e
 }
