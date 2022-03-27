@@ -1,0 +1,9 @@
+database:
+    host: "localhost"
+    port: "3306"
+    user: "www"
+    password: "NFc58T&4!EFk1"
+    dbname: "nago"
+
+server:
+    port: "8081"
