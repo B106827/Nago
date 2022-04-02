@@ -6,23 +6,23 @@ import (
     "NagoBackend/usecase/repository"
 )
 
-type memberService struct {
+type userService struct {
     MemberRepository repository.MemberRepository
     MemberPresenter  presenter.MemberPresenter
 }
 
 type MemberService interface {
-    Get(members []*model.Member) ([]*model.Member, error)
+    Get(users []*model.Member) ([]*model.Member, error)
 }
 
 func NewMemberService(repo repository.MemberRepository, pre presenter.MemberPresenter) MemberService {
-    return &memberService{repo, pre}
+    return &userService{repo, pre}
 }
 
-func (memberService *memberService) Get(members []*model.Member) ([]*model.Member, error) {
-    mems, err := memberService.MemberRepository.FindAll(members)
+func (userService *userService) Get(users []*model.Member) ([]*model.Member, error) {
+    mems, err := userService.MemberRepository.FindAll(users)
     if err != nil {
         return nil, err
     }
-    return memberService.MemberPresenter.ResponseMembers(mems), nil
+    return userService.MemberPresenter.ResponseMembers(mems), nil
 }

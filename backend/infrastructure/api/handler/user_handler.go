@@ -8,8 +8,8 @@ import (
     "net/http"
 )
 
-type memberHandler struct {
-    memberController controllers.MemberController
+type userHandler struct {
+    userController controllers.MemberController
 }
 
 type MemberHandler interface {
@@ -17,10 +17,10 @@ type MemberHandler interface {
 }
 
 func NewMemberHandler(uc controllers.MemberController) MemberHandler {
-    return &memberHandler{memberController: uc}
+    return &userHandler{userController: uc}
 }
 
-func (uh *memberHandler) GetMembers(c echo.Context) error {
+func (uh *userHandler) GetMembers(c echo.Context) error {
     req := &model.Member{}
     if err := c.Bind(req); err != nil {
         return c.JSON(http.StatusBadRequest, model.ResponseError{Message: err.Error()})
@@ -31,7 +31,7 @@ func (uh *memberHandler) GetMembers(c echo.Context) error {
         ctx = context.Background()
     }
 
-    u, err := uh.memberController.GetMembers()
+    u, err := uh.userController.GetMembers()
     if err != nil {
         // システム内のエラー
         return c.JSON(http.StatusBadRequest, err)

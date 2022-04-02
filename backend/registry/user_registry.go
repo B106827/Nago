@@ -11,7 +11,7 @@ import (
     "NagoBackend/usecase/service"
 )
 
-type memberInteractor struct {
+type userInteractor struct {
     conn *gorm.DB
 }
 
@@ -20,25 +20,25 @@ type MemberInteractor interface {
 }
 
 func NewMemberInteractor(conn *gorm.DB) MemberInteractor {
-    return &memberInteractor{conn}
+    return &userInteractor{conn}
 }
 
-func (i *memberInteractor) NewMemberHandler() handler.MemberHandler {
+func (i *userInteractor) NewMemberHandler() handler.MemberHandler {
     return handler.NewMemberHandler(i.NewMemberController())
 }
 
-func (i *memberInteractor) NewMemberController() controllers.MemberController {
+func (i *userInteractor) NewMemberController() controllers.MemberController {
     return controllers.NewMemberController(i.NewMemberService())
 }
 
-func (i *memberInteractor) NewMemberService() service.MemberService {
+func (i *userInteractor) NewMemberService() service.MemberService {
     return service.NewMemberService(i.NewMemberRepository(), i.NewMemberPresenter())
 }
 
-func (i *memberInteractor) NewMemberRepository() repository.MemberRepository {
+func (i *userInteractor) NewMemberRepository() repository.MemberRepository {
     return datastore.NewMemberRepository(i.conn)
 }
 
-func (i *memberInteractor) NewMemberPresenter() presenter.MemberPresenter {
+func (i *userInteractor) NewMemberPresenter() presenter.MemberPresenter {
     return presenters.NewMemberPresenter()
 }

@@ -5,8 +5,8 @@ import (
     "NagoBackend/usecase/service"
 )
 
-type memberController struct {
-    memberService service.MemberService
+type userController struct {
+    userService service.MemberService
 }
 
 type MemberController interface {
@@ -14,12 +14,12 @@ type MemberController interface {
 }
 
 func NewMemberController(us service.MemberService) MemberController {
-    return &memberController{us}
+    return &userController{us}
 }
 
-func (memberController *memberController) GetMembers() ([]*model.Member, error) {
+func (userController *userController) GetMembers() ([]*model.Member, error) {
     u := []*model.Member{}
-    us, err := memberController.memberService.Get(u)
+    us, err := userController.userService.Get(u)
 
     if err != nil {
         return nil, err
