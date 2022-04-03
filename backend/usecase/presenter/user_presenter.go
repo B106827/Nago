@@ -2,6 +2,6 @@ package presenter
 
 import "NagoBackend/domain/model"
 
-type MemberPresenter interface {
-    ResponseMembers(users []*model.Member) []*model.Member
+type UserPresenter interface {
+    ResponseUsers(users []*model.User) []*model.User
 }

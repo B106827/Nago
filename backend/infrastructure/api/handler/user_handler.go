@@ -9,19 +9,19 @@ import (
 )
 
 type userHandler struct {
-    userController controllers.MemberController
+    userController controllers.UserController
 }
 
-type MemberHandler interface {
-    GetMembers(c echo.Context) error
+type UserHandler interface {
+    GetUsers(c echo.Context) error
 }
 
-func NewMemberHandler(uc controllers.MemberController) MemberHandler {
+func NewUserHandler(uc controllers.UserController) UserHandler {
     return &userHandler{userController: uc}
 }
 
-func (uh *userHandler) GetMembers(c echo.Context) error {
-    req := &model.Member{}
+func (uh *userHandler) GetUsers(c echo.Context) error {
+    req := &model.User{}
     if err := c.Bind(req); err != nil {
         return c.JSON(http.StatusBadRequest, model.ResponseError{Message: err.Error()})
     }
@@ -31,7 +31,7 @@ func (uh *userHandler) GetMembers(c echo.Context) error {
         ctx = context.Background()
     }
 
-    u, err := uh.userController.GetMembers()
+    u, err := uh.userController.GetUsers()
     if err != nil {
         // システム内のエラー
         return c.JSON(http.StatusBadRequest, err)

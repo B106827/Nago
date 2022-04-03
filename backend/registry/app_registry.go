@@ -7,7 +7,7 @@ type interactor struct {
 }
 
 type Interactor interface {
-    MemberInteractor
+    UserInteractor
 }
 
 func NewInteractor (conn *gorm.DB) Interactor {

@@ -6,19 +6,19 @@ import (
 )
 
 type userController struct {
-    userService service.MemberService
+    userService service.UserService
 }
 
-type MemberController interface {
-    GetMembers() ([]*model.Member, error)
+type UserController interface {
+    GetUsers() ([]*model.User, error)
 }
 
-func NewMemberController(us service.MemberService) MemberController {
+func NewUserController(us service.UserService) UserController {
     return &userController{us}
 }
 
-func (userController *userController) GetMembers() ([]*model.Member, error) {
-    u := []*model.Member{}
+func (userController *userController) GetUsers() ([]*model.User, error) {
+    u := []*model.User{}
     us, err := userController.userService.Get(u)
 
     if err != nil {

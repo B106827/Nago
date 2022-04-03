@@ -7,15 +7,15 @@ import (
 type userPresenter struct {
 }
 
-func NewMemberPresenter() MemberPresenter {
+func NewUserPresenter() UserPresenter {
     return &userPresenter{}
 }
 
-type MemberPresenter interface {
-    ResponseMembers(users []*model.Member) []*model.Member
+type UserPresenter interface {
+    ResponseUsers(users []*model.User) []*model.User
 }
 
-func (userPresenter *userPresenter) ResponseMembers(users []*model.Member) []*model.Member {
+func (userPresenter *userPresenter) ResponseUsers(users []*model.User) []*model.User {
     for _, u := range users {
         u.Name = u.Name + "hoge"
     }

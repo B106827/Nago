@@ -10,15 +10,15 @@ type userRepository struct {
     db *gorm.DB
 }
 
-type MemberRepository interface {
-    FindAll(users []*model.Member) ([]*model.Member, error)
+type UserRepository interface {
+    FindAll(users []*model.User) ([]*model.User, error)
 }
 
-func NewMemberRepository(db *gorm.DB) MemberRepository {
+func NewUserRepository(db *gorm.DB) UserRepository {
     return &userRepository{db}
 }
 
-func (userRepository *userRepository) FindAll(users []*model.Member) ([]*model.Member, error) {
+func (userRepository *userRepository) FindAll(users []*model.User) ([]*model.User, error) {
     err := userRepository.db.Find(&users).Error
 
     if err != nil {

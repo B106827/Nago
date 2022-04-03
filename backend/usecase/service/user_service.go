@@ -7,22 +7,22 @@ import (
 )
 
 type userService struct {
-    MemberRepository repository.MemberRepository
-    MemberPresenter  presenter.MemberPresenter
+    UserRepository repository.UserRepository
+    UserPresenter  presenter.UserPresenter
 }
 
-type MemberService interface {
-    Get(users []*model.Member) ([]*model.Member, error)
+type UserService interface {
+    Get(users []*model.User) ([]*model.User, error)
 }
 
-func NewMemberService(repo repository.MemberRepository, pre presenter.MemberPresenter) MemberService {
+func NewUserService(repo repository.UserRepository, pre presenter.UserPresenter) UserService {
     return &userService{repo, pre}
 }
 
-func (userService *userService) Get(users []*model.Member) ([]*model.Member, error) {
-    mems, err := userService.MemberRepository.FindAll(users)
+func (userService *userService) Get(users []*model.User) ([]*model.User, error) {
+    mems, err := userService.UserRepository.FindAll(users)
     if err != nil {
         return nil, err
     }
-    return userService.MemberPresenter.ResponseMembers(mems), nil
+    return userService.UserPresenter.ResponseUsers(mems), nil
 }

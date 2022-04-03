@@ -2,6 +2,6 @@ package repository
 
 import "NagoBackend/domain/model"
 
-type MemberRepository interface {
-    FindAll(posts []*model.Member) ([]*model.Member, error)
+type UserRepository interface {
+    FindAll(posts []*model.User) ([]*model.User, error)
 }
