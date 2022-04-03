@@ -16,7 +16,7 @@ type userInteractor struct {
 }
 
 type UserInteractor interface {
-    NewUserHandler() handler.UserHandler
+    NewUserHandler()handler.UserHandler
 }
 
 func NewUserInteractor(conn *gorm.DB) UserInteractor {

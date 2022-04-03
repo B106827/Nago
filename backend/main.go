@@ -3,7 +3,9 @@ package main
 import (
     "fmt"
     "github.com/labstack/echo/v4"
+    "github.com/labstack/echo/v4/middleware"
     "NagoBackend/conf"
+    "NagoBackend/infrastructure/api/router"
     "NagoBackend/infrastructure/datastore"
     "NagoBackend/registry"
 )
@@ -15,8 +17,11 @@ func main() {
     // DB取得
     conn := datastore.NewMySqlDB()
 
-    // interractor
-    r := registry.NewInterractor(conn)
+    // interactor
+    r := registry.NewInteractor(conn)
+
+    // 依存解決
+    h := r.NewUserHandler()
 
     // echo
     e := echo.New()
@@ -25,7 +30,7 @@ func main() {
     e.Use(middleware.Recover())
 
     // router
-    router.NewRouter(e, r)
+    router.NewRouter(e, h)
 
     // DB stop
     defer func () {

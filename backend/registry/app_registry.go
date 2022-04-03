@@ -10,8 +10,8 @@ type Interactor interface {
     UserInteractor
 }
 
-func NewInteractor (conn *gorm.DB) Interactor {
-    return &Interactor{
+func NewInteractor(conn *gorm.DB) Interactor {
+    return &interactor{
         userInteractor{conn},
     }
 }
