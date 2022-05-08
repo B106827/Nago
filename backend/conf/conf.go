@@ -15,7 +15,7 @@ type config struct {
         Port     string
         User     string
         Password string
-        DBname   string
+        Dbname   string
     }
     Server struct {
         Port string
@@ -32,7 +32,7 @@ func ReadConf() {
     // ファイルタイプ
     viper.SetConfigType("yml")
     // ファイルパスの設定
-    viper.AddConfigPath(filepath.Join("$GOPATH", "src", "NagoBackend", "conf"))
+    viper.AddConfigPath(filepath.Join("$GOPATH", "src", "app", "conf"))
     // 環境変数から設定値を上書きできるように設定
     viper.AutomaticEnv()
 

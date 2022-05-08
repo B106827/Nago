@@ -1,5 +1,5 @@
 database:
-    host: "localhost"
+    host: "nago-mysql"
     port: "3306"
     user: "www"
     password: "NFc58T&4!EFk1"
