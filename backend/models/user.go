@@ -16,3 +16,15 @@ type User struct {
 	CreatedOn  time.Time `json:"-"     gorm:"column(created_on);autoCreateTime;type(datetime);"`
 	ModifiedOn time.Time `json:"-"     gorm:"column(modified_on);autoUpdateTime;type(timestamp);"`
 }
+
+// create a user
+func (u *User) Create() (err error) {
+    db := database.GetDB()
+    return db.Create(u).Error
+}
+
+// find user by id
+func (u *User) FindByID(id uint) (err error) {
+    db := database.GetDB()
+    return db.Where("id = ?", id).First(u).Error
+}
