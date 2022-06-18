@@ -29,6 +29,7 @@ services:
   mysql:
     container_name: nago-mysql
     image: mysql:8.0.27
+    platform: linux/amd64
     restart: always
     security_opt:
       - seccomp:unconfined
