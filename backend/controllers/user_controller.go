@@ -6,33 +6,23 @@ import (
     userForms "NagoBackend/forms/user"
 )
 
-// UserController is controller for login
 type UserController struct{}
 
 func NewUserController() *UserController {
     return new(UserController)
 }
 
-// User is handle login process
+// ログイン処理
 func (uc *UserController) Login(c echo.Context) (err error) {
     loginForm := new(userForms.LoginForm)
-    if err = c.Bind(loginForm); err != nil {
-        return c.JSON(http.StatusOK, newResponse(
-            http.StatusBadRequest,
-            http.StatusText(http.StatusBadRequest),
-            "bind error",
-        ))
+    //if err = cc.BindValidate(loginForm); err != nil {
+    //    return err
+    //}
+    if err := c.Bind(loginForm); err != nil {
+        return err
     }
-    if err = c.Validate(loginForm); err != nil {
-        return c.JSON(http.StatusOK, newResponse(
-            http.StatusBadRequest,
-            http.StatusText(http.StatusBadRequest),
-            "validate error",
-        ))
+    if err := c.Validate(loginForm); err != nil {
+        return err
     }
-    return c.JSON(http.StatusOK, newResponse(
-        http.StatusOK,
-        http.StatusText(http.StatusOK),
-        "validation ok",
-    ))
+    return c.JSON(http.StatusOK, successResponse("OKです"))
 }

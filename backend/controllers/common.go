@@ -1,11 +1,18 @@
 package controllers
 
+import (
+    "net/http"
+)
+
 type response struct {
     Status  int         `json:"status"`
-    Message string      `json:"message"`
     Result  interface{} `json:"result"`
 }
 
-func newResponse(status int, message string, result interface{}) *response {
-    return &response{status, message, result}
+func successResponse(msg interface{}) *response {
+    return &response{http.StatusOK, msg}
+}
+
+func badRequestResponse(msg []string) *response {
+    return &response{http.StatusBadRequest, msg}
 }

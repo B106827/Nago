@@ -1,13 +1,24 @@
 package server
 
-import "NagoBackend/config"
+import (
+    "github.com/labstack/echo/v4"
+    "NagoBackend/config"
+    "NagoBackend/server/routes"
+    "NagoBackend/server/middlewares"
+    // "NagoBackend/server/contexts"
+)
 
 func Init() error {
+    e := echo.New()
+    // initialize router
+    routes.InitRouter(e)
+    // initialize middleware
+    middlewares.InitMiddleware(e)
+    // initialize context
+    // contexts.InitCustomContext(e)
+
     c := config.GetConfig()
-    r, err := NewRouter()
-    if err != nil {
-        return err
-    }
-    r.Logger.Fatal(r.Start(":" + c.GetString("server.port")))
+    // server start
+    e.Logger.Fatal(e.Start(":" + c.GetString("server.port")))
     return nil
 }
