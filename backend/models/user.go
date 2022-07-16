@@ -18,6 +18,10 @@ type User struct {
 	ModifiedOn time.Time `json:"-"     gorm:"column(modified_on);autoUpdateTime;type(timestamp);"`
 }
 
+func (User) TableName() string {
+    return "user"
+}
+
 // create a user
 func (u *User) Create() (err error) {
     db := database.GetDB()
@@ -28,4 +32,10 @@ func (u *User) Create() (err error) {
 func (u *User) FindByID(id uint) (err error) {
     db := database.GetDB()
     return db.Where("id = ?", id).First(u).Error
+}
+
+// find user by email
+func (u *User) FindByEmail(email string) (err error) {
+    db := database.GetDB()
+    return db.Where("email = ?", email).First(u).Error
 }

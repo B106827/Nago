@@ -5,6 +5,7 @@ import (
     "net/http"
     loginForms "NagoBackend/forms/login"
     "NagoBackend/server/contexts"
+    "NagoBackend/models"
 )
 
 type LoginController struct{}
@@ -20,7 +21,11 @@ func (lc *LoginController) Login(c echo.Context) error {
     if err := cc.BindValidate(loginForm); err != nil {
         return err
     }
-    return c.JSON(http.StatusOK, successResponse("OKです"))
+    user := new(models.User)
+    if err := user.FindByEmail(loginForm.Email); err != nil {
+        return c.JSON(http.StatusOK, successResponse("メンバーが見つかりません"))
+    }
+    return c.JSON(http.StatusOK, user.Name)
 }
 
 // ログアウト処理

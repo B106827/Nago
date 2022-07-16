@@ -81,6 +81,7 @@ export const login = (email, password) => {
       dispatch
     )
       .then((json) => {
+        console.log('test', json);
         if (json.status === 200) {
           const user = json.data.user;
           if (user) {

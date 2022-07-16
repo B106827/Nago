@@ -19,7 +19,6 @@ func Init() {
         c.GetString("db.port"),
         c.GetString("db.dbname"),
     )
-    fmt.Sprintf("%s", connString)
     d, err = gorm.Open(c.GetString("db.provider"), connString)
     if err != nil {
         fmt.Println("db connection error")
