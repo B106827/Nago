@@ -9,8 +9,8 @@ type response struct {
     Result  interface{} `json:"result"`
 }
 
-func successResponse(msg interface{}) *response {
-    return &response{http.StatusOK, msg}
+func successResponse(res interface{}) *response {
+    return &response{http.StatusOK, res}
 }
 
 func badRequestResponse(msg []string) *response {

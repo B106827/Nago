@@ -9,7 +9,7 @@ import (
 type HealthController struct{}
 
 func NewHealthController() *HealthController {
-    return new(HealthController)
+    return &HealthController{}
 }
 
 // ヘルスチェック

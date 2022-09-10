@@ -11,7 +11,7 @@ import (
 type LoginController struct{}
 
 func NewLoginController() *LoginController {
-    return new(LoginController)
+    return &LoginController{}
 }
 
 // ログイン処理
@@ -19,16 +19,21 @@ func (lc *LoginController) Login(c echo.Context) error {
     loginForm := new(loginForms.LoginForm)
     cc := c.(*contexts.CustomContext)
     if err := cc.BindValidate(loginForm); err != nil {
-        return err
+        return c.JSON(http.StatusOK, badRequestResponse([]string{"パラメータが不正です"}))
     }
     user := new(models.User)
     if err := user.FindByEmail(loginForm.Email); err != nil {
-        return c.JSON(http.StatusOK, successResponse("メンバーが見つかりません"))
+        return c.JSON(http.StatusOK, badRequestResponse([]string{"メンバーが見つかりません"}))
     }
-    return c.JSON(http.StatusOK, user.Name)
+    return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
+        "user": user,
+        "message": "ログインしました",
+    }))
 }
 
 // ログアウト処理
 func (lc *LoginController) Logout(c echo.Context) error {
-    return c.JSON(http.StatusOK, successResponse("OKです"))
+    return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
+        "message": "ログアウトしました",
+    }))
 }

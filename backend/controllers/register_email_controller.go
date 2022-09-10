@@ -10,7 +10,7 @@ import (
 type RegisterEmailController struct{}
 
 func NewRegisterEmailController() *RegisterEmailController {
-    return new(RegisterEmailController)
+    return &RegisterEmailController{}
 }
 
 // メールアドレス登録処理

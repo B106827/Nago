@@ -81,9 +81,8 @@ export const login = (email, password) => {
       dispatch
     )
       .then((json) => {
-        console.log('test', json);
         if (json.status === 200) {
-          const user = json.data.user;
+          const user = json.result.user;
           if (user) {
             dispatch(
               loginAction({
@@ -91,7 +90,7 @@ export const login = (email, password) => {
                 name: user.name,
               })
             );
-            dispatch(showMessageAction('success', 'ログインしました'));
+            dispatch(showMessageAction('success', json.result.message));
             dispatch(push('/'));
           }
         } else {
@@ -192,8 +191,8 @@ export const checkRegisterUrl = (id) => {
       .then((json) => {
         if (json.status === 200) {
           dispatch(showMessageAction('info', '新規登録を進めてください'));
-          if (json.data.email) {
-            dispatch(fetchUserTmpEmail(json.data.email));
+          if (json.result.email) {
+            dispatch(fetchUserTmpEmail(json.result.email));
           } else {
             dispatch(showMessageAction('error', '登録用URLを確認してください'));
           }
@@ -236,7 +235,7 @@ export const register = (tmpId, name, email, password, confirmPassword) => {
     )
       .then((json) => {
         if (json.status === 200) {
-          const user = json.data.user;
+          const user = json.result.user;
           if (user) {
             // 新規登録およびログインが完了
             dispatch(
@@ -245,7 +244,7 @@ export const register = (tmpId, name, email, password, confirmPassword) => {
                 name: user.name,
               })
             );
-            dispatch(showMessageAction('success', json.data.message));
+            dispatch(showMessageAction('success', json.result.message));
             dispatch(push('/'));
           }
         } else {
@@ -272,7 +271,7 @@ export const logout = () => {
       .then((json) => {
         if (json.status === 200) {
           dispatch(logoutAction());
-          dispatch(showMessageAction('success', 'ログアウトしました'));
+          dispatch(showMessageAction('success', json.result.message));
           dispatch(push('/'));
         } else {
           dispatch(showMessageAction('error', json.messages));

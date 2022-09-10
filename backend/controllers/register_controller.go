@@ -10,7 +10,7 @@ import (
 type RegisterController struct{}
 
 func NewRegisterController() *RegisterController {
-    return new(RegisterController)
+    return &RegisterController{}
 }
 
 // 登録URL確認

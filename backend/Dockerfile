@@ -1,4 +1,4 @@
-ARG BASE=golang:1.16-alpine
+ARG BASE=golang:1.17-alpine
 FROM ${BASE} as dev
 
 ARG ROOT=/go/src/app
