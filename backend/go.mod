@@ -3,6 +3,7 @@ module NagoBackend
 go 1.15
 
 require (
+	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/jinzhu/gorm v1.9.16

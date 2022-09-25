@@ -1,19 +1,21 @@
 package middlewares
 
 import (
-    "github.com/go-playground/validator"
-    "github.com/labstack/echo/v4"
-    "github.com/labstack/echo/v4/middleware"
     "NagoBackend/config"
     "net/http"
+
+    validation "github.com/go-ozzo/ozzo-validation/v4"
+    "github.com/labstack/echo/v4"
+    "github.com/labstack/echo/v4/middleware"
 )
 
-type CustomValidator struct {
-    validator *validator.Validate
-}
+type CustomValidator struct {}
 
 func (cv *CustomValidator) Validate(i interface{}) error {
-    return cv.validator.Struct(i)
+    if c, ok := i.(validation.Validatable); ok {
+        return c.Validate()
+    }
+    return nil
 }
 
 func InitMiddleware(e *echo.Echo) {
@@ -24,5 +26,5 @@ func InitMiddleware(e *echo.Echo) {
         AllowOrigins: c.GetStringSlice("server.cors"),
         AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
     }))
-    e.Validator = &CustomValidator{validator: validator.New()}
+    e.Validator = &CustomValidator{}
 }

@@ -13,6 +13,6 @@ func successResponse(res interface{}) *response {
     return &response{http.StatusOK, res}
 }
 
-func badRequestResponse(msg []string) *response {
-    return &response{http.StatusBadRequest, msg}
+func badRequestResponse(res interface{}) *response {
+    return &response{http.StatusBadRequest, res}
 }

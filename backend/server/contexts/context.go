@@ -1,6 +1,12 @@
 package contexts
 
 import (
+    "errors"
+    "fmt"
+    "regexp"
+    "strings"
+
+    validation "github.com/go-ozzo/ozzo-validation/v4"
     "github.com/labstack/echo/v4"
 )
 
@@ -13,7 +19,16 @@ func (c *CustomContext) BindValidate(i interface{}) error {
         return err
     }
     if err := c.Validate(i); err != nil {
-        return err
+        errs := err.(validation.Errors)
+        re := regexp.MustCompile(`{[a-z]+}`)
+        for k, err := range errs {
+            verr := err.(validation.Error)
+            params := verr.Params()
+            errs[k] = errors.New(re.ReplaceAllStringFunc(verr.Message(), func(s string) string {
+                return fmt.Sprint(params[strings.Trim(s, "{}")])
+            }))
+        }
+        return errs
     }
     return nil
 }
