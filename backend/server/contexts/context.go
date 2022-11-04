@@ -8,10 +8,17 @@ import (
 
     validation "github.com/go-ozzo/ozzo-validation/v4"
     "github.com/labstack/echo/v4"
+
+//    "github.com/k0kubun/pp"
 )
 
 type CustomContext struct {
     echo.Context
+}
+
+type CustomError struct {
+    errorType     string
+    originalError error
 }
 
 func (c *CustomContext) BindValidate(i interface{}) error {
