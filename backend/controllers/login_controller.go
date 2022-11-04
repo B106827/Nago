@@ -1,11 +1,14 @@
 package controllers
 
 import (
-    "github.com/labstack/echo/v4"
-    "net/http"
-    loginForms "NagoBackend/forms/login"
     "NagoBackend/server/contexts"
     "NagoBackend/models"
+    "net/http"
+
+    loginForms "NagoBackend/forms/login"
+    "github.com/labstack/echo/v4"
+
+//    "github.com/k0kubun/pp"
 )
 
 type LoginController struct{}
@@ -19,7 +22,7 @@ func (lc *LoginController) Login(c echo.Context) error {
     loginForm := new(loginForms.LoginForm)
     cc := c.(*contexts.CustomContext)
     if err := cc.BindValidate(loginForm); err != nil {
-        return c.JSON(http.StatusOK, badRequestResponse([]string{"パラメータが不正です"}))
+        return c.JSON(http.StatusOK, badRequestResponse(err))
     }
     user := new(models.User)
     if err := user.FindByEmail(loginForm.Email); err != nil {

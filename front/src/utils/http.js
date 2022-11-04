@@ -49,9 +49,9 @@ export const fetchWrapper = (args, dispatch) => {
   })
     // リクエスト以前の段階でのエラー処理
     .catch((e) => handleNetworkError(e))
-    // ヘッダーステータスごとに処理
+    // HTTPリクエストのステータスごとに処理
     .then((res) => handleStatusErrors(res))
-    // メイン処理
+    // ビジネスロジックの処理結果を扱う
     .then((json) => handleResult(json));
 
   const handleNetworkError = (error) => {
@@ -71,29 +71,29 @@ export const fetchWrapper = (args, dispatch) => {
       case 200:
         return res.json(); // API側バリデーションエラー等も含む
       case 401:
-        return handle401(res); // API側認証エラー
+        return handleStatus401(res); // API側認証エラー
       case 404:
-        return handle404(res); // API側Not Found エラー
+        return handleStatus404(res); // API側Not Found エラー
       case 500:
-        return handle500(res); // API側サーバーエラー
+        return handeleStatus500(res); // API側サーバーエラー
       default:
         return handleErrors(res); // API側想定外のエラー
     }
   };
 
-  const handle401 = (res) => {
+  const handleStatus401 = (res) => {
     console.log('401:unauthorized', res);
     commonActions.networkError(dispatch);
     return;
   };
 
-  const handle404 = (res) => {
+  const handleStatus404 = (res) => {
     console.log('404:not found', res);
     commonActions.networkError(dispatch);
     return;
   };
 
-  const handle500 = (res) => {
+  const handeleStatus500 = (res) => {
     console.log('500:internal server error', res);
     commonActions.networkError(dispatch);
     return;
@@ -105,7 +105,24 @@ export const fetchWrapper = (args, dispatch) => {
     return;
   };
 
+  // HTTPリクエスト自体は成功し、ビジネスロジックの処理結果を扱う
   const handleResult = (json) => {
+    if (!json) return;
+    switch (Number(json.status)) {
+      case 200:
+        return json; // API側処理成功
+      case 400:
+        return fixResponse400(json); // リクエスト内容に問題あり
+      default:
+        return json;
+    }
+  };
+
+  const fixResponse400 = (json) => {
+    const result = json.result;
+    if (!result) return json;
+    json.errorKeys = Object.keys(result);
+    json.messages  = Object.values(result);
     return json;
   };
 
