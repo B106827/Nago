@@ -5,7 +5,10 @@ ARG ROOT=/go/src/app
 WORKDIR ${ROOT}
 
 RUN apk update \
-    && apk add git
+    && apk add git \
+    && apk --no-cache add tzdata \
+    && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+    && apk del tzdata
 COPY ./go.mod ./
 COPY ./go.sum ./
 RUN go mod download
