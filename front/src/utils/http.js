@@ -113,6 +113,8 @@ export const fetchWrapper = (args, dispatch) => {
         return json; // API側処理成功
       case 400:
         return fixResponse400(json); // リクエスト内容に問題あり
+      case 500:
+        return fixResponse500(json); // API側の処理に問題あり
       default:
         return json;
     }
@@ -123,6 +125,13 @@ export const fetchWrapper = (args, dispatch) => {
     if (!result) return json;
     json.errorKeys = Object.keys(result);
     json.messages  = Object.values(result);
+    return json;
+  };
+
+  const fixResponse500 = (json) => {
+    const result = json.result;
+    if (!result) return json;
+    json.messages = Object.values(result);
     return json;
   };
 

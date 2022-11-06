@@ -10,16 +10,16 @@ type LoginForm struct {
     Password string `json:"password"`
 }
 
-func (p LoginForm) Validate() error {
-    return validation.ValidateStruct(&p,
+func (f LoginForm) Validate() error {
+    return validation.ValidateStruct(&f,
         validation.Field(
-            &p.Email,
+            &f.Email,
             validation.Required.Error("メールアドレスは入力必須です"),
             validation.RuneLength(5, 255).Error("メールアドレスは{min}〜{max}文字です"),
             is.Email.Error("メールアドレスが不正な形式です"),
         ),
         validation.Field(
-            &p.Password,
+            &f.Password,
             validation.Required.Error("パスワードは入力必須です"),
             validation.RuneLength(6, 20).Error("パスワードは{min}〜{max}文字です"),
         ),

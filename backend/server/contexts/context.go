@@ -8,8 +8,6 @@ import (
 
     validation "github.com/go-ozzo/ozzo-validation/v4"
     "github.com/labstack/echo/v4"
-
-//    "github.com/k0kubun/pp"
 )
 
 type CustomContext struct {
@@ -23,6 +21,7 @@ type CustomError struct {
 
 func (c *CustomContext) BindValidate(i interface{}) error {
     if err := c.Bind(i); err != nil {
+        c.Logger().Error(err)
         return err
     }
     if err := c.Validate(i); err != nil {

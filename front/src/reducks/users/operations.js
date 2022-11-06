@@ -133,12 +133,11 @@ export const listenAuth = (isRedirect = true) => {
 
 // メールアドレス登録
 export const registerEmail = (email) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     if (email === '') {
       dispatch(showMessageAction('error', 'メールアドレスが未入力です'));
       return false;
     }
-
     const params = {
       email,
     };
@@ -155,7 +154,7 @@ export const registerEmail = (email) => {
           dispatch(
             showMessageAction(
               'success',
-              '登録用URLを送信しました。メールを確認してください'
+              json.result.message
             )
           );
         } else {
@@ -163,8 +162,8 @@ export const registerEmail = (email) => {
         }
       })
       .catch((error) => {
+        console.log('error: ', error);
         dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
-        console.log(error);
       });
   };
 };

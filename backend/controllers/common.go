@@ -2,8 +2,6 @@ package controllers
 
 import (
     "net/http"
-
-//    "github.com/k0kubun/pp"
 )
 
 type response struct {
@@ -17,4 +15,8 @@ func successResponse(res interface{}) *response {
 
 func badRequestResponse(res interface{}) *response {
     return &response{http.StatusBadRequest, res}
+}
+
+func serverErrorResponse(res interface{}) *response {
+    return &response{http.StatusInternalServerError, res}
 }
