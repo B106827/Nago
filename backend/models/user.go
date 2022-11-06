@@ -14,28 +14,20 @@ type User struct {
 	Name       *string   `json:"name"  gorm:"column(name);size(255);type(varchar(255));"`
 	Address    *string   `json:"-"     gorm:"column(address);size(255);type(varchar(255));"`
 	Status     uint      `json:"-"     gorm:"column(status);default(1);type(int);"`
-	CreatedOn  time.Time `json:"-"     gorm:"column(created_on);autoCreateTime;type(datetime);"`
-	ModifiedOn time.Time `json:"-"     gorm:"column(modified_on);autoUpdateTime;type(timestamp);"`
+    CreatedAt  time.Time `json:"-"     gorm:"column(created_at);not null;type(datetime);"`
+    UpdatedAt  time.Time `json:"-"     gorm:"column(updated_at);not null;type(datetime);"`
 }
+
+const (
+    USER_REGISTERD = 1
+)
 
 func (User) TableName() string {
     return "user"
 }
 
-// create a user
-func (u *User) Create() (err error) {
+// find active user by email
+func (u *User) FindByEmail(email string) error {
     db := database.GetDB()
-    return db.Create(u).Error
-}
-
-// find user by id
-func (u *User) FindByID(id uint) (err error) {
-    db := database.GetDB()
-    return db.Where("id = ?", id).First(u).Error
-}
-
-// find user by email
-func (u *User) FindByEmail(email string) (err error) {
-    db := database.GetDB()
-    return db.Where("email = ?", email).First(u).Error
+    return db.Where("email = ? AND status = ?", email, USER_REGISTERD).First(u).Error
 }

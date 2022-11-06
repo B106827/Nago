@@ -3,16 +3,16 @@
 --
 
 CREATE TABLE IF NOT EXISTS user (
-  id               INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  email            VARCHAR(255) NOT NULL                COMMENT 'メールアドレス',
-  password         VARCHAR(255) NOT NULL                COMMENT 'パスワード',
-  line_user_id     VARCHAR(255)                         COMMENT 'LINE ユーザー ID',
-  tel              VARCHAR(13)                          COMMENT '電話番号',
-  name             VARCHAR(255)                         COMMENT '名前',
-  address          VARCHAR(255)                         COMMENT '住所',
-  `status`         INT NOT NULL DEFAULT 1               COMMENT 'ユーザーステータス',
-  created_on       DATETIME NOT NULL                    COMMENT '登録日時',
-  modified_on      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
+  id           INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  email        VARCHAR(255) NOT NULL                COMMENT 'メールアドレス',
+  password     VARCHAR(255) NOT NULL                COMMENT 'パスワード',
+  line_user_id VARCHAR(255)                         COMMENT 'LINE ユーザー ID',
+  tel          VARCHAR(13)                          COMMENT '電話番号',
+  name         VARCHAR(255)                         COMMENT '名前',
+  address      VARCHAR(255)                         COMMENT '住所',
+  `status`     INT NOT NULL DEFAULT 1               COMMENT 'ユーザーステータス',
+  created_at   DATETIME NOT NULL                    COMMENT '登録日時',
+  updated_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
   PRIMARY KEY (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT 'ユーザー';
 
@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS target (
   latest_passed_on DATETIME                             COMMENT '最終通過日時',
   name             VARCHAR(255) NOT NULL                COMMENT '名前',
   address          VARCHAR(255)                         COMMENT '住所',
-  created_on       DATETIME NOT NULL                    COMMENT '登録日時',
-  modified_on      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
+  created_at       DATETIME NOT NULL                    COMMENT '登録日時',
+  updated_at       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
   PRIMARY KEY (id),
   KEY target_key01 (user_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT 'ターゲット';
@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS target_notification_conf (
   interval_min           INT NOT NULL                         COMMENT '間隔(分)',
   flg_every_notification INT NOT NULL DEFAULT 0               COMMENT '毎通知フラグ',
   flg_not_notification   INT NOT NULL DEFAULT 0               COMMENT '非通知フラグ',
-  created_on             DATETIME NOT NULL                    COMMENT '登録日時',
-  modified_on            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
+  created_at             DATETIME NOT NULL                    COMMENT '登録日時',
+  updated_at             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
   PRIMARY KEY (id),
   KEY target_notification_conf_key01 (target_id),
   KEY target_notification_conf_key02 (weekday_id, flg_every_notification)
@@ -48,11 +48,11 @@ CREATE TABLE IF NOT EXISTS target_notification_conf (
 CREATE TABLE IF NOT EXISTS user_temporary (
   id            CHAR(10) NOT NULL COMMENT 'ID',
   email         VARCHAR(255)      COMMENT 'メールアドレス',
-  oauth_user_id VARCHAR(255)      COMMENT 'OAuth ユーザー ID',
   user_id       INT UNSIGNED NULL COMMENT 'ユーザー ID (メールアドレス変更用)',
   redirect_path VARCHAR(255)      COMMENT 'リダイレクト先',
-  created_on    DATETIME NOT NULL COMMENT '登録日時',
-  modified_on   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
+  expired_at    DATETIME NOT NULL COMMENT '有効期限日時',
+  created_at    DATETIME NOT NULL COMMENT '登録日時',
+  updated_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
   PRIMARY KEY (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT 'ユーザー仮登録情報';
 
