@@ -47,7 +47,7 @@ func (base *Mail) Send(to string, sub string, vars interface{}, files ...string)
     m.SetBody(base.contentType, body)
 
     d := gomail.Dialer{Host: base.host, Port: base.port}
-    // SSL/TLS証明書がサーバー上で有効でない場合にのみ必要
+    // SSL/TLS証明書がサーバー上で有効でない場合はtrue
     d.TLSConfig = &tls.Config{InsecureSkipVerify: base.insecureSkipVerify}
     err = d.DialAndSend(m)
     return err
