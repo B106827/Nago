@@ -1,8 +1,10 @@
 package controllers
 
 import (
+    "NagoBackend/config"
     "NagoBackend/models"
     "NagoBackend/server/contexts"
+    "NagoBackend/services"
     "NagoBackend/utils"
     "net/http"
     "time"
@@ -36,7 +38,7 @@ func (rec *RegisterEmailController) RegisterEmail(c echo.Context) error {
         return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
     }
     ut := new(models.UserTemporary)
-    ut.ID = rndID
+    ut.ID    = rndID
     ut.Email = registerEmailForm.Email
     // 有効期限は1日後
     ut.ExpiredAt = utils.GetAddDateTime(1, "d")
@@ -45,6 +47,17 @@ func (rec *RegisterEmailController) RegisterEmail(c echo.Context) error {
         c.Logger().Error(err)
         return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
     } 
+    // 本登録用URLメール送信
+    mail  := services.NewMail()
+    conf  := config.GetConfig()
+    url   := conf.GetString("url.main")
+    path  := "/register/" + ut.ID
+    vars  := map[string]string{"Url": url + path}
+    files := []string{"views/mail/register_email.tpl", "views/mail/base.tpl"}
+    if err := mail.Send(ut.Email, "【nago】新規登録用URL", vars, files...); err != nil {
+        c.Logger().Error(err)
+        return c.JSON(http.StatusOK, serverErrorResponse([]string{"登録用メールが送信できませんでした"}))
+    }
     return c.JSON(http.StatusOK, successResponse(map[string]string{
         "message": "登録用URLを送信しました。メールを確認してください（有効期限1日）",
     }))
