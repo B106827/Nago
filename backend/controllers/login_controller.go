@@ -34,7 +34,7 @@ func (lc *LoginController) Login(c echo.Context) error {
 
 // ログアウト処理
 func (lc *LoginController) Logout(c echo.Context) error {
-    return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
+    return c.JSON(http.StatusOK, successResponse(map[string]string{
         "message": "ログアウトしました",
     }))
 }

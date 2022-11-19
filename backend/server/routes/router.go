@@ -17,7 +17,7 @@ func InitRouter(e *echo.Echo) {
 
     // register url check
     registerController := controllers.NewRegisterController()
-    api.POST("/register_url_check", registerController.URLCheck)
+    api.POST("/register_url_check", registerController.UrlCheck)
     // register
     api.POST("/register", registerController.Register)
 

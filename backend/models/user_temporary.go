@@ -19,6 +19,12 @@ func (UserTemporary) TableName() string {
     return "user_temporary"
 }
 
+// find user_temporary by id
+func (ut *UserTemporary) FindById(id string) error {
+    db := database.GetDB()
+    return db.Where("id = ?", id).First(ut).Error
+}
+
 func (ut *UserTemporary) Create() error {
     db := database.GetDB()
     return db.Create(ut).Error

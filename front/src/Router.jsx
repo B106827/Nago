@@ -17,7 +17,7 @@ const Router = () => {
   return (
     <Switch>
       <Route exact path={'/'} component={Home} />
-      <Route path={'/register/:id?'} component={Register} />
+      <Route path={'/register/:tmpId?'} component={Register} />
       <Route exact path={'/email_register'} component={EmailRegister} />
       <Route exact path={'/login'} component={Login} />
       <Route exact path={'/password_reset'} component={PasswordReset} />

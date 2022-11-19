@@ -169,15 +169,14 @@ export const registerEmail = (email) => {
 };
 
 // 新規登録URL有効性確認
-export const checkRegisterUrl = (id) => {
+export const checkRegisterUrl = (tmpId) => {
   return async (dispatch) => {
-    if (!id) {
+    if (!tmpId) {
       dispatch(showMessageAction('error', '無効なURLです'));
       return false;
     }
-
     const params = {
-      id,
+      tmpId,
     };
     fetchWrapper(
       {
