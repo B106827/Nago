@@ -15,13 +15,13 @@ func (f LoginForm) Validate() error {
         validation.Field(
             &f.Email,
             validation.Required.Error("メールアドレスは入力必須です"),
-            validation.RuneLength(5, 255).Error("メールアドレスは{min}〜{max}文字です"),
+            validation.RuneLength(5, 255).Error("メールアドレスは{min}〜{max}文字で入力してください"),
             is.Email.Error("メールアドレスが不正な形式です"),
         ),
         validation.Field(
             &f.Password,
             validation.Required.Error("パスワードは入力必須です"),
-            validation.RuneLength(6, 20).Error("パスワードは{min}〜{max}文字です"),
+            validation.RuneLength(6, 20).Error("パスワードは{min}〜{max}文字で入力してください"),
         ),
     )
 }
