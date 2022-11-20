@@ -65,6 +65,11 @@ func (rc *RegisterController) Register(c echo.Context) error {
         c.Logger().Error(err)
         return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
     }
+    // 登録が完了すれば一時テーブルから削除しておく
+    if err := ut.Delete(); err != nil {
+        c.Logger().Error(err)
+        return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
+    }
 
     return c.JSON(http.StatusOK, successResponse("OKです"))
 }

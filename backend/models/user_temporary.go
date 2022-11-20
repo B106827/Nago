@@ -29,3 +29,8 @@ func (ut *UserTemporary) Create() error {
     db := database.GetDB()
     return db.Create(ut).Error
 }
+
+func (ut *UserTemporary) Delete() error {
+    db := database.GetDB()
+    return db.Delete(ut).Error
+}
