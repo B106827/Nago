@@ -12,7 +12,6 @@ func Init() error {
     e := echo.New()
     // initialize context
     contexts.InitCustomContext(e)
-
     // initialize router
     routes.InitRouter(e)
     // initialize middleware

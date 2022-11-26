@@ -9,10 +9,10 @@ var c *viper.Viper
 
 func Init(env string) {
     c = viper.New()
+    c.SetConfigFile("config/common/config.yml")
     c.SetConfigFile("yaml")
-    c.SetConfigName(env)
-    c.AddConfigPath("config/environments/")
-    c.AddConfigPath("/run/secrets/")
+    c.SetConfigName("config")
+    c.AddConfigPath("config/environments/" + env)
     if err := c.ReadInConfig(); err != nil {
         fmt.Println("config file read error")
         panic(err)

@@ -1,0 +1,5 @@
+session:
+  expireHour: "24"
+
+mail:
+  contentType: "text/plain"

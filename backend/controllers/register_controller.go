@@ -3,6 +3,7 @@ package controllers
 import (
     "net/http"
     "NagoBackend/constants"
+    //"NagoBackend/handlers"
     "NagoBackend/models"
     "NagoBackend/server/contexts"
     "NagoBackend/utils"
@@ -70,6 +71,8 @@ func (rc *RegisterController) Register(c echo.Context) error {
         c.Logger().Error(err)
         return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
     }
+    //authHandler := new(handlers.Auth)
+    //authHandler.Login(user.ID)
 
     return c.JSON(http.StatusOK, successResponse("OKです"))
 }

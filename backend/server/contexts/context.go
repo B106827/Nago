@@ -14,9 +14,13 @@ type CustomContext struct {
     echo.Context
 }
 
-type CustomError struct {
-    errorType     string
-    originalError error
+func InitCustomContext(e *echo.Echo) {
+    e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+        return func(c echo.Context) error {
+            cc := &CustomContext{c}
+            return next(cc)
+        }
+    })
 }
 
 func (c *CustomContext) BindValidate(i interface{}) error {
@@ -38,13 +42,3 @@ func (c *CustomContext) BindValidate(i interface{}) error {
     }
     return nil
 }
-
-func InitCustomContext(e *echo.Echo) {
-    e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
-        return func(c echo.Context) error {
-            cc := &CustomContext{c}
-            return next(cc)
-        }
-    })
-}
-
