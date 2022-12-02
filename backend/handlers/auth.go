@@ -42,7 +42,19 @@ func (*Auth) Login(c echo.Context, userid uint) error {
     }
 
     session := getSession(c)
+    // セッション保存
     session.Values[constants.SESSION_KEY_NAME] = t
+    if err := session.Save(c.Request(), c.Response()); err != nil {
+        c.Logger().Error(err)
+        return err
+    }
+    return nil
+}
+
+func (*Auth) Logout(c echo.Context) error {
+    session := getSession(c)
+    // セッション削除
+    session.Options.MaxAge = -1
     if err := session.Save(c.Request(), c.Response()); err != nil {
         c.Logger().Error(err)
         return err

@@ -34,7 +34,9 @@ func (lc *LoginController) Login(c echo.Context) error {
         return c.JSON(http.StatusOK, badRequestResponse([]string{"パスワードが一致しません"}))
     }
     authHandler := new(handlers.Auth)
-    authHandler.Login(c, user.ID)
+    if err := authHandler.Login(c, user.ID); err != nil {
+        return c.JSON(http.StatusOK, unauthorizedResponse([]string{"ログインに失敗しました"}))
+    }
     return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
         "user": user,
         "message": "ログインしました",
@@ -43,6 +45,10 @@ func (lc *LoginController) Login(c echo.Context) error {
 
 // ログアウト処理
 func (lc *LoginController) Logout(c echo.Context) error {
+    authHandler := new(handlers.Auth)
+    if err := authHandler.Logout(c); err != nil {
+        return c.JSON(http.StatusOK, serverErrorResponse([]string{"ログアウトに失敗しました"}))
+    }
     return c.JSON(http.StatusOK, successResponse(map[string]string{
         "message": "ログアウトしました",
     }))
