@@ -9,11 +9,22 @@ var c *viper.Viper
 
 func Init(env string) {
     c = viper.New()
-    c.SetConfigFile("config/common/config.yml")
     c.SetConfigFile("yaml")
-    c.SetConfigName("config")
-    c.AddConfigPath("config/environments/" + env)
+    c.SetConfigName(env)
+    c.AddConfigPath("config/environments/")
     if err := c.ReadInConfig(); err != nil {
+        fmt.Println("config file read error")
+        panic(err)
+    }
+    c.SetConfigName("common")
+    c.AddConfigPath("config/common/")
+    if err := c.MergeInConfig(); err != nil {
+        fmt.Println("config file read error")
+        panic(err)
+    }
+    c.SetConfigName("private")
+    c.AddConfigPath("config/common/")
+    if err := c.MergeInConfig(); err != nil {
         fmt.Println("config file read error")
         panic(err)
     }

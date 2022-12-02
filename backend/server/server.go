@@ -1,6 +1,7 @@
 package server
 
 import (
+    "fmt"
     "github.com/labstack/echo/v4"
     "NagoBackend/config"
     "NagoBackend/server/routes"
@@ -19,6 +20,6 @@ func Init() error {
 
     c := config.GetConfig()
     // server start
-    e.Logger.Fatal(e.Start(":" + c.GetString("server.port")))
+    e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", c.GetInt("server.port"))))
     return nil
 }

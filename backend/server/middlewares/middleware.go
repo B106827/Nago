@@ -20,7 +20,8 @@ func InitMiddleware(e *echo.Echo) {
         AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
     }))
     // session
-    e.Use(session.Middleware(sessions.NewCookieStore([]byte(c.GetString("session.secret")))))
+    cookie := sessions.NewCookieStore([]byte(c.GetString("session.secret")))
+    e.Use(session.Middleware(cookie))
     e.Validator = &CustomValidator{}
 }
 

@@ -2,7 +2,9 @@ package handlers
 
 import (
     "context"
+    "fmt"
     "NagoBackend/config"
+    "NagoBackend/constants"
     "time"
 
     "github.com/go-redis/redis/v8"
@@ -10,7 +12,6 @@ import (
     "github.com/gorilla/sessions"
     "github.com/labstack/echo/v4"
     "github.com/rbcervilla/redisstore/v8"
-    "github.com/k0kubun/pp"
 )
 
 type Auth struct {
@@ -22,30 +23,26 @@ type jwtCustomClaims struct {
     jwt.StandardClaims
 }
 
-var conf = config.GetConfig()
-
 func (*Auth) Login(c echo.Context, userid uint) error {
-    var conf = config.GetConfig()
-    var test = conf.GetString("session.secret")
-    pp.Print(conf)
-    pp.Print(test)
+    conf := config.GetConfig()
     claims := &jwtCustomClaims{
         userid,
         jwt.StandardClaims{
-            ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+            // 1日
+            ExpiresAt: time.Now().Add(time.Hour * time.Duration(conf.GetInt("session.expireHour"))).Unix(),
         },
     }
     // create token with claims
-    token      := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+    token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
     // generate encoded token
-    singingKey := []byte("qFsMnunj87WPesc31OWoPmWbBVSjqv9u")
+    singingKey := []byte(conf.GetString("session.secret"))
     t, err := token.SignedString(singingKey)
     if err != nil {
         return err
     }
 
     session := getSession(c)
-    session.Values["nago-token"] = t
+    session.Values[constants.SESSION_KEY_NAME] = t
     if err := session.Save(c.Request(), c.Response()); err != nil {
         c.Logger().Error(err)
         return err
@@ -54,20 +51,22 @@ func (*Auth) Login(c echo.Context, userid uint) error {
 }
 
 func getSession(c echo.Context) *sessions.Session {
+    conf := config.GetConfig()
     client := redis.NewClient(&redis.Options{
-        Addr: "nago-redis:6379",
-        Password: "rIguo7jfxkMjA5Il6RyG",
+        Addr: fmt.Sprintf("%s:%d", conf.GetString("redis.host"), conf.GetInt("redis.port")),
+        Password: conf.GetString("redis.password"),
     })
     store, err := redisstore.NewRedisStore(context.Background(), client)
     if err != nil {
         c.Logger().Error(err)
     }
-    store.KeyPrefix("session_")
+    store.KeyPrefix(constants.SESSION_REDIS_KEY_PREFIX)
     store.Options(sessions.Options{
-        MaxAge: 86400 * 1, // 1日
+        MaxAge: 3600 * conf.GetInt("session.expireHour"), // 1日
         HttpOnly: true,
+        Secure: true,
     })
-    session, err := store.Get(c.Request(), "nago-session")
+    session, err := store.Get(c.Request(), constants.SESSION_COOKIE_KEY_NAME)
     if err != nil {
         c.Logger().Error(err)
     }

@@ -1,5 +1,5 @@
 session:
-  expireHour: "24"
+  expireHour: 24
 
 mail:
   contentType: "text/plain"
