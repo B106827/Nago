@@ -26,7 +26,7 @@ const Config = {
         value: '/order/history',
       },
       {
-        label: 'プロフィール',
+        label: 'マイページ',
         icon: <PersonIcon />,
         value: '/user/mypage',
       },

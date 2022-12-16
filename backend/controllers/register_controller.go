@@ -58,10 +58,10 @@ func (rc *RegisterController) Register(c echo.Context) error {
     if err := user.FindByEmail(registerForm.Email); err == nil {
         return c.JSON(http.StatusOK, badRequestResponse([]string{"すでに登録済みのメールアドレスです"}))
     }
-    user.Name = registerForm.Name
-    user.Email = registerForm.Email
+    user.Name     = registerForm.Name
+    user.Email    = registerForm.Email
     user.Password = utils.GetEncryptedHash(registerForm.Password)
-    user.Status = constants.USER_STATUS_REGISTERED
+    user.Status   = constants.USER_STATUS_REGISTERED
     if err := user.Create(); err != nil {
         c.Logger().Error(err)
         return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))

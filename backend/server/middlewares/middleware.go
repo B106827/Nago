@@ -16,7 +16,7 @@ func InitMiddleware(e *echo.Echo) {
     e.Use(middleware.Logger())
     e.Use(middleware.Recover())
     e.Use(middleware.CORSWithConfig(middleware.CORSConfig {
-        AllowOrigins: c.GetStringSlice("server.cors"),
+        AllowOrigins: []string{c.GetString("url.front"), c.GetString("url.server")},
         AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
     }))
     // session

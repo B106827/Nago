@@ -2,7 +2,11 @@ package routes
 
 import (
     "github.com/labstack/echo/v4"
+    "NagoBackend/config"
     "NagoBackend/controllers"
+    "NagoBackend/handlers"
+
+    "github.com/labstack/echo/v4/middleware"
 )
 
 func InitRouter(e *echo.Echo) {
@@ -26,4 +30,17 @@ func InitRouter(e *echo.Echo) {
     api.POST("/login", loginController.Login)
     // logout
     api.GET("/logout", loginController.Logout)
+
+    conf := config.GetConfig()
+    jwtConfig := middleware.JWTConfig{
+        Claims:     &handlers.JwtCustomClaims{},
+        SigningKey: []byte(conf.GetString("session.secret")),
+    }
+
+    // user
+    apiU := e.Group("/api/user")
+    apiU.Use(middleware.JWTWithConfig(jwtConfig))
+    // mypage
+    userMyinfoController := controllers.NewUserMyinfoController()
+    apiU.GET("/myinfo", userMyinfoController.Index)
 }

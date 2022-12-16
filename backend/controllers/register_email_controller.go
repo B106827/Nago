@@ -50,7 +50,7 @@ func (rec *RegisterEmailController) RegisterEmail(c echo.Context) error {
     // 本登録用URLメール送信
     mailHandler := new(handlers.Mail)
     conf        := config.GetConfig()
-    url         := conf.GetString("url.main")
+    url         := conf.GetString("url.front")
     path        := "/register/" + ut.ID
     vars        := map[string]string{"Url": url + path}
     files       := []string{"views/mail/register_email.tpl", "views/mail/base.tpl"}

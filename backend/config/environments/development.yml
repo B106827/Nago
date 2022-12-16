@@ -20,4 +20,5 @@ mail:
   insecureSkipVerify: true
 
 url:
-  main: "localhost:3001"
+  front: "localhost:3001"
+  server: "localhost:8081"
