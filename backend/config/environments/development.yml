@@ -6,10 +6,6 @@ db:
   password: "NFc58T&4!EFk1"
   dbname: "nago"
 
-redis:
-  host: "nago-redis"
-  port: 6379
-
 server:
   port: 8081
 

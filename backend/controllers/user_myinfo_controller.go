@@ -4,7 +4,6 @@ import (
     "net/http"
 
 //    "github.com/golang-jwt/jwt"
-    "NagoBackend/handlers"
 //    "NagoBackend/server/contexts"
 //    "NagoBackend/utils"
 //    "net/http"
@@ -26,8 +25,6 @@ func (umc *UserMyinfoController) Index(c echo.Context) error {
     //claims := user.Claims.(*handlers.JwtCustomClaims)
     //pp.Print(claims)
 	//userID := claims.UserID
-	authHandler := new(handlers.Auth)
-	authHandler.Test(c)
     return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
         "message": "success",
     }))
