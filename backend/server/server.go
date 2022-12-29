@@ -1,25 +1,25 @@
 package server
 
 import (
-    "fmt"
-    "github.com/labstack/echo/v4"
-    "NagoBackend/config"
-    "NagoBackend/server/routes"
-    "NagoBackend/server/middlewares"
-    "NagoBackend/server/contexts"
+	"fmt"
+	"github.com/labstack/echo/v4"
+	"NagoBackend/config"
+	"NagoBackend/server/routes"
+	"NagoBackend/server/middlewares"
+	"NagoBackend/server/contexts"
 )
 
 func Init() error {
-    e := echo.New()
-    // initialize context
-    contexts.InitCustomContext(e)
-    // initialize router
-    routes.InitRouter(e)
-    // initialize middleware
-    middlewares.InitMiddleware(e)
+	e := echo.New()
+	// initialize context
+	contexts.InitCustomContext(e)
+	// initialize router
+	routes.InitRouter(e)
+	// initialize middleware
+	middlewares.InitMiddleware(e)
 
-    c := config.GetConfig()
-    // server start
-    e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", c.GetInt("server.port"))))
-    return nil
+	c := config.GetConfig()
+	// server start
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", c.GetInt("server.port"))))
+	return nil
 }
