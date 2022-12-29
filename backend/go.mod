@@ -8,6 +8,8 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/jinzhu/gorm v1.9.16
 	github.com/jinzhu/now v1.1.4 // indirect
+	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
+	github.com/k0kubun/pp v3.0.1+incompatible
 	github.com/kr/text v0.2.0 // indirect
 	github.com/labstack/echo/v4 v4.7.2
 	github.com/magiconair/properties v1.8.6 // indirect

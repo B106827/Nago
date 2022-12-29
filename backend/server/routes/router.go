@@ -33,6 +33,7 @@ func InitRouter(e *echo.Echo) {
 	api.GET("/logout", loginController.Logout)
 
 	// cookie で管理されている JWT をチェックする
+    // TODO: 他のファイルに移す
 	conf := config.GetConfig()
 	jwtConfig := middleware.JWTConfig{
 		Claims:     &handlers.JwtCustomClaims{},
