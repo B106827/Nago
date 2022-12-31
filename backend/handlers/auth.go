@@ -3,6 +3,7 @@ package handlers
 import (
 	"NagoBackend/config"
 	"NagoBackend/constants"
+	"NagoBackend/utils/types"
 	"net/http"
 	"time"
 
@@ -14,14 +15,9 @@ type Auth struct {
 	echo.Context
 }
 
-type JwtCustomClaims struct {
-	UserID uint
-	jwt.StandardClaims
-}
-
 func (*Auth) Login(c echo.Context, userid uint) error {
 	conf := config.GetConfig()
-	claims := &JwtCustomClaims{
+	claims := &types.JwtCustomClaims{
 		userid,
 		jwt.StandardClaims{
 			// 1日
