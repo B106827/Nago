@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
 
+	"github.com/k0kubun/pp"
 	"github.com/labstack/echo/v4"
 )
 
@@ -14,7 +14,8 @@ func NewUserMyinfoController() *UserMyinfoController {
 }
 
 func (umc *UserMyinfoController) Index(c echo.Context) error {
-	log.Println("hogehoge")
+	user := c.Get("user")
+	pp.Print(user)
 	return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
 		"message": "success",
 	}))

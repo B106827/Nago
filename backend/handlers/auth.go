@@ -33,12 +33,12 @@ func (*Auth) Login(c echo.Context, userid uint) error {
 		return err
 	}
 	// set cookie
-	cookie          := new(http.Cookie)
-	cookie.Expires   = time.Now().Add(24 * time.Hour) // 1日
-	cookie.HttpOnly  = true
-	cookie.Secure    = true
-	cookie.Name      = constants.SESSION_COOKIE_KEY_NAME
-	cookie.Value     = t
+	cookie := new(http.Cookie)
+	cookie.Expires = time.Now().Add(time.Hour * time.Duration(conf.GetInt("session.expireHour"))) // 1日
+	cookie.HttpOnly = true
+	cookie.Secure = true
+	cookie.Name = constants.SESSION_COOKIE_KEY_NAME
+	cookie.Value = t
 	c.SetCookie(cookie)
 	return nil
 }

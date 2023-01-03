@@ -41,8 +41,7 @@ func InitRouter(e *echo.Echo) {
 	/*
 	  /api/user
 	*/
-	apiU := e.Group("/api/user")
-	apiU.Use(authMiddleware.Authenticate())
+	apiU := e.Group("/api/user", authMiddleware.Authenticate())
 	//
 	// ユーザー情報
 	//

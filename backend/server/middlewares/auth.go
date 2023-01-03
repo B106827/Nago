@@ -1,29 +1,45 @@
 package middlewares
 
 import (
-	"NagoBackend/utils/types"
 	"NagoBackend/config"
-	//"NagoBackend/constants"
+	"NagoBackend/constants"
+	"NagoBackend/models"
+	"NagoBackend/utils/types"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-
-	//"github.com/k0kubun/pp"
 )
 
-type AuthMiddleware struct{}
+type AuthMiddleware struct {
+	echo.Context
+}
 
 func NewAuthMiddleware() *AuthMiddleware {
 	return &AuthMiddleware{}
 }
 
 func (am *AuthMiddleware) Authenticate() echo.MiddlewareFunc {
-	// JWTの有効性確認 
+	// JWTの有効性確認
 	conf := config.GetConfig()
+
 	jwtConfig := middleware.JWTConfig{
-		Claims:     &types.JwtCustomClaims{},
-		SigningKey: []byte(conf.GetString("session.secret")),
-		//TokenLookup: "cookie:" + constants.SESSION_COOKIE_KEY_NAME,
+		Claims:         &types.JwtCustomClaims{},
+		SigningKey:     []byte(conf.GetString("session.secret")),
+		TokenLookup:    "cookie:" + constants.SESSION_COOKIE_KEY_NAME,
+		SuccessHandler: setMember,
 	}
 	return middleware.JWTWithConfig(jwtConfig)
+}
+
+func setMember(c echo.Context) {
+	u := c.Get("user").(*jwt.Token)
+	claims := u.Claims.(*types.JwtCustomClaims)
+	userId := int(claims.UserID)
+	user := new(models.User)
+	if err := user.FindById(userId); err != nil {
+		// TODO: panic以外でメンバーが見つからない場合を実装したい
+		panic("member not found")
+	}
+	c.Set("user", user)
 }
