@@ -1,9 +1,10 @@
 package routes
 
 import (
-	"github.com/labstack/echo/v4"
 	"NagoBackend/controllers"
 	"NagoBackend/server/middlewares"
+
+	"github.com/labstack/echo/v4"
 )
 
 func InitRouter(e *echo.Echo) {
@@ -13,7 +14,7 @@ func InitRouter(e *echo.Echo) {
 	authMiddleware := middlewares.NewAuthMiddleware()
 
 	/*
-	  /api 
+	  /api
 	*/
 	api := e.Group("/api")
 	//
@@ -37,7 +38,7 @@ func InitRouter(e *echo.Echo) {
 	//
 	loginController := controllers.NewLoginController()
 	api.POST("/login", loginController.Login)
-	api.GET("/logout", loginController.Logout)
+	api.GET("/logout", loginController.Logout, authMiddleware.Authenticate())
 	/*
 	  /api/user
 	*/
