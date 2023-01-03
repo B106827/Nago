@@ -1,12 +1,23 @@
 package constants
 
 const (
-	// user
+	/*
+	  ユーザー関連
+	*/
+	// アクティブユーザーのステータス
 	USER_STATUS_REGISTERED = 1
-	// session（Cookie）
+	/*
+	  セッション関連
+	*/
+	// JWTのCookieキー名
 	SESSION_COOKIE_KEY_NAME = "nago-cs"
-	// CSRF（Contexst）
+	// CSRFのContextキー名
 	CSRF_CONTEXT_KEY_NAME = "nago-ctc"
-	// CSRF（Cookie）
+	// CSRFのCookieキー名
 	CSRF_COOKIE_KEY_NAME = "nago-cc"
+	/*
+	  時間関連
+	*/
+	// 1日（秒）
+	TIME_SECONDS_A_DAY = 86400
 )
