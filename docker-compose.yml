@@ -50,6 +50,12 @@ services:
       options:
         max-size: "3m"
         max-file: "5"
+  maildev:
+    container_name: nago-maildev
+    image: maildev/maildev:latest
+    ports:
+      - 1080:1080
+      - 1025:1025
 volumes:
   front-node-modules:
   db-data:

@@ -1,10 +1,20 @@
 db:
-    provider: "mysql"
-    host: "nago-mysql"
-    port: "3306"
-    user: "www"
-    password: "NFc58T&4!EFk1"
-    dbname: "nago"
+  provider: "mysql"
+  host: "nago-mysql"
+  port: 3306
+  user: "www"
+  password: "NFc58T&4!EFk1"
+  dbname: "nago"
 
 server:
-    port: "8081"
+  port: 8081
+
+mail:
+  from: "nago-support-dev@gmail.com"
+  host: "nago-maildev"
+  port: 1025
+  insecureSkipVerify: true
+
+url:
+  front: "localhost:3001"
+  server: "localhost:8081"

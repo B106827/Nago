@@ -1,6 +1,40 @@
 //import { push } from 'connected-react-router';
 //import { fetchWrapper } from '../utils/http';
 
+export const addProductToCart = () => {
+  return async () => {
+    // const uid = getState().users.uid;
+    //const cartRef = db.collection('users').doc(uid).collection('cart').doc();
+    //addedProduct['cartId'] = cartRef.id;
+    //await cartRef.set(addedProduct);
+    //dispatch(push('/'));
+  };
+};
+
+export const fetchOrdersHistory = () => {
+  return async () => {
+    //const uid = getState().users.uid;
+    //const list = [];
+    // db.collection('users').doc(uid)
+    //   .collection('orders')
+    //   .ordefetchOrdersHistoryActionrBy('updated_at', 'desc')
+    //   .get()
+    //   .then((snapshots) => {
+    //     snapshots.forEach(snapshot => {
+    //       const data = snapshot.data();
+    //       list.push(data);
+    //     });
+    //     dispatch(fetchOrdersHistoryAction(list));
+    //   })
+  };
+};
+
+export const fetchProductsInCart = (products) => {
+  return async (dispatch) => {
+//    dispatch(fetchProductsInCartAction(products));
+  };
+};
+
 //export const orderProduct = (productsInCart, amount) => {
 //  return async (dispatch, getState) => {
 //    const uid = getState().users.uid;

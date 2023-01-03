@@ -12,13 +12,13 @@ const Register = () => {
   const selector = useSelector((state) => state);
 
   // URL が有効かどうか確認する
-  const { id } = useParams();
-  if (!id) {
+  const { tmpId } = useParams();
+  if (!tmpId) {
     dispatch(showMessageAction('error', '無効なURLです'));
     dispatch(push('/'));
   } else {
     useEffect(() => {
-      dispatch(checkRegisterUrl(id));
+      dispatch(checkRegisterUrl(tmpId));
     }, []);
   }
 
@@ -106,7 +106,7 @@ const Register = () => {
         <PrimaryButton
           label={'アカウントを登録する'}
           onClick={() =>
-            dispatch(register(id, name, email, password, confirmPassword))
+            dispatch(register(tmpId, name, email, password, confirmPassword))
           }
           addStyle={{ fontWeight: 'bold' }}
         />

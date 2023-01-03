@@ -2,46 +2,11 @@ import { push } from 'connected-react-router';
 import { fetchWrapper } from '../../utils/http';
 import { showMessageAction } from '../messages/actions';
 import {
-  fetchProductsInCartAction,
   loginAction,
   logedInAction,
   logoutAction,
   fetchUserTmpEmail,
 } from './actions';
-
-export const addProductToCart = () => {
-  return async () => {
-    // const uid = getState().users.uid;
-    //const cartRef = db.collection('users').doc(uid).collection('cart').doc();
-    //addedProduct['cartId'] = cartRef.id;
-    //await cartRef.set(addedProduct);
-    //dispatch(push('/'));
-  };
-};
-
-export const fetchOrdersHistory = () => {
-  return async () => {
-    //const uid = getState().users.uid;
-    //const list = [];
-    // db.collection('users').doc(uid)
-    //   .collection('orders')
-    //   .orderBy('updated_at', 'desc')
-    //   .get()
-    //   .then((snapshots) => {
-    //     snapshots.forEach(snapshot => {
-    //       const data = snapshot.data();
-    //       list.push(data);
-    //     });
-    //     dispatch(fetchOrdersHistoryAction(list));
-    //   })
-  };
-};
-
-export const fetchProductsInCart = (products) => {
-  return async (dispatch) => {
-    dispatch(fetchProductsInCartAction(products));
-  };
-};
 
 export const resetPassword = (email) => {
   return async () => {
@@ -133,12 +98,11 @@ export const listenAuth = (isRedirect = true) => {
 
 // メールアドレス登録
 export const registerEmail = (email) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     if (email === '') {
       dispatch(showMessageAction('error', 'メールアドレスが未入力です'));
       return false;
     }
-
     const params = {
       email,
     };
@@ -155,7 +119,7 @@ export const registerEmail = (email) => {
           dispatch(
             showMessageAction(
               'success',
-              '登録用URLを送信しました。メールを確認してください'
+              json.result.message
             )
           );
         } else {
@@ -163,22 +127,21 @@ export const registerEmail = (email) => {
         }
       })
       .catch((error) => {
+        console.log('error: ', error);
         dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
-        console.log(error);
       });
   };
 };
 
 // 新規登録URL有効性確認
-export const checkRegisterUrl = (id) => {
+export const checkRegisterUrl = (tmpId) => {
   return async (dispatch) => {
-    if (!id) {
+    if (!tmpId) {
       dispatch(showMessageAction('error', '無効なURLです'));
       return false;
     }
-
     const params = {
-      id,
+      tmpId,
     };
     fetchWrapper(
       {
@@ -273,6 +236,31 @@ export const logout = () => {
           dispatch(logoutAction());
           dispatch(showMessageAction('success', json.result.message));
           dispatch(push('/'));
+        } else {
+          dispatch(showMessageAction('error', json.messages));
+        }
+      })
+      .catch((error) => {
+        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
+        console.log(error);
+      });
+  };
+};
+
+// ユーザー情報取得
+export const fetchMyInfo = () => {
+  return (dispatch) => {
+    fetchWrapper(
+      {
+        type: 'GET',
+        url: '/user/myinfo',
+      },
+      dispatch
+    )
+      .then((json) => {
+        if (json.status === 200) {
+          console.log(json);
+          dispatch(showMessageAction('success', json.result.message));
         } else {
           dispatch(showMessageAction('error', json.messages));
         }

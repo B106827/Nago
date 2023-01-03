@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+    // コマンドライン引数「-e」の値を取得する（デフォルトは "development"）
     env := flag.String("e", "development", "")
     flag.Parse()
 
