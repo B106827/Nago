@@ -27,19 +27,19 @@ func (am *AuthMiddleware) Authenticate() echo.MiddlewareFunc {
 		Claims:         &types.JwtCustomClaims{},
 		SigningKey:     []byte(conf.GetString("session.secret")),
 		TokenLookup:    "cookie:" + constants.SESSION_COOKIE_KEY_NAME,
-		SuccessHandler: setMember,
+		SuccessHandler: setUser,
 	}
 	return middleware.JWTWithConfig(jwtConfig)
 }
 
-func setMember(c echo.Context) {
+func setUser(c echo.Context) {
 	u := c.Get("user").(*jwt.Token)
 	claims := u.Claims.(*types.JwtCustomClaims)
 	userId := int(claims.UserID)
 	user := new(models.User)
 	if err := user.FindById(userId); err != nil {
 		// TODO: panic以外でメンバーが見つからない場合を実装したい
-		panic("member not found")
+		panic("user not found")
 	}
 	c.Set("user", user)
 }
