@@ -23,10 +23,12 @@ func InitMiddleware(e *echo.Echo) {
 	}))
 	// CSRF
 	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
-		ContextKey:   constants.CSRF_CONTEXT_KEY_NAME,
-		CookieName:   constants.CSRF_COOKIE_KEY_NAME,
-		TokenLookup:  "cookie:" + constants.CSRF_COOKIE_KEY_NAME,
-		CookieMaxAge: constants.TIME_SECONDS_A_DAY,
+		ContextKey:     constants.CSRF_CONTEXT_KEY_NAME,
+		CookieName:     constants.CSRF_COOKIE_KEY_NAME,
+		CookieMaxAge:   constants.TIME_SECONDS_A_DAY,
+		CookieSecure:   true,
+		CookieHTTPOnly: true,
+		TokenLookup:    "cookie:" + constants.CSRF_COOKIE_KEY_NAME,
 	}))
 	// バリデータ
 	e.Validator = &CustomValidator{}
