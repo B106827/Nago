@@ -3,7 +3,6 @@ import { fetchWrapper } from '../../utils/http';
 import { showMessageAction } from '../messages/actions';
 import {
   loginAction,
-  logedInAction,
   logoutAction,
   fetchUserTmpEmail,
 } from './actions';
@@ -65,33 +64,6 @@ export const login = (email, password) => {
       .catch((error) => {
         console.log('error :', error);
         dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
-      });
-  };
-};
-
-// 認証状態確認
-export const listenAuth = (isRedirect = true) => {
-  return async (dispatch) => {
-    fetchWrapper(
-      {
-        type: 'GET',
-        url: '/listen_auth',
-      },
-      dispatch
-    )
-      .then((json) => {
-        if (json.status === 200) {
-          // 認証済み
-          dispatch(logedInAction());
-        } else if (isRedirect) {
-          // 未認証
-          dispatch(showMessageAction('info', 'ログインし直してください'));
-          dispatch(push('/login'));
-        }
-      })
-      .catch((error) => {
-        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
-        console.log(error);
       });
   };
 };
