@@ -1,6 +1,7 @@
 package models
 
 import (
+	"NagoBackend/constants"
 	"NagoBackend/database"
 	"time"
 )
@@ -24,7 +25,7 @@ func (Product) TableName() string {
 func (p *Product) GetActiveProductsWithImages() ([]Product, error) {
 	db := database.GetDB()
 	var res []Product
-	result := db.Preload("Images").Where("product.status = ?", 2).Find(&res).Error
+	result := db.Preload("Images").Where("product.status = ?", constants.PRODUCT_STATUS_ACTIVE).Find(&res).Error
 	if result != nil {
 		// エラーが発生した場合
 		return nil, result

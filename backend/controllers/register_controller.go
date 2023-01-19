@@ -16,18 +16,14 @@ import (
 
 type RegisterController struct{}
 
-func NewRegisterController() *RegisterController {
-	return &RegisterController{}
-}
-
 // 登録URL確認
 func (rc *RegisterController) UrlCheck(c echo.Context) error {
-	registerUrlForm := new(registerForms.RegisterUrlForm)
+	registerUrlForm := registerForms.RegisterUrlForm{}
 	cc := c.(*contexts.CustomContext)
 	if err := cc.BindValidate(registerUrlForm); err != nil {
 		return c.JSON(http.StatusOK, badRequestResponse(err))
 	}
-	utm := new(models.UserTemporary)
+	utm := models.UserTemporary{}
 	ut, err := utm.FindById(registerUrlForm.TmpID)
 	if err != nil || ut == nil {
 		// エラーもしくはデータが存在しない
@@ -44,12 +40,12 @@ func (rc *RegisterController) UrlCheck(c echo.Context) error {
 
 // 登録処理
 func (rc *RegisterController) Register(c echo.Context) error {
-	registerForm := new(registerForms.RegisterForm)
+	registerForm := registerForms.RegisterForm{}
 	cc := c.(*contexts.CustomContext)
 	if err := cc.BindValidate(registerForm); err != nil {
 		return c.JSON(http.StatusOK, badRequestResponse(err))
 	}
-	utm := new(models.UserTemporary)
+	utm := models.UserTemporary{}
 	ut, err := utm.FindById(registerForm.TmpID)
 	if err != nil {
 		return c.JSON(http.StatusOK, badRequestResponse([]string{"無効なURLです"}))
@@ -58,7 +54,7 @@ func (rc *RegisterController) Register(c echo.Context) error {
 		// 有効期限が切れていれば無効
 		return c.JSON(http.StatusOK, badRequestResponse([]string{"有効期限(24時間)が切れています。もう一度登録をお願いします"}))
 	}
-	um := new(models.User)
+	um := models.User{}
 	user, err := um.FindByEmail(registerForm.Email)
 	if err != nil || user != nil {
 		return c.JSON(http.StatusOK, badRequestResponse([]string{"すでに登録済みのメールアドレスです"}))

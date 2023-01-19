@@ -15,10 +15,6 @@ type AuthMiddleware struct {
 	echo.Context
 }
 
-func NewAuthMiddleware() *AuthMiddleware {
-	return &AuthMiddleware{}
-}
-
 func (am *AuthMiddleware) Authenticate() echo.MiddlewareFunc {
 	// JWTの有効性確認
 	conf := config.GetConfig()
@@ -36,7 +32,7 @@ func setUser(c echo.Context) {
 	u := c.Get("user").(*jwt.Token)
 	claims := u.Claims.(*types.JwtCustomClaims)
 	userId := int(claims.UserID)
-	um := new(models.User)
+	um := models.User{}
 	user, err := um.FindById(userId)
 	if err != nil {
 		// TODO: panic以外でメンバーが見つからない場合を実装したい

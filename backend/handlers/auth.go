@@ -17,7 +17,7 @@ type Auth struct {
 
 func (*Auth) Login(c echo.Context, userid uint) error {
 	conf := config.GetConfig()
-	claims := &types.JwtCustomClaims{
+	claims := types.JwtCustomClaims{
 		userid,
 		jwt.StandardClaims{
 			// 1日
@@ -33,12 +33,13 @@ func (*Auth) Login(c echo.Context, userid uint) error {
 		return err
 	}
 	// set cookie
-	cookie := new(http.Cookie)
-	cookie.Expires = time.Now().Add(time.Hour * time.Duration(conf.GetInt("session.expireHour"))) // 1日
-	cookie.HttpOnly = true
-	cookie.Secure = true
-	cookie.Name = constants.SESSION_COOKIE_KEY_NAME
-	cookie.Value = t
+	cookie := &http.Cookie{
+		Expires:  time.Now().Add(time.Hour * time.Duration(conf.GetInt("session.expireHour"))),
+		HttpOnly: true,
+		Secure:   true,
+		Name:     constants.SESSION_COOKIE_KEY_NAME,
+		Value:    t,
+	}
 	c.SetCookie(cookie)
 	return nil
 }

@@ -14,18 +14,14 @@ import (
 
 type LoginController struct{}
 
-func NewLoginController() *LoginController {
-	return &LoginController{}
-}
-
 // ログイン処理
 func (lc *LoginController) Login(c echo.Context) error {
-	loginForm := new(loginForms.LoginForm)
+	loginForm := loginForms.LoginForm{}
 	cc := c.(*contexts.CustomContext)
 	if err := cc.BindValidate(loginForm); err != nil {
 		return c.JSON(http.StatusOK, badRequestResponse(err))
 	}
-	um := new(models.User)
+	um := models.User{}
 	user, err := um.FindByEmail(loginForm.Email)
 	if err != nil || user == nil {
 		// エラーもしくはユーザーが存在しない
@@ -35,7 +31,7 @@ func (lc *LoginController) Login(c echo.Context) error {
 	if paramPasswordHash != user.Password {
 		return c.JSON(http.StatusOK, badRequestResponse([]string{"パスワードが一致しません"}))
 	}
-	authHandler := new(handlers.Auth)
+	authHandler := handlers.Auth{}
 	if err := authHandler.Login(c, user.ID); err != nil {
 		return c.JSON(http.StatusOK, unauthorizedResponse([]string{"ログインに失敗しました"}))
 	}
@@ -47,7 +43,7 @@ func (lc *LoginController) Login(c echo.Context) error {
 
 // ログアウト処理
 func (lc *LoginController) Logout(c echo.Context) error {
-	authHandler := new(handlers.Auth)
+	authHandler := handlers.Auth{}
 	if err := authHandler.Logout(c); err != nil {
 		return c.JSON(http.StatusOK, serverErrorResponse([]string{"ログアウトに失敗しました"}))
 	}

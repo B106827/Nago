@@ -9,13 +9,9 @@ import (
 
 type ProductController struct{}
 
-func NewProductController() *ProductController {
-	return &ProductController{}
-}
-
 // 商品一覧
 func (pc *ProductController) Index(c echo.Context) error {
-	pm := new(models.Product)
+	pm := models.Product{}
 	products, err := pm.GetActiveProductsWithImages()
 	if err != nil {
 		c.Logger().Error(err)

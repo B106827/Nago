@@ -9,10 +9,6 @@ import (
 
 type UserMyinfoController struct{}
 
-func NewUserMyinfoController() *UserMyinfoController {
-	return &UserMyinfoController{}
-}
-
 func (umc *UserMyinfoController) Index(c echo.Context) error {
 	user := c.Get("user")
 	pp.Print(user)

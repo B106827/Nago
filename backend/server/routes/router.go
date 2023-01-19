@@ -11,7 +11,7 @@ func InitRouter(e *echo.Echo) {
 	/*
 	  認証ミドルウェア
 	*/
-	authMiddleware := middlewares.NewAuthMiddleware()
+	authMiddleware := middlewares.AuthMiddleware{}
 
 	/*
 	  /api
@@ -20,23 +20,23 @@ func InitRouter(e *echo.Echo) {
 	//
 	// ヘルスチェック
 	//
-	healthController := controllers.NewHealthController()
+	healthController := controllers.HealthController{}
 	api.GET("/health", healthController.Index)
 	//
 	// 新規登録のためのメール送信
 	//
-	registerEmailController := controllers.NewRegisterEmailController()
+	registerEmailController := controllers.RegisterEmailController{}
 	api.POST("/register_email", registerEmailController.RegisterEmail)
 	//
 	// 新規登録
 	//
-	registerController := controllers.NewRegisterController()
+	registerController := controllers.RegisterController{}
 	api.POST("/register_url_check", registerController.UrlCheck)
 	api.POST("/register", registerController.Register)
 	//
 	// ログイン・ログアウト
 	//
-	loginController := controllers.NewLoginController()
+	loginController := controllers.LoginController{}
 	api.POST("/login", loginController.Login)
 	api.GET("/logout", loginController.Logout, authMiddleware.Authenticate())
 
@@ -47,7 +47,7 @@ func InitRouter(e *echo.Echo) {
 	//
 	// 商品一覧
 	//
-	productController := controllers.NewProductController()
+	productController := controllers.ProductController{}
 	apiP.GET("", productController.Index)
 
 	/*
@@ -57,6 +57,6 @@ func InitRouter(e *echo.Echo) {
 	//
 	// ユーザー情報
 	//
-	userMyinfoController := controllers.NewUserMyinfoController()
+	userMyinfoController := controllers.UserMyinfoController{}
 	apiU.GET("/myinfo", userMyinfoController.Index)
 }

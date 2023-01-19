@@ -15,18 +15,14 @@ import (
 
 type RegisterEmailController struct{}
 
-func NewRegisterEmailController() *RegisterEmailController {
-	return &RegisterEmailController{}
-}
-
 // メールアドレス仮登録処理
 func (rec *RegisterEmailController) RegisterEmail(c echo.Context) error {
-	registerEmailForm := new(registerEmailForms.RegisterEmailForm)
+	registerEmailForm := registerEmailForms.RegisterEmailForm{}
 	cc := c.(*contexts.CustomContext)
 	if err := cc.BindValidate(registerEmailForm); err != nil {
 		return c.JSON(http.StatusOK, badRequestResponse(err))
 	}
-	um := new(models.User)
+	um := models.User{}
 	user, err := um.FindByEmail(registerEmailForm.Email)
 	if err != nil || user != nil {
 		// エラー発生もしくはすでに登録済み
@@ -38,7 +34,7 @@ func (rec *RegisterEmailController) RegisterEmail(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
 	}
-	utm := new(models.UserTemporary)
+	utm := models.UserTemporary{}
 	utm.ID = rndID
 	utm.Email = registerEmailForm.Email
 	// 有効期限は1日後
@@ -47,7 +43,7 @@ func (rec *RegisterEmailController) RegisterEmail(c echo.Context) error {
 		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
 	}
 	// 本登録用URLメール送信
-	mailHandler := new(handlers.Mail)
+	mailHandler := handlers.Mail{}
 	conf := config.GetConfig()
 	url := conf.GetString("url.front")
 	path := "/register/" + utm.ID
