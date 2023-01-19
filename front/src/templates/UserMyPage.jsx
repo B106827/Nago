@@ -24,7 +24,7 @@ const UserMyPage = () => {
 
   useEffect(() => {
     dispatch(fetchMyInfo());
-  }, [dispatch]);
+  }, []);
 
   return (
     <section className='c-section-wrapin'>

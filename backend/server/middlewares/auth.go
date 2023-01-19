@@ -36,8 +36,9 @@ func setUser(c echo.Context) {
 	u := c.Get("user").(*jwt.Token)
 	claims := u.Claims.(*types.JwtCustomClaims)
 	userId := int(claims.UserID)
-	user := new(models.User)
-	if err := user.FindById(userId); err != nil {
+	um := new(models.User)
+	user, err := um.FindById(userId)
+	if err != nil {
 		// TODO: panic以外でメンバーが見つからない場合を実装したい
 		panic("user not found")
 	}

@@ -1,11 +1,18 @@
+import { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
+import { useDispatch } from 'react-redux';
 import { theme } from '../assets/theme';
 import { constants } from '../utils/constants';
+import { fetchProducts } from '../reducks/products/operations';
 import { ProductCard } from '../components/Products';
 
 const Home = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
   const products = constants.products;
 
   return (

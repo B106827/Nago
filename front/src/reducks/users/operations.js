@@ -130,14 +130,17 @@ export const checkRegisterUrl = (tmpId) => {
             dispatch(fetchUserTmpEmail(json.result.email));
           } else {
             dispatch(showMessageAction('error', '登録用URLを確認してください'));
+            dispatch(push('/'));
           }
         } else {
           dispatch(showMessageAction('error', json.messages));
+          dispatch(push('/'));
         }
       })
       .catch((error) => {
         dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
         console.log(error);
+        dispatch(push('/'));
       });
   };
 };

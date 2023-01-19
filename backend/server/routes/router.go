@@ -39,6 +39,17 @@ func InitRouter(e *echo.Echo) {
 	loginController := controllers.NewLoginController()
 	api.POST("/login", loginController.Login)
 	api.GET("/logout", loginController.Logout, authMiddleware.Authenticate())
+
+	/*
+	  /api/product
+	*/
+	apiP := e.Group("/api/product")
+	//
+	// 商品一覧
+	//
+	productController := controllers.NewProductController()
+	apiP.GET("", productController.Index)
+
 	/*
 	  /api/user
 	*/

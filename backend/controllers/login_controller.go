@@ -25,8 +25,10 @@ func (lc *LoginController) Login(c echo.Context) error {
 	if err := cc.BindValidate(loginForm); err != nil {
 		return c.JSON(http.StatusOK, badRequestResponse(err))
 	}
-	user := new(models.User)
-	if err := user.FindByEmail(loginForm.Email); err != nil {
+	um := new(models.User)
+	user, err := um.FindByEmail(loginForm.Email)
+	if err != nil || user == nil {
+		// エラーもしくはユーザーが存在しない
 		return c.JSON(http.StatusOK, badRequestResponse([]string{"メンバーが見つかりません"}))
 	}
 	paramPasswordHash := utils.GetEncryptedHash(loginForm.Password)

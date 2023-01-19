@@ -1,5 +1,27 @@
 //import { push } from 'connected-react-router';
-//import { fetchWrapper } from '../utils/http';
+import { fetchWrapper } from '../../utils/http';
+import { showMessageAction } from '../messages/actions';
+
+export const fetchProducts = () => {
+  return async (dispatch) => {
+    fetchWrapper(
+      {
+        type: 'GET',
+        url: '/product',
+      },
+      dispatch,
+    )
+      .then((json) => {
+        if (json.status === 200) {
+          return;
+        }
+      })
+      .catch((error) => {
+        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
+        console.log(error);
+      });
+  };
+};
 
 export const addProductToCart = () => {
   return async () => {
