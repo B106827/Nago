@@ -16,7 +16,7 @@ type LoginController struct{}
 
 // ログイン処理
 func (lc *LoginController) Login(c echo.Context) error {
-	loginForm := loginForms.LoginForm{}
+	loginForm := new(loginForms.LoginForm)
 	cc := c.(*contexts.CustomContext)
 	if err := cc.BindValidate(loginForm); err != nil {
 		return c.JSON(http.StatusOK, badRequestResponse(err))
