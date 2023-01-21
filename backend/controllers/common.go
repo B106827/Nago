@@ -1,30 +1,35 @@
 package controllers
 
 import (
-    "net/http"
+	"net/http"
 )
 
 type response struct {
-    Status  int         `json:"status"`
-    Result  interface{} `json:"result"`
+	Status int         `json:"status"`
+	Result interface{} `json:"result"`
 }
 
 // 200
 func successResponse(res interface{}) *response {
-    return &response{http.StatusOK, res}
+	return &response{http.StatusOK, res}
 }
 
 // 400
 func badRequestResponse(res interface{}) *response {
-    return &response{http.StatusBadRequest, res}
+	return &response{http.StatusBadRequest, res}
 }
 
 // 401
 func unauthorizedResponse(res interface{}) *response {
-    return &response{http.StatusUnauthorized, res}
+	return &response{http.StatusUnauthorized, res}
+}
+
+// 404
+func notFoundResponse(res interface{}) *response {
+	return &response{http.StatusNotFound, res}
 }
 
 // 500
 func serverErrorResponse(res interface{}) *response {
-    return &response{http.StatusInternalServerError, res}
+	return &response{http.StatusInternalServerError, res}
 }

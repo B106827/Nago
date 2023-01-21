@@ -21,7 +21,7 @@ export const logedInAction = () => {
 };
 
 export const FETCH_USER_TMP_EMAIL = 'FETCH_USER_TMP_EMAIL';
-export const fetchUserTmpEmail = (email) => {
+export const fetchUserTmpEmailAction = (email) => {
   return {
     type: FETCH_USER_TMP_EMAIL,
     payload: {
