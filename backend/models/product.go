@@ -7,15 +7,15 @@ import (
 )
 
 type Product struct {
-	ID          uint   `json:"id"          gorm:"column(id);primaryKey;autoIncrement;not null;type(uint);"`
-	Name        string `json:"name"        gorm:"column(title);size(255);not null;type(varchar(255));"`
-	SubTitle    string `json:"subTitle"    gorm:"column(sub_title);size(255);type(varchar(255));"`
-	Price       uint   `json:"price"       gorm:"column(price);not null;type(int);"`
-	Description string `json:"description" gorm:"column(description);type(text);"`
-	Status      uint   `json:"-"           gorm:"column(status);default(1);type(int);"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	Images      []ProductImage
+	ID          uint           `json:"id"          gorm:"column(id);primaryKey;autoIncrement;not null;type(uint);"`
+	Name        string         `json:"name"        gorm:"column(title);size(255);not null;type(varchar(255));"`
+	SubTitle    string         `json:"subTitle"    gorm:"column(sub_title);size(255);type(varchar(255));"`
+	Price       uint           `json:"price"       gorm:"column(price);not null;type(int);"`
+	Description string         `json:"description" gorm:"column(description);type(text);"`
+	Status      uint           `json:"-"           gorm:"column(status);default(1);type(int);"`
+	CreatedAt   time.Time      `json:"-"`
+	UpdatedAt   time.Time      `json:"-"`
+	Images      []ProductImage `json:"images"`
 }
 
 func (Product) TableName() string {

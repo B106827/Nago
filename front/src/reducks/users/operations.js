@@ -4,7 +4,7 @@ import { showMessageAction } from '../messages/actions';
 import {
   loginAction,
   logoutAction,
-  fetchUserTmpEmail,
+  fetchUserTmpEmailAction,
 } from './actions';
 
 export const resetPassword = (email) => {
@@ -127,7 +127,7 @@ export const checkRegisterUrl = (tmpId) => {
         if (json.status === 200) {
           dispatch(showMessageAction('info', '新規登録を進めてください'));
           if (json.result.email) {
-            dispatch(fetchUserTmpEmail(json.result.email));
+            dispatch(fetchUserTmpEmailAction(json.result.email));
           } else {
             dispatch(showMessageAction('error', '登録用URLを確認してください'));
             dispatch(push('/'));

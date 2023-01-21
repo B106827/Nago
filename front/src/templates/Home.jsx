@@ -1,19 +1,28 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { theme } from '../assets/theme';
 import { constants } from '../utils/constants';
 import { fetchProducts } from '../reducks/products/operations';
+import { getProducts } from '../reducks/products/selectors';
 import { ProductCard } from '../components/Products';
 
 const Home = () => {
-  const classes = useStyles();
+  const classes  = useStyles();
   const dispatch = useDispatch();
+  const selector = useSelector((state) => state);
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, []);
-  const products = constants.products;
+
+  const [products, setProducts] = useState([]);
+
+  const fetchProductsList = getProducts(selector);
+  useEffect(() => {
+    if (fetchProductsList) setProducts(fetchProductsList);
+    console.log(fetchProductsList);
+  }, [fetchProductsList])
 
   return (
     <section>
@@ -22,7 +31,12 @@ const Home = () => {
         <div className={classes.topSectionFlow}>
           {products.map((product, i) =>
             <div key={i}>
-              <ProductCard name={product.name} images={product.images} price={product.price} />
+              <ProductCard
+                id={product.id}
+                name={product.name}
+                images={product.images}
+                price={product.price}
+              />
             </div>
           )}
         </div>

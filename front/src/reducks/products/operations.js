@@ -1,6 +1,7 @@
 //import { push } from 'connected-react-router';
 import { fetchWrapper } from '../../utils/http';
 import { showMessageAction } from '../messages/actions';
+import { fetchProductsAction } from './actions';
 
 export const fetchProducts = () => {
   return async (dispatch) => {
@@ -13,7 +14,12 @@ export const fetchProducts = () => {
     )
       .then((json) => {
         if (json.status === 200) {
-          return;
+          const products = json.result.products;
+          if (Array.isArray(products)) {
+            dispatch(
+              fetchProductsAction(products)
+            );
+          }
         }
       })
       .catch((error) => {

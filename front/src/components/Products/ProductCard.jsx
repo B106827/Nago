@@ -10,14 +10,14 @@ import { useDispatch } from 'react-redux';
 const ProductCard = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const images = props.images.length > 0 ? props.images : [{ path: NoImage }];
+  const images = props.images.length > 0 ? props.images : [{ url: NoImage }];
   const price = props.price.toLocaleString();
 
   return (
     <Card className={classes.card}>
       <CardMedia
         className={classes.media}
-        image={images[0].path}
+        image={images[0].url}
         onClick={() => dispatch(push('/product/' + props.id))}
       />
       <CardContent className={classes.content}>
