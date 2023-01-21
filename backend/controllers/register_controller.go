@@ -18,7 +18,7 @@ type RegisterController struct{}
 
 // 登録URL確認
 func (rc *RegisterController) UrlCheck(c echo.Context) error {
-	registerUrlForm := registerForms.RegisterUrlForm{}
+	registerUrlForm := new(registerForms.RegisterUrlForm)
 	cc := c.(*contexts.CustomContext)
 	if err := cc.BindValidate(registerUrlForm); err != nil {
 		return c.JSON(http.StatusOK, badRequestResponse(err))
@@ -40,7 +40,7 @@ func (rc *RegisterController) UrlCheck(c echo.Context) error {
 
 // 登録処理
 func (rc *RegisterController) Register(c echo.Context) error {
-	registerForm := registerForms.RegisterForm{}
+	registerForm := new(registerForms.RegisterForm)
 	cc := c.(*contexts.CustomContext)
 	if err := cc.BindValidate(registerForm); err != nil {
 		return c.JSON(http.StatusOK, badRequestResponse(err))

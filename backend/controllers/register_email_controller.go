@@ -17,7 +17,7 @@ type RegisterEmailController struct{}
 
 // メールアドレス仮登録処理
 func (rec *RegisterEmailController) RegisterEmail(c echo.Context) error {
-	registerEmailForm := registerEmailForms.RegisterEmailForm{}
+	registerEmailForm := new(registerEmailForms.RegisterEmailForm)
 	cc := c.(*contexts.CustomContext)
 	if err := cc.BindValidate(registerEmailForm); err != nil {
 		return c.JSON(http.StatusOK, badRequestResponse(err))
