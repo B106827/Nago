@@ -20,7 +20,7 @@ const Home = () => {
   const fetchProductsList = getProducts(selector);
   useEffect(() => {
     if (fetchProductsList) setProducts(fetchProductsList);
-  }, [fetchProductsList])
+  }, [fetchProductsList]);
 
   return (
     <section>

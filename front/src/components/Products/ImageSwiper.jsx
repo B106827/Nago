@@ -30,11 +30,11 @@ const ImageSwiper = (props) => {
           <img src={NoImage} alt='no image' />
         </div>
       ) : (
-        images.map((image) => (
-          <div className='p-media__thumb' key={image.id}>
+        images.map((image, index) => (
+          <div className='p-media__thumb' key={index}>
             <TransformWrapper pinch={{ step: 1 }} doubleClick={{ step: 0.5 }}>
               <TransformComponent>
-                <img src={image.path} alt='商品画像' />
+                <img src={image.url} alt='商品画像' />
               </TransformComponent>
             </TransformWrapper>
           </div>

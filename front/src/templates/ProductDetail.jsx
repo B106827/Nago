@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCductack, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { push } from 'connected-react-router';
@@ -9,6 +9,7 @@ import { addProductToCart } from '../reducks/users/operations';
 import { showMessageAction } from '../reducks/messages/actions';
 import { getWindowSize } from '../reducks/utils/selectors';
 import { fetchProduct } from '../reducks/products/operations';
+import { getProduct } from '../reducks/products/selectors';
 import { constants } from '../utils/constants';
 import product_top from '../assets/img/src/nago_product_top.png';
 import flow_1 from '../assets/img/svg/nago_flow_1.svg';
@@ -35,7 +36,12 @@ const ProductDetail = () => {
     }, []);
   }
 
-  //const path = selector.router.location.pathname;
+  const [product, setProduct] = useState(null);
+
+  const storeProduct = getProduct(selector);
+  useEffect(() => {
+    if (storeProduct) setProduct(storeProduct);
+  }, [storeProduct]);
 
   const returnCodeToBr = (text) => {
     if (text === '') {
@@ -56,25 +62,6 @@ const ProductDetail = () => {
       </div>
     );
   };
-
-  //const addProduct = useCallback();
-  //(selectedSize) => {
-  //  //const timestamp = FirebaseTimestamp.now();
-  //  dispatch(
-  //    addProductToCart({
-  //      //added_at: timestamp,
-  //      description: product.description,
-  //      gender: product.gender,
-  //      images: product.images,
-  //      name: product.name,
-  //      price: product.price,
-  //      productId: product.id,
-  //      quantity: 1,
-  //    })
-  //  );
-  //},
-  //[dispatch, product]
-  const product = constants.product;
 
   return (
     <section

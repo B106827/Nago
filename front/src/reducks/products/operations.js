@@ -1,7 +1,10 @@
 import { fetchWrapper } from '../../utils/http';
 import { showMessageAction } from '../messages/actions';
-import { fetchProductsAction } from './actions';
 import { push } from 'connected-react-router';
+import {
+  fetchProductsAction,
+  fetchProductAction,
+} from './actions';
 
 export const fetchProducts = () => {
   return async (dispatch) => {
@@ -41,6 +44,11 @@ export const fetchProduct = (productId) => {
       .then((json) => {
         if (json.status === 200) {
           const product = json.result.product;
+          if (product) {
+            dispatch(
+              fetchProductAction(product)
+            );
+          }
         } else {
           dispatch(showMessageAction('error', json.messages));
           dispatch(push('/'));

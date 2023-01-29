@@ -13,6 +13,7 @@ const initialState = {
   },
   products: {
     list: [],
+    product: null,
   },
   users: {
     cart: [],

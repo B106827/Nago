@@ -13,3 +13,11 @@ export const fetchProductsAction = (products) => {
     payload: products,
   };
 };
+
+export const FETCH_PRODUCT = 'FETCH_PRODUCT';
+export const fetchProductAction = (product) => {
+  return {
+    type: FETCH_PRODUCT,
+    payload: product,
+  };
+};

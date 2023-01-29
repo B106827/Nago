@@ -6,3 +6,8 @@ export const getProducts = createSelector(
   [productsSelector],
   (state) => state.list
 );
+
+export const getProduct = createSelector(
+  [productsSelector],
+  (state) => state.product
+);
