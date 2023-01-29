@@ -27,7 +27,7 @@ func (rc *RegisterController) UrlCheck(c echo.Context) error {
 	ut, err := utm.FindById(registerUrlForm.TmpID)
 	if err != nil || ut == nil {
 		// エラーもしくはデータが存在しない
-		return c.JSON(http.StatusOK, badRequestResponse([]string{"無効なURLです"}))
+		return c.JSON(http.StatusOK, notFoundResponse([]string{"無効なURLです"}))
 	}
 	if ut.ExpiredAt.Unix() < time.Now().Unix() {
 		// 有効期限が切れていれば無効
@@ -48,7 +48,7 @@ func (rc *RegisterController) Register(c echo.Context) error {
 	utm := models.UserTemporary{}
 	ut, err := utm.FindById(registerForm.TmpID)
 	if err != nil {
-		return c.JSON(http.StatusOK, badRequestResponse([]string{"無効なURLです"}))
+		return c.JSON(http.StatusOK, notFoundResponse([]string{"無効なURLです"}))
 	}
 	if ut.ExpiredAt.Unix() < time.Now().Unix() {
 		// 有効期限が切れていれば無効

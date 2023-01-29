@@ -1,9 +1,14 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { push } from 'connected-react-router';
 import { makeStyles } from '@material-ui/styles';
 import HTMLReactParser from 'html-react-parser';
 import { ImageSwiper } from '../components/Products';
 import { addProductToCart } from '../reducks/users/operations';
+import { showMessageAction } from '../reducks/messages/actions';
+import { getWindowSize } from '../reducks/utils/selectors';
+import { fetchProduct } from '../reducks/products/operations';
 import { constants } from '../utils/constants';
 import product_top from '../assets/img/src/nago_product_top.png';
 import flow_1 from '../assets/img/svg/nago_flow_1.svg';
@@ -13,13 +18,23 @@ import flow_4 from '../assets/img/svg/nago_flow_4.svg';
 import flow_5 from '../assets/img/svg/nago_flow_5.svg';
 import flow_6 from '../assets/img/svg/nago_flow_6.svg';
 import { theme } from '../assets/theme';
-import { getWindowSize } from '../reducks/utils/selectors';
 
 const ProductDetail = () => {
-  const classes = useStyles();
-  //const dispatch = useDispatch();
-  const selector = useSelector((state) => state);
+  const classes    = useStyles();
+  const dispatch   = useDispatch();
+  const selector   = useSelector((state) => state);
   const windowSize = getWindowSize(selector);
+
+  const { productId } = useParams();
+  if (!productId) {
+    dispatch(showMessageAction('error', '無効なURLです'));
+    dispatch(push('/'));
+  } else {
+    useEffect(() => {
+      dispatch(fetchProduct(productId));
+    }, []);
+  }
+
   //const path = selector.router.location.pathname;
 
   const returnCodeToBr = (text) => {

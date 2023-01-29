@@ -1,7 +1,7 @@
-//import { push } from 'connected-react-router';
 import { fetchWrapper } from '../../utils/http';
 import { showMessageAction } from '../messages/actions';
 import { fetchProductsAction } from './actions';
+import { push } from 'connected-react-router';
 
 export const fetchProducts = () => {
   return async (dispatch) => {
@@ -29,6 +29,29 @@ export const fetchProducts = () => {
   };
 };
 
+export const fetchProduct = (productId) => {
+  return async (dispatch) => {
+    fetchWrapper(
+      {
+        type: 'GET',
+        url: '/product/' + productId,
+      },
+      dispatch,
+    )
+      .then((json) => {
+        if (json.status === 200) {
+          const product = json.result.product;
+        } else {
+          dispatch(showMessageAction('error', json.messages));
+          dispatch(push('/'));
+        }
+      })
+      .catch((error) => {
+        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
+        console.log(error);
+      });
+  };
+}
 export const addProductToCart = () => {
   return async () => {
     // const uid = getState().users.uid;

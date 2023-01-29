@@ -23,7 +23,7 @@ func (User) TableName() string {
 	return "user"
 }
 
-func (u *User) FindById(id int) (*User, error) {
+func (u *User) FindById(id uint) (*User, error) {
 	db := database.GetDB()
 	var res User
 	result := db.Where("id = ? AND status = ?", id, constants.USER_STATUS_REGISTERED).First(&res).Error
@@ -42,7 +42,7 @@ func (u *User) FindByEmail(email string) (*User, error) {
 	var res User
 	result := db.Where("email = ? AND status = ?", email, constants.USER_STATUS_REGISTERED).First(&res).Error
 	if errors.Is(result, gorm.ErrRecordNotFound) {
-		// ユーザーが存在しない
+		// データが存在しない
 		return nil, nil
 	} else if result != nil {
 		// 上記以外のエラー

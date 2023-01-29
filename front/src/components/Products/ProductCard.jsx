@@ -14,7 +14,7 @@ const ProductCard = (props) => {
   const price = props.price.toLocaleString();
 
   return (
-    <Card className={classes.card}>
+    <Card className={'cursor-pointer' + ' ' + `${classes.card}`}>
       <CardMedia
         className={classes.media}
         image={images[0].url}

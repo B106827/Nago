@@ -58,6 +58,7 @@ export const login = (email, password) => {
             dispatch(push('/'));
           }
         } else {
+          console.log(json);
           dispatch(showMessageAction('error', json.messages));
         }
       })

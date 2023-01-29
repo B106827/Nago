@@ -25,7 +25,7 @@ func (lc *LoginController) Login(c echo.Context) error {
 	user, err := um.FindByEmail(loginForm.Email)
 	if err != nil || user == nil {
 		// エラーもしくはユーザーが存在しない
-		return c.JSON(http.StatusOK, badRequestResponse([]string{"メンバーが見つかりません"}))
+		return c.JSON(http.StatusOK, notFoundResponse([]string{"メンバーが見つかりません"}))
 	}
 	paramPasswordHash := utils.GetEncryptedHash(loginForm.Password)
 	if paramPasswordHash != user.Password {

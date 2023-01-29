@@ -49,6 +49,10 @@ func InitRouter(e *echo.Echo) {
 	//
 	productController := controllers.ProductController{}
 	apiP.GET("", productController.Index)
+	//
+	// 商品情報
+	//
+	apiP.GET("/:productId", productController.Get)
 
 	/*
 	  /api/user
