@@ -1,22 +1,15 @@
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/styles';
-
-const useStyles = makeStyles({
-  formControl: {
-    marginBottom: 16,
-    minWidth: 128,
-    width: '100%',
-  },
-});
 
 const SelectBox = (props) => {
   const classes = useStyles();
 
   return (
-    <FormControl className={classes.formControl}>
+    <FormControl className={classes.formControl} error={props.error}>
       <InputLabel>{props.label}</InputLabel>
       <Select
         required={props.required}
@@ -29,8 +22,19 @@ const SelectBox = (props) => {
           </MenuItem>
         ))}
       </Select>
+      {props.error && (
+        <FormHelperText>{props.errorMsg}</FormHelperText>
+      )}
     </FormControl>
   );
 };
+
+const useStyles = makeStyles({
+  formControl: {
+    marginBottom: 16,
+    minWidth: 128,
+    width: '100%',
+  },
+});
 
 export default SelectBox;

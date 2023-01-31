@@ -1,16 +1,14 @@
-import { useCductack, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { makeStyles } from '@material-ui/styles';
 import HTMLReactParser from 'html-react-parser';
 import { ImageSwiper } from '../components/Products';
-import { addProductToCart } from '../reducks/users/operations';
 import { showMessageAction } from '../reducks/messages/actions';
 import { getWindowSize } from '../reducks/utils/selectors';
-import { fetchProduct } from '../reducks/products/operations';
+import { fetchProduct, addProductToCart } from '../reducks/products/operations';
 import { getProduct } from '../reducks/products/selectors';
-import { constants } from '../utils/constants';
 import product_top from '../assets/img/src/nago_product_top.png';
 import flow_1 from '../assets/img/svg/nago_flow_1.svg';
 import flow_2 from '../assets/img/svg/nago_flow_2.svg';
@@ -19,6 +17,7 @@ import flow_4 from '../assets/img/svg/nago_flow_4.svg';
 import flow_5 from '../assets/img/svg/nago_flow_5.svg';
 import flow_6 from '../assets/img/svg/nago_flow_6.svg';
 import { theme } from '../assets/theme';
+import { SelectBox, PrimaryButton } from '../components/UIkit';
 
 const ProductDetail = () => {
   const classes    = useStyles();
@@ -37,6 +36,9 @@ const ProductDetail = () => {
   }
 
   const [product, setProduct] = useState(null);
+  const [cartNum, setCartNum] = useState(0);
+  const [cartErr, setCartErr] = useState(false);
+  const [cartErrMsg, setCartErrMsg] = useState('');
 
   const storeProduct = getProduct(selector);
   useEffect(() => {
@@ -63,6 +65,27 @@ const ProductDetail = () => {
     );
   };
 
+  const options = [
+    {
+      id: 1,
+      name: '1'
+    },
+    {
+      id: 2,
+      name: '2'
+    },
+  ];
+
+  const addCart = useCallback(() => {
+    if (!cartNum || cartNum === 0) {
+      setCartErr(true);
+      setCartErrMsg('数量を選択してください');
+      return;
+    }
+    setCartErr(false);
+    setCartErrMsg('');
+  }, [cartNum]);
+
   return (
     <section
       className={classes.sectionWrapperAdjuster}
@@ -83,6 +106,8 @@ const ProductDetail = () => {
               </h2>
               <p className={classes.price}>¥{product.price.toLocaleString()}</p>
               <div className='module-spacer--small' />
+              <SelectBox label={'数量※'} required={true} value={cartNum} options={options} select={setCartNum} error={cartErr} errorMsg={cartErrMsg} />
+              <PrimaryButton label={'カートに入れる'} onClick={addCart} addStyle={{ width: '100%' }} />
               <div className='module-spacer--small' />
               <p>{returnCodeToBr(product.description)}</p>
             </div>

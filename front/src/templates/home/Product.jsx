@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import HTMLReactParser from 'html-react-parser';
-import { ImageSwiper } from '../components/Products';
+import { ImageSwiper, SizeTable } from '../components/Products';
 import { addProductToCart } from '../reducks/users/operations';
 import { constants } from '../utils/constants';
 import product_top from '../assets/img/src/nago_product_top.png';
@@ -17,7 +17,7 @@ import { getWindowSize } from '../reducks/utils/selectors';
 
 const ProductDetail = () => {
   const classes = useStyles();
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const selector = useSelector((state) => state);
   const windowSize = getWindowSize(selector);
   //const path = selector.router.location.pathname;
@@ -42,24 +42,6 @@ const ProductDetail = () => {
     );
   };
 
-  //const addProduct = useCallback();
-  //(selectedSize) => {
-  //  //const timestamp = FirebaseTimestamp.now();
-  //  dispatch(
-  //    addProductToCart({
-  //      //added_at: timestamp,
-  //      description: product.description,
-  //      gender: product.gender,
-  //      images: product.images,
-  //      name: product.name,
-  //      price: product.price,
-  //      productId: product.id,
-  //      quantity: 1,
-  //    })
-  //  );
-  //},
-  //[dispatch, product]
-  const product = constants.product;
 
   return (
     <section
@@ -81,6 +63,7 @@ const ProductDetail = () => {
               </h2>
               <p className={classes.price}>¥{product.price.toLocaleString()}</p>
               <div className='module-spacer--small' />
+              <SizeTable addProduct={addProduct} sizes={test} />
               <div className='module-spacer--small' />
               <p>{returnCodeToBr(product.description)}</p>
             </div>
@@ -110,7 +93,7 @@ const ProductDetail = () => {
         </div>
       </div>
       {/* セクション3 */}
-      <div className={classes.thirdSection}>
+      <div className={classes.thirddSection}>
         <p className={classes.thirdSectionTitle}>nagoで見守りを始めるまで</p>
         <div className={classes.thirdSectionFlow}>
           <div>
