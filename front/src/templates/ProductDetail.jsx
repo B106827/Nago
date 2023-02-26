@@ -35,14 +35,36 @@ const ProductDetail = () => {
     }, []);
   }
 
-  const [product, setProduct] = useState(null);
-  const [cartNum, setCartNum] = useState(0);
-  const [cartErr, setCartErr] = useState(false);
+  const [product, setProduct]       = useState(null);
+  const [cartNum, setCartNum]       = useState(0);
+  const [cartErr, setCartErr]       = useState(false);
   const [cartErrMsg, setCartErrMsg] = useState('');
+  const [options, setOptions]       = useState(null);
+  const [selErr, setSelErr]         = useState(false);
+  const [selErrMsg, setSelErrMsg]   = useState('');
 
   const storeProduct = getProduct(selector);
+
   useEffect(() => {
-    if (storeProduct) setProduct(storeProduct);
+    if (storeProduct) {
+      setProduct(storeProduct);
+      const tmpOptions = [{
+        id: 0,
+        name: 0,
+      }];
+      if (storeProduct.quantity > 0) {
+        for (let i = 1; i <= storeProduct.quantity; i++) {
+          tmpOptions.push({
+            id: i,
+            name: i,
+          });
+        }
+      } else {
+        setSelErr(true);
+        setSelErrMsg('在庫がありません');
+      }
+      setOptions(tmpOptions);
+    }
   }, [storeProduct]);
 
   const returnCodeToBr = (text) => {
@@ -64,17 +86,6 @@ const ProductDetail = () => {
       </div>
     );
   };
-
-  const options = [
-    {
-      id: 1,
-      name: '1'
-    },
-    {
-      id: 2,
-      name: '2'
-    },
-  ];
 
   const addCart = useCallback(() => {
     if (!cartNum || cartNum === 0) {
@@ -106,7 +117,7 @@ const ProductDetail = () => {
               </h2>
               <p className={classes.price}>¥{product.price.toLocaleString()}</p>
               <div className='module-spacer--small' />
-              <SelectBox label={'数量※'} required={true} value={cartNum} options={options} select={setCartNum} error={cartErr} errorMsg={cartErrMsg} />
+              <SelectBox label={'数量※'} required={true} value={cartNum} options={options} select={setCartNum} error={selErr} errorMsg={selErrMsg} />
               <PrimaryButton label={'カートに入れる'} onClick={addCart} addStyle={{ width: '100%' }} />
               <div className='module-spacer--small' />
               <p>{returnCodeToBr(product.description)}</p>

@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS product (
   sub_title   VARCHAR(255)                                                             COMMENT 'サブタイトル',
   price       INT UNSIGNED NOT NULL                                                    COMMENT '価格',
   description TEXT                                                                     COMMENT '商品説明',
+  quantity    UINT NOT NULL DEFAULT 0                                                  COMMENT '在庫数',
   status      INT NOT NULL DEFAULT 1                                                   COMMENT '商品ステータス',
   created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP                             COMMENT '作成日時',
   updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',

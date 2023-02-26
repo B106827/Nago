@@ -15,6 +15,7 @@ type Product struct {
 	SubTitle    string         `json:"subTitle"    gorm:"column(sub_title);size(255);type(varchar(255));"`
 	Price       uint           `json:"price"       gorm:"column(price);not null;type(int);"`
 	Description string         `json:"description" gorm:"column(description);type(text);"`
+	Quantity    uint           `json:"quantity"    gorm:"column(quantity);not null;type(uint);"`
 	Status      uint           `json:"-"           gorm:"column(status);default(1);type(int);"`
 	CreatedAt   time.Time      `json:"-"`
 	UpdatedAt   time.Time      `json:"-"`
