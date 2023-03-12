@@ -31,9 +31,9 @@ const SizeTable = (props) => {
                 <TableCell component='th' scope='row'>
                   {size.size}
                 </TableCell>
-                <TableCell>残り{size.quantity}点</TableCell>
+                <TableCell>残り{size.stock}点</TableCell>
                 <TableCell className={classes.iconCell}>
-                  {size.quantity > 0 ? (
+                  {size.stock > 0 ? (
                     <IconButton onClick={() => props.addProduct(size.size)}>
                       <ShoppingCartIcon />
                     </IconButton>

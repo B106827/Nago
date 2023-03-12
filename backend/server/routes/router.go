@@ -40,9 +40,8 @@ func InitRouter(e *echo.Echo) {
 	api.POST("/login", loginController.Login)
 	api.GET("/logout", loginController.Logout, authMiddleware.Authenticate())
 
-	/*
-	  /api/product
-	*/
+	/* /api/product
+	 */
 	apiP := e.Group("/api/product")
 	//
 	// 商品一覧
@@ -63,4 +62,14 @@ func InitRouter(e *echo.Echo) {
 	//
 	userMyinfoController := controllers.UserMyinfoController{}
 	apiU.GET("/myinfo", userMyinfoController.Index)
+
+	/*
+	  /api/cart
+	*/
+	apiC := e.Group("/api/cart", authMiddleware.Authenticate())
+	//
+	// カート更新
+	//
+	cartController := controllers.CartController{}
+	apiC.POST("", cartController.Update)
 }

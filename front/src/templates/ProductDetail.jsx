@@ -7,7 +7,7 @@ import HTMLReactParser from 'html-react-parser';
 import { ImageSwiper } from '../components/Products';
 import { showMessageAction } from '../reducks/messages/actions';
 import { getWindowSize } from '../reducks/utils/selectors';
-import { fetchProduct, addProductToCart } from '../reducks/products/operations';
+import { fetchProduct, updateCart } from '../reducks/products/operations';
 import { getProduct } from '../reducks/products/selectors';
 import product_top from '../assets/img/src/nago_product_top.png';
 import flow_1 from '../assets/img/svg/nago_flow_1.svg';
@@ -35,13 +35,11 @@ const ProductDetail = () => {
     }, []);
   }
 
-  const [product, setProduct]       = useState(null);
-  const [cartNum, setCartNum]       = useState(0);
-  const [cartErr, setCartErr]       = useState(false);
-  const [cartErrMsg, setCartErrMsg] = useState('');
-  const [options, setOptions]       = useState(null);
-  const [selErr, setSelErr]         = useState(false);
-  const [selErrMsg, setSelErrMsg]   = useState('');
+  const [product, setProduct]     = useState(null);
+  const [cartNum, setCartNum]     = useState(0);
+  const [options, setOptions]     = useState(null);
+  const [selErr, setSelErr]       = useState(false);
+  const [selErrMsg, setSelErrMsg] = useState('');
 
   const storeProduct = getProduct(selector);
 
@@ -52,8 +50,8 @@ const ProductDetail = () => {
         id: 0,
         name: 0,
       }];
-      if (storeProduct.quantity > 0) {
-        for (let i = 1; i <= storeProduct.quantity; i++) {
+      if (storeProduct.stock > 0) {
+        for (let i = 1; i <= storeProduct.stock; i++) {
           tmpOptions.push({
             id: i,
             name: i,
@@ -87,14 +85,12 @@ const ProductDetail = () => {
     );
   };
 
-  const addCart = useCallback(() => {
+  const addToCart = useCallback(() => {
     if (!cartNum || cartNum === 0) {
-      setCartErr(true);
-      setCartErrMsg('数量を選択してください');
+      dispatch(showMessageAction('error', '数量を選択してください'));
       return;
     }
-    setCartErr(false);
-    setCartErrMsg('');
+    dispatch(updateCart(Number(productId), cartNum));
   }, [cartNum]);
 
   return (
@@ -118,7 +114,7 @@ const ProductDetail = () => {
               <p className={classes.price}>¥{product.price.toLocaleString()}</p>
               <div className='module-spacer--small' />
               <SelectBox label={'数量※'} required={true} value={cartNum} options={options} select={setCartNum} error={selErr} errorMsg={selErrMsg} />
-              <PrimaryButton label={'カートに入れる'} onClick={addCart} addStyle={{ width: '100%' }} />
+              <PrimaryButton label={'カートに入れる'} onClick={addToCart} addStyle={{ width: '100%' }} />
               <div className='module-spacer--small' />
               <p>{returnCodeToBr(product.description)}</p>
             </div>

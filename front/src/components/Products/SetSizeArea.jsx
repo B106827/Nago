@@ -28,7 +28,7 @@ const SetSizeArea = (props) => {
 
   const [index, setIndex] = useState(0),
     [size, setSize] = useState(''),
-    [quantity, setQuantity] = useState(0);
+    [stock, setStock] = useState(0);
 
   const inputSize = useCallback(
     (event) => {
@@ -37,42 +37,42 @@ const SetSizeArea = (props) => {
     [setSize]
   );
 
-  const inputQuantity = useCallback(
+  const inputStock = useCallback(
     (event) => {
-      setQuantity(event.target.value);
+      setStock(event.target.value);
     },
-    [setQuantity]
+    [setStock]
   );
 
-  const addSize = (index, size, quantity) => {
-    if (size === '' || quantity === '') {
+  const addSize = (index, size, stock) => {
+    if (size === '' || stock === '') {
       return false;
     } else {
       if (index === props.sizes.length) {
         // サイズの新規追加
         props.setSizes((prevState) => [
           ...prevState,
-          { size: size, quantity: quantity },
+          { size: size, stock: stock },
         ]);
         setIndex(index + 1);
         setSize('');
-        setQuantity(0);
+        setStock(0);
       } else {
         // サイズの編集
         const newSizes = props.sizes;
-        newSizes[index] = { size: size, quantity: quantity };
+        newSizes[index] = { size: size, stock: stock };
         props.setSizes(newSizes);
         setIndex(newSizes.length);
         setSize('');
-        setQuantity(0);
+        setStock(0);
       }
     }
   };
 
-  const editSize = (index, size, quantity) => {
+  const editSize = (index, size, stock) => {
     setIndex(index);
     setSize(size);
-    setQuantity(quantity);
+    setStock(stock);
   };
 
   const deleteSize = (deleteIndex) => {
@@ -97,11 +97,11 @@ const SetSizeArea = (props) => {
               props.sizes.map((item, i) => (
                 <TableRow key={item.size}>
                   <TableCell>{item.size}</TableCell>
-                  <TableCell>{item.quantity}</TableCell>
+                  <TableCell>{item.stock}</TableCell>
                   <TableCell>
                     <IconButton
                       className={classes.iconCell}
-                      onClick={() => editSize(i, item.size, item.quantity)}
+                      onClick={() => editSize(i, item.size, item.stock)}
                     >
                       <EditIcon />
                     </IconButton>
@@ -134,15 +134,15 @@ const SetSizeArea = (props) => {
             label={'数量'}
             multiline={false}
             required={true}
-            onChange={inputQuantity}
+            onChange={inputStock}
             rows={1}
-            value={quantity}
+            value={stock}
             type={'number'}
           />
         </div>
         <IconButton
           className={classes.checkIcon}
-          onClick={() => addSize(index, size, quantity)}
+          onClick={() => addSize(index, size, stock)}
         >
           <CheckCircleIcon />
         </IconButton>

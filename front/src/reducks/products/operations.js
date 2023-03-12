@@ -60,13 +60,37 @@ export const fetchProduct = (productId) => {
       });
   };
 }
-export const addProductToCart = () => {
-  return async () => {
-    // const uid = getState().users.uid;
-    //const cartRef = db.collection('users').doc(uid).collection('cart').doc();
-    //addedProduct['cartId'] = cartRef.id;
-    //await cartRef.set(addedProduct);
-    //dispatch(push('/'));
+
+export const updateCart = (productId, cartNum) => {
+  return (dispatch) => {
+    if (!productId || !cartNum) {
+      dispatch(showMessageAction('error', 'カートを更新できません'));
+      return false;
+    }
+    const params = {
+      productId,
+      cartNum,
+    };
+    fetchWrapper(
+      {
+        type: 'POST',
+        url: '/cart',
+        params: params,
+      },
+      dispatch
+    )
+      .then((json) => {
+        if (json.status === 200) {
+          dispatch(showMessageAction('success', json.result.message));
+        } else {
+          console.log(json);
+          dispatch(showMessageAction('error', json.messages));
+        }
+      })
+      .catch((error) => {
+        console.log('error :', error);
+        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
+      });
   };
 };
 

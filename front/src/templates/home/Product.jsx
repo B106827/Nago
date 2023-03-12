@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import HTMLReactParser from 'html-react-parser';
 import { ImageSwiper, SizeTable } from '../components/Products';
-import { addProductToCart } from '../reducks/users/operations';
 import { constants } from '../utils/constants';
 import product_top from '../assets/img/src/nago_product_top.png';
 import flow_1 from '../assets/img/svg/nago_flow_1.svg';
