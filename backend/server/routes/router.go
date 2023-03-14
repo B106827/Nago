@@ -71,5 +71,6 @@ func InitRouter(e *echo.Echo) {
 	// カート更新
 	//
 	cartController := controllers.CartController{}
+	apiC.GET("", cartController.Index)
 	apiC.POST("", cartController.Update)
 }

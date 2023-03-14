@@ -9,16 +9,30 @@ import (
 )
 
 type Cart struct {
-	ID        uint `json:"id"        gorm:"column(id);primaryKey;autoIncrement;not null;type(uint);"`
-	UserID    uint `json:"userId"    gorm:"column(user_id);not null;type(uint);"`
-	ProductID uint `json:"productId" gorm:"column(product_id);not null;type(uint);"`
-	Num       uint `json:"num"       gorm:"column(num);not null;type(uint);"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        uint      `json:"id"        gorm:"column(id);primaryKey;autoIncrement;not null;type(uint);"`
+	UserID    uint      `json:"userId"    gorm:"column(user_id);not null;type(uint);"`
+	ProductID uint      `json:"productId" gorm:"column(product_id);not null;type(uint);"`
+	Num       uint      `json:"num"       gorm:"column(num);not null;type(uint);"`
+	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
 }
 
 func (Cart) TableName() string {
 	return "cart"
+}
+
+func (c *Cart) FindByUserId(userId uint) ([]Cart, error) {
+	db := database.GetDB()
+	var res []Cart
+	result := db.Where("user_id = ?", userId).Find(&res).Error
+	if result != nil {
+		// エラーが発生した場合
+		return nil, result
+	} else if len(res) == 0 {
+		// 上記以外のエラー
+		return nil, nil
+	}
+	return res, nil
 }
 
 func (c *Cart) FindByUserIdAndProductId(userId uint, productId uint) (*Cart, error) {
