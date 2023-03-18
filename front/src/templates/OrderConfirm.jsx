@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProductsInCart } from '../reducks/users/selectors';
+import { getMyCartList } from '../reducks/users/selectors';
 import { makeStyles } from '@material-ui/styles';
 import { CartListItem } from '../components/Products';
 import List from '@material-ui/core/List';
@@ -33,7 +33,7 @@ const OrderConfirm = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
-  const productsInCart = getProductsInCart(selector);
+  const productsInCart = getMyCartList(selector);
 
   const subtotal = useMemo(() => {
     return productsInCart.reduce((sum, product) => (sum += product.price), 0);

@@ -1,10 +1,10 @@
-import { useEffect }from 'react';
+import { useEffect, useState }from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import MenuIcon from '@material-ui/icons/Menu';
-import { fetchMyCart } from '../../reducks/users/operations';
-import { getProductsInCart, getIsLogedIn } from '../../reducks/users/selectors';
+import { fetchMyCartList } from '../../reducks/users/operations';
+import { getMyCartList, getIsLogedIn } from '../../reducks/users/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import { makeStyles } from '@material-ui/styles';
@@ -14,47 +14,29 @@ const HeaderMenus = (props) => {
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
   const isLogedIn = getIsLogedIn(selector);
-  const productsInCart = getProductsInCart(selector);
 
   useEffect(() => {
     if (isLogedIn) {
-      dispatch(fetchMyCart());
+      dispatch(fetchMyCartList());
     }
   }, []);
-//  
-//    const unsubscribe = db.collection('users').doc(uid).collection('cart')
-//      .onSnapshot(snapshots => {
-//        snapshots.docChanges().forEach(change => {
-//          const product = change.doc.data();
-//          const changeType = change.type;
-//
-//          switch (changeType) {
-//            case 'added':
-//              productsInCart.push(product);
-//              break;
-//            case 'modified':
-//              const index = productsInCart.findIndex(product => product.cartId === change.doc.id);
-//              productsInCart[index] = product;
-//              break;
-//            case 'removed':
-//              productsInCart = productsInCart.filter(product => product.cartId !== change.doc.id);
-//              break;
-//            default:
-//              break;
-//          }
-//        })
-//        dispatch(fetchProductsInCart(productsInCart));
-//      })
-//
-//    return () => unsubscribe();
-//  }, []);
+
+  const [cartList, setCartList] = useState([]);
+
+  const storeMyCartList = getMyCartList(selector);
+  useEffect(() => {
+    if (storeMyCartList) {
+      setCartList(storeMyCartList);
+    }
+  }, [storeMyCartList]);
 
   return (
     <>
       <IconButton onClick={() => dispatch(push('/cart'))}>
         <Badge
-          badgeContent={productsInCart && productsInCart.length}
-          color='secondary'
+          badgeContent={cartList && cartList.length}
+          max={99}
+          classes={{ badge: classes.badge }}
         >
           <ShoppingCartOutlinedIcon className={classes.icon} />
         </Badge>
@@ -66,9 +48,13 @@ const HeaderMenus = (props) => {
   );
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
+  badge: {
+    color: theme.palette.primary.black,
+    backgroundColor: theme.palette.primary.light
+  },
   icon: {
-    color: '#fff',
+    color: theme.palette.primary.light,
     fontSize: 30,
   },
 }));

@@ -5,6 +5,7 @@ import {
   loginAction,
   logoutAction,
   fetchUserTmpEmailAction,
+  fetchMyCartAction,
 } from './actions';
 
 export const resetPassword = (email) => {
@@ -249,7 +250,7 @@ export const fetchMyInfo = () => {
 };
 
 // ユーザーカート情報取得
-export const fetchMyCart = () => {
+export const fetchMyCartList = () => {
   return (dispatch) => {
     fetchWrapper(
       {
@@ -260,8 +261,14 @@ export const fetchMyCart = () => {
     )
       .then((json) => {
         if (json.status === 200) {
-          console.log(json);
-          dispatch(showMessageAction('success', json.result.message));
+          const cartList = json.result.cartList;
+          if (cartList) {
+            dispatch(
+              fetchMyCartAction({
+                cartList
+              })
+            );
+          }
         } else {
           dispatch(showMessageAction('error', json.messages));
         }

@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import List from '@material-ui/core/List';
-import { getProductsInCart } from '../reducks/users/selectors';
+import { getMyCartList } from '../reducks/users/selectors';
 import { CartListItem } from '../components/Products';
 import { PrimaryButton } from '../components/UIkit';
 import { push } from 'connected-react-router';
@@ -19,7 +19,7 @@ const CartList = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
-  const productsInCart = getProductsInCart(selector);
+  const productsInCart = getMyCartList(selector);
 
   const goToOrder = useCallback(() => {
     dispatch(push('/order/confirm'));

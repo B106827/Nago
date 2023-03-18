@@ -16,7 +16,7 @@ const initialState = {
     product: null,
   },
   users: {
-    cart: [],
+    cartList: [],
     isLogedIn: false,
     orders: [],
     role: '',
