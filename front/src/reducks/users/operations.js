@@ -5,6 +5,7 @@ import {
   loginAction,
   logoutAction,
   fetchUserTmpEmailAction,
+  updateCartAction,
 } from './actions';
 
 export const resetPassword = (email) => {
@@ -272,6 +273,7 @@ export const updateCart = (productId, cartNum) => {
     )
       .then((json) => {
         if (json.status === 200) {
+          dispatch(updateCartAction(json.result.updatedCartList));
           dispatch(showMessageAction('success', json.result.message));
         } else {
           console.log(json);

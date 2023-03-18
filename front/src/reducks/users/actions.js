@@ -39,8 +39,15 @@ export const logoutAction = () => {
       isLogedIn: false,
       id: '',
       name: '',
-      cartList: [],
     },
+  };
+};
+
+export const UPDATE_CART = 'UPDATE_CART';
+export const updateCartAction = (updatedCartList) => {
+  return {
+    type: UPDATE_CART,
+    payload: updatedCartList,
   };
 };
 

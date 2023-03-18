@@ -17,12 +17,11 @@ const HeaderMenus = (props) => {
 
   const storeMyCartList = getMyCartList(selector);
   useEffect(() => {
+    setCartNum(0);
     if (storeMyCartList && storeMyCartList.length > 0) {
       storeMyCartList.forEach((cart) => {
         setCartNum((prevCartNum) => prevCartNum + cart.num);
       });
-    } else {
-      setCartNum(0);
     }
   }, [storeMyCartList]);
 

@@ -39,7 +39,12 @@ func (cac *CartController) Update(c echo.Context) error {
 			return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
 		}
 	}
+	updatedCartList, err := cm.FindByUserId(user.ID)
+	if err != nil {
+		c.Logger().Error(err)
+	}
 	return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
-		"message": "カートを更新しました",
+		"message":         "カートを更新しました",
+		"updatedCartList": updatedCartList,
 	}))
 }
