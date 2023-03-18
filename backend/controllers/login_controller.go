@@ -35,9 +35,15 @@ func (lc *LoginController) Login(c echo.Context) error {
 	if err := authHandler.Login(c, user.ID); err != nil {
 		return c.JSON(http.StatusOK, unauthorizedResponse([]string{"ログインに失敗しました"}))
 	}
+	cm := models.Cart{}
+	cartList, err := cm.FindByUserId(user.ID)
+	if err != nil {
+		c.Logger().Error(err)
+	}
 	return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
-		"user":    user,
-		"message": "ログインしました",
+		"user":     user,
+		"cartList": cartList,
+		"message":  "ログインしました",
 	}))
 }
 

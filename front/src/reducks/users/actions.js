@@ -6,6 +6,7 @@ export const loginAction = (userState) => {
       isLogedIn: true,
       id: userState.id,
       name: userState.name,
+      cartList: userState.cartList,
     },
   };
 };
@@ -36,16 +37,10 @@ export const logoutAction = () => {
     type: LOGOUT,
     payload: {
       isLogedIn: false,
+      id: '',
       name: '',
+      cartList: [],
     },
-  };
-};
-
-export const FETCH_MY_CART = 'FETCH_MY_CART';
-export const fetchMyCartAction = (cartList) => {
-  return {
-    type: FETCH_MY_CART,
-    payload: cartList,
   };
 };
 

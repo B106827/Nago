@@ -5,7 +5,6 @@ import {
   loginAction,
   logoutAction,
   fetchUserTmpEmailAction,
-  fetchMyCartAction,
 } from './actions';
 
 export const resetPassword = (email) => {
@@ -48,11 +47,13 @@ export const login = (email, password) => {
       .then((json) => {
         if (json.status === 200) {
           const user = json.result.user;
+          const cartList = json.result.cartList;
           if (user) {
             dispatch(
               loginAction({
                 id: user.id,
                 name: user.name,
+                cartList: cartList,
               })
             );
             dispatch(showMessageAction('success', json.result.message));
@@ -249,36 +250,6 @@ export const fetchMyInfo = () => {
   };
 };
 
-// ユーザーカート情報取得
-export const fetchMyCartList = () => {
-  return (dispatch) => {
-    fetchWrapper(
-      {
-        type: 'GET',
-        url: '/cart',
-      },
-      dispatch
-    )
-      .then((json) => {
-        if (json.status === 200) {
-          const cartList = json.result.cartList;
-          if (cartList) {
-            dispatch(
-              fetchMyCartAction({
-                cartList
-              })
-            );
-          }
-        } else {
-          dispatch(showMessageAction('error', json.messages));
-        }
-      })
-      .catch((error) => {
-        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
-        console.log(error);
-      });
-  };
-};
 
 // ユーザーカート情報更新
 export const updateCart = (productId, cartNum) => {

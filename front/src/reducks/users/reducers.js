@@ -22,11 +22,6 @@ export const UsersReducer = (state = initialState.users, action) => {
       return {
         ...action.payload,
       };
-    case Actions.FETCH_MY_CART:
-      return {
-        ...state,
-        ...action.payload,
-      };
     case Actions.FETCH_ORDERS_HISTORY:
       return {
         ...state,

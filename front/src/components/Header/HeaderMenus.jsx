@@ -3,8 +3,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import MenuIcon from '@material-ui/icons/Menu';
-import { fetchMyCartList } from '../../reducks/users/operations';
-import { getMyCartList, getIsLogedIn } from '../../reducks/users/selectors';
+import { getMyCartList } from '../../reducks/users/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import { makeStyles } from '@material-ui/styles';
@@ -13,20 +12,17 @@ const HeaderMenus = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
-  const isLogedIn = getIsLogedIn(selector);
 
-  useEffect(() => {
-    if (isLogedIn) {
-      dispatch(fetchMyCartList());
-    }
-  }, []);
-
-  const [cartList, setCartList] = useState([]);
+  const [cartNum, setCartNum] = useState(0);
 
   const storeMyCartList = getMyCartList(selector);
   useEffect(() => {
-    if (storeMyCartList) {
-      setCartList(storeMyCartList);
+    if (storeMyCartList && storeMyCartList.length > 0) {
+      storeMyCartList.forEach((cart) => {
+        setCartNum((prevCartNum) => prevCartNum + cart.num);
+      });
+    } else {
+      setCartNum(0);
     }
   }, [storeMyCartList]);
 
@@ -34,7 +30,7 @@ const HeaderMenus = (props) => {
     <>
       <IconButton onClick={() => dispatch(push('/cart'))}>
         <Badge
-          badgeContent={cartList && cartList.length}
+          badgeContent={cartNum}
           max={99}
           classes={{ badge: classes.badge }}
         >
