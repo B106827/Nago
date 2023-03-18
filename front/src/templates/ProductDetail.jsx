@@ -49,7 +49,7 @@ const ProductDetail = () => {
       setProduct(storeProduct);
       const tmpOptions = [{
         id: 0,
-        name: 0,
+        name: "-",
       }];
       if (storeProduct.stock > 0) {
         for (let i = 1; i <= storeProduct.stock; i++) {

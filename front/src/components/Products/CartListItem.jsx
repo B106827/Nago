@@ -23,11 +23,13 @@ const useStyles = makeStyles({
 
 const CartListItem = (props) => {
   const classes = useStyles();
+  const cartId  = props.cart.id;
+  const cartNum = props.cart.num;
+  const product = props.cart.product;
 
-  const image = props.product.images[0].path;
-  const name = props.product.name;
-  const price = props.product.price.toLocaleString();
-  const size = props.product.size;
+  const image = product.images[0]?.url;
+  const name  = product.name;
+  const price = product.price.toLocaleString();
 
   const removeProductFromCart = () => {
     //         .collection('cart').doc(id)
@@ -41,10 +43,10 @@ const CartListItem = (props) => {
           <img className={classes.image} src={image} alt='商品画像' />
         </ListItemAvatar>
         <div className={classes.text}>
-          <ListItemText primary={name} secondary={'サイズ:' + size} />
+          <ListItemText primary={name} secondary={'個数:' + cartNum} />
           <ListItemText primary={'￥' + price} />
         </div>
-        <IconButton onClick={() => removeProductFromCart(props.product.cartId)}>
+        <IconButton onClick={() => removeProductFromCart(cartId)}>
           <DeleteIcon />
         </IconButton>
       </ListItem>
