@@ -63,9 +63,7 @@ export const fetchProduct = (productId) => {
 
 export const fetchOrdersHistory = () => {
   return async () => {
-    //const uid = getState().users.uid;
     //const list = [];
-    // db.collection('users').doc(uid)
     //   .collection('orders')
     //   .ordefetchOrdersHistoryActionrBy('updated_at', 'desc')
     //   .get()
@@ -87,8 +85,6 @@ export const fetchProductsInCart = (products) => {
 
 //export const orderProduct = (productsInCart, amount) => {
 //  return async (dispatch, getState) => {
-//    const uid = getState().users.uid;
-//    const userRef = db.collection('users').doc(uid);
 //    const timestamp = FirebaseTimestamp.now();
 //
 //    let products = [],

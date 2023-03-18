@@ -36,8 +36,6 @@ export const logoutAction = () => {
     type: LOGOUT,
     payload: {
       isLogedIn: false,
-      role: '',
-      uid: '',
       name: '',
     },
   };

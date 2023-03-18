@@ -19,8 +19,6 @@ const initialState = {
     cartList: [],
     isLogedIn: false,
     orders: [],
-    role: '',
-    uid: '',
     id: '',
     name: '',
   },
