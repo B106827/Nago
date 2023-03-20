@@ -45,6 +45,7 @@ const HeaderMenus = (props) => {
 
 const useStyles = makeStyles((theme) => ({
   badge: {
+    fontSize: '16px',
     color: theme.palette.primary.black,
     backgroundColor: theme.palette.primary.light
   },
