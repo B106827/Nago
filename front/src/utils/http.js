@@ -37,6 +37,24 @@ export const fetchWrapper = (args, dispatch) => {
         body: JSON.stringify(params),
       };
       break;
+    case 'PUT':
+      options = {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      };
+      break;
+    case 'DELETE':
+      options = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      };
+      break;
     default:
       return;
   }

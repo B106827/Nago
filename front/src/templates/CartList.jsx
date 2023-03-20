@@ -8,7 +8,7 @@ import { push } from 'connected-react-router';
 import { makeStyles } from '@material-ui/styles';
 
 const CartList = () => {
-  const classes = useStyles();
+  const classes  = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
   const cartList = getMyCartList(selector);
@@ -21,22 +21,25 @@ const CartList = () => {
     dispatch(push('/'));
   }, [dispatch]);
 
-  console.log(cartList);
   return (
     <section>
       <div className={classes.topSection}>
         <h2 className={classes.topSectionTitle}>カート</h2>
         <List className={classes.topSectionCartList}>
-          {cartList.length > 0 &&
+          {cartList && cartList.length > 0 ? (
             cartList.map((cart) => (
               <CartListItem key={cart.id} cart={cart} />
             ))
-          }
+          ) : (
+            <p className={classes.topSectionEmptyCartMsg}>カートは空です</p>
+          )}
         </List>
         <div className='module-spacer--medium' />
         <div className='p-grid__column' />
         <div className={classes.topSectionButton} >
-          <PrimaryButton label={'レジへ進む'} onClick={goToOrder} />
+          {cartList && cartList.length > 0 &&
+            <PrimaryButton label={'レジへ進む'} onClick={goToOrder} />
+          }
           <div className='module-spacer--extra-extra-small' />
           <PrimaryButton label={'ショッピングを続ける'} onClick={backToHome} />
         </div>
@@ -75,6 +78,9 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 auto',
     maxWidth: 512,
     width: '100%',
+  },
+  topSectionEmptyCartMsg: {
+    textAlign: 'center',
   },
   topSectionButton: {
     margin: '0 auto',

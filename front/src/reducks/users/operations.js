@@ -265,7 +265,7 @@ export const updateCart = (productId, cartNum) => {
     };
     fetchWrapper(
       {
-        type: 'POST',
+        type: 'PUT',
         url: '/cart',
         params: params,
       },
@@ -287,3 +287,36 @@ export const updateCart = (productId, cartNum) => {
   };
 };
 
+// ユーザーカート情報削除
+export const deleteCart = (cartId) => {
+  return (dispatch) => {
+    if (!cartId) {
+      dispatch(showMessageAction('error', '商品が指定されていません'));
+      return false;
+    }
+    const params = {
+      cartId
+    };
+    fetchWrapper(
+      {
+        type: 'DELETE',
+        url: '/cart',
+        params: params,
+      },
+      dispatch
+    )
+      .then((json) => {
+        if (json.status === 200) {
+          dispatch(updateCartAction(json.result.updatedCartList));
+          dispatch(showMessageAction('success', json.result.message));
+        } else {
+          console.log(json);
+          dispatch(showMessageAction('error', json.messages));
+        }
+      })
+      .catch((error) => {
+        console.log('error :', error);
+        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
+      });
+  };
+};

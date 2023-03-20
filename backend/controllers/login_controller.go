@@ -36,7 +36,7 @@ func (lc *LoginController) Login(c echo.Context) error {
 		return c.JSON(http.StatusOK, unauthorizedResponse([]string{"ログインに失敗しました"}))
 	}
 	cm := models.Cart{}
-	cartList, err := cm.FindByUserId(user.ID)
+	cartList, err := cm.FindByUserIdWithProduct(user.ID)
 	if err != nil {
 		c.Logger().Error(err)
 	}

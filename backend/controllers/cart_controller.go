@@ -39,12 +39,38 @@ func (cac *CartController) Update(c echo.Context) error {
 			return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
 		}
 	}
-	updatedCartList, err := cm.FindByUserId(user.ID)
+	updatedCartList, err := cm.FindByUserIdWithProduct(user.ID)
 	if err != nil {
 		c.Logger().Error(err)
 	}
 	return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
 		"message":         "カートを更新しました",
+		"updatedCartList": updatedCartList,
+	}))
+}
+
+func (cac *CartController) Delete(c echo.Context) error {
+	cartForm := new(cartForms.DeleteCartForm)
+	cc := c.(*contexts.CustomContext)
+	if err := cc.BindValidate(cartForm); err != nil {
+		return c.JSON(http.StatusOK, badRequestResponse(err))
+	}
+	user := c.Get("user").(*models.User)
+	cm := models.Cart{}
+	cart, err := cm.FindById(cartForm.CartId)
+	if err != nil || cart == nil || cart.UserID != user.ID {
+		c.Logger().Error(err)
+		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
+	}
+	if err := cart.Delete(); err != nil {
+		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
+	}
+	updatedCartList, err := cm.FindByUserIdWithProduct(user.ID)
+	if err != nil {
+		c.Logger().Error(err)
+	}
+	return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
+		"message":         "カートから削除しました",
 		"updatedCartList": updatedCartList,
 	}))
 }

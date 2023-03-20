@@ -21,3 +21,16 @@ func (f CartForm) Validate() error {
 		),
 	)
 }
+
+type DeleteCartForm struct {
+	CartId uint `json:"cartId"`
+}
+
+func (f DeleteCartForm) Validate() error {
+	return validation.ValidateStruct(&f,
+		validation.Field(
+			&f.CartId,
+			validation.Required.Error("パラメータが不正です"),
+		),
+	)
+}
