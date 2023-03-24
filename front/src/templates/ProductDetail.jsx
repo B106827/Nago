@@ -91,7 +91,7 @@ const ProductDetail = () => {
       dispatch(showMessageAction('error', '数量を選択してください'));
       return;
     }
-    dispatch(updateCart(Number(productId), cartNum));
+    dispatch(updateCart(productId, cartNum));
   }, [cartNum]);
 
   return (

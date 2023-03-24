@@ -260,8 +260,8 @@ export const updateCart = (productId, cartNum) => {
       return false;
     }
     const params = {
-      productId,
-      cartNum,
+      productId: Number(productId),
+      cartNum: cartNum,
     };
     fetchWrapper(
       {
