@@ -31,7 +31,7 @@ func (am *AuthMiddleware) Authenticate() echo.MiddlewareFunc {
 func setUser(c echo.Context) {
 	u := c.Get("user").(*jwt.Token)
 	claims := u.Claims.(*types.JwtCustomClaims)
-	userId := int(claims.UserID)
+	userId := uint(claims.UserID)
 	um := models.User{}
 	user, err := um.FindById(userId)
 	if err != nil {

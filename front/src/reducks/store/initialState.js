@@ -13,13 +13,12 @@ const initialState = {
   },
   products: {
     list: [],
+    product: null,
   },
   users: {
-    cart: [],
+    cartList: [],
     isLogedIn: false,
     orders: [],
-    role: '',
-    uid: '',
     id: '',
     name: '',
   },

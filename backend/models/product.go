@@ -3,7 +3,10 @@ package models
 import (
 	"NagoBackend/constants"
 	"NagoBackend/database"
+	"errors"
 	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 type Product struct {
@@ -12,6 +15,7 @@ type Product struct {
 	SubTitle    string         `json:"subTitle"    gorm:"column(sub_title);size(255);type(varchar(255));"`
 	Price       uint           `json:"price"       gorm:"column(price);not null;type(int);"`
 	Description string         `json:"description" gorm:"column(description);type(text);"`
+	Stock       uint           `json:"stock"       gorm:"column(stock);not null;type(uint);"`
 	Status      uint           `json:"-"           gorm:"column(status);default(1);type(int);"`
 	CreatedAt   time.Time      `json:"-"`
 	UpdatedAt   time.Time      `json:"-"`
@@ -34,4 +38,18 @@ func (p *Product) GetActiveProductsWithImages() ([]Product, error) {
 		return nil, nil
 	}
 	return res, nil
+}
+
+func (p *Product) GetActiveProductWithImages(id uint) (*Product, error) {
+	db := database.GetDB()
+	var res Product
+	result := db.Preload("Images").Where("product.id = ? AND product.status = ?", id, constants.PRODUCT_STATUS_ACTIVE).First(&res).Error
+	if errors.Is(result, gorm.ErrRecordNotFound) {
+		// データが存在しない
+		return nil, nil
+	} else if result != nil {
+		// 上記以外のエラー
+		return nil, result
+	}
+	return &res, nil
 }

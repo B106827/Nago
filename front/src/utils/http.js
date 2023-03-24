@@ -37,6 +37,24 @@ export const fetchWrapper = (args, dispatch) => {
         body: JSON.stringify(params),
       };
       break;
+    case 'PUT':
+      options = {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      };
+      break;
+    case 'DELETE':
+      options = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      };
+      break;
     default:
       return;
   }
@@ -113,6 +131,10 @@ export const fetchWrapper = (args, dispatch) => {
         return json; // API側処理成功
       case 400:
         return fixResponse400(json); // リクエスト内容に問題あり
+      case 401:
+        return fixResponse401(json); // 認証内容に問題あり
+      case 404:
+        return fixResponse404(json); // リクエスト先が見つからない
       case 500:
         return fixResponse500(json); // API側の処理に問題あり
       default:
@@ -123,8 +145,23 @@ export const fetchWrapper = (args, dispatch) => {
   const fixResponse400 = (json) => {
     const result = json.result;
     if (!result) return json;
+    // バリデーションエラーの該当箇所を調整する
     json.errorKeys = Object.keys(result);
     json.messages  = Object.values(result);
+    return json;
+  };
+
+  const fixResponse401 = (json) => {
+    const result = json.result;
+    if (!result) return json;
+    json.messages = Object.values(result);
+    return json;
+  };
+
+  const fixResponse404 = (json) => {
+    const result = json.result;
+    if (!result) return json;
+    json.messages = Object.values(result);
     return json;
   };
 

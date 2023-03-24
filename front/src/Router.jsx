@@ -22,7 +22,7 @@ const Router = () => {
       <Route exact path={'/email_register'} component={EmailRegister} />
       <Route exact path={'/login'} component={Login} />
       <Route exact path={'/password_reset'} component={PasswordReset} />
-      <Route exact path={'/product'} component={ProductDetail} />
+      <Route exact path={'/product/:productId?'} component={ProductDetail} />
       <Auth>
         <Switch>
           <Route exact path={'/user/mypage'} component={UserMyPage} />

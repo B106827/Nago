@@ -1,7 +1,10 @@
-//import { push } from 'connected-react-router';
 import { fetchWrapper } from '../../utils/http';
 import { showMessageAction } from '../messages/actions';
-import { fetchProductsAction } from './actions';
+import { push } from 'connected-react-router';
+import {
+  fetchProductsAction,
+  fetchProductAction,
+} from './actions';
 
 export const fetchProducts = () => {
   return async (dispatch) => {
@@ -29,21 +32,38 @@ export const fetchProducts = () => {
   };
 };
 
-export const addProductToCart = () => {
-  return async () => {
-    // const uid = getState().users.uid;
-    //const cartRef = db.collection('users').doc(uid).collection('cart').doc();
-    //addedProduct['cartId'] = cartRef.id;
-    //await cartRef.set(addedProduct);
-    //dispatch(push('/'));
+export const fetchProduct = (productId) => {
+  return async (dispatch) => {
+    fetchWrapper(
+      {
+        type: 'GET',
+        url: '/product/' + productId,
+      },
+      dispatch,
+    )
+      .then((json) => {
+        if (json.status === 200) {
+          const product = json.result.product;
+          if (product) {
+            dispatch(
+              fetchProductAction(product)
+            );
+          }
+        } else {
+          dispatch(showMessageAction('error', json.messages));
+          dispatch(push('/'));
+        }
+      })
+      .catch((error) => {
+        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
+        console.log(error);
+      });
   };
-};
+}
 
 export const fetchOrdersHistory = () => {
   return async () => {
-    //const uid = getState().users.uid;
     //const list = [];
-    // db.collection('users').doc(uid)
     //   .collection('orders')
     //   .ordefetchOrdersHistoryActionrBy('updated_at', 'desc')
     //   .get()
@@ -65,8 +85,6 @@ export const fetchProductsInCart = (products) => {
 
 //export const orderProduct = (productsInCart, amount) => {
 //  return async (dispatch, getState) => {
-//    const uid = getState().users.uid;
-//    const userRef = db.collection('users').doc(uid);
 //    const timestamp = FirebaseTimestamp.now();
 //
 //    let products = [],

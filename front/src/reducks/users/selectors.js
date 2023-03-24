@@ -12,9 +12,9 @@ export const getOrdersHistory = createSelector(
   (state) => state.orders
 );
 
-export const getProductsInCart = createSelector(
+export const getMyCartList = createSelector(
   [usersSelector],
-  (state) => state.cart
+  (state) => state.cartList
 );
 
 export const getUserId = createSelector([usersSelector], (state) => state.id);

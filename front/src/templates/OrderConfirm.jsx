@@ -1,61 +1,49 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProductsInCart } from '../reducks/users/selectors';
+import { getMyCartList } from '../reducks/users/selectors';
 import { makeStyles } from '@material-ui/styles';
 import { CartListItem } from '../components/Products';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import { PrimaryButton, TextDetail } from '../components/UIkit';
+import { push } from 'connected-react-router';
+import config from '../config/base';
 //import { orderProduct } from '../reducks/products/operations';
 
-const useStyles = makeStyles((theme) => ({
-  detailBox: {
-    margin: '0 auto',
-    [theme.breakpoints.down('sm')]: {
-      width: 320,
-    },
-    [theme.breakpoints.up('sm')]: {
-      width: 512,
-    },
-  },
-  orderBox: {
-    border: '1px solid rgba(0, 0, 0, 0.2)',
-    borderRadius: 4,
-    boxShadow: '0 4px 2px 2px rgba(0, 0, 0, 0.2)',
-    height: 256,
-    margin: '24px auto 16px auto',
-    padding: 16,
-    width: 288,
-  },
-}));
-
 const OrderConfirm = () => {
-  const classes = useStyles();
+  const classes  = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
-  const productsInCart = getProductsInCart(selector);
+  const cartList = getMyCartList(selector);
+  useEffect(() => {
+    if (!cartList || cartList.length == 0) {
+      dispatch(push('/'));
+    }
+  })
 
   const subtotal = useMemo(() => {
-    return productsInCart.reduce((sum, product) => (sum += product.price), 0);
-  }, [productsInCart]);
+    return cartList.reduce((sum, cart) => {
+      return sum += (cart.product.price * cart.num);
+    }, 0);
+  }, [cartList]);
 
-  const shippingFee = subtotal > 10000 ? 0 : 210;
-  const tax = subtotal * 0.1;
-  const total = subtotal + shippingFee + tax;
+  const shippingFee = 0;
+  const tax         = subtotal * config.taxRate;
+  const total       = subtotal + shippingFee + tax;
 
   const order = useCallback(() => {
-    //   dispatch(orderProduct(productsInCart, total));
-  }, [dispatch, productsInCart, total]);
+    //   dispatch(orderProduct(cartList, total));
+  }, [dispatch, cartList, total]);
 
   return (
-    <section className='c-section-wrapin'>
-      <h2 className='u-text__headline'>注文の確認</h2>
+    <section className={classes.topSection}>
+      <h2 className={classes.topSectionTitle}>注文の確認</h2>
       <div className='p-grid__row'>
         <div className={classes.detailBox}>
           <List>
-            {productsInCart.length > 0 &&
-              productsInCart.map((product) => (
-                <CartListItem product={product} key={product.cartId} />
+            {cartList && cartList.length > 0 &&
+              cartList.map((cart) => (
+                <CartListItem key={cart.id} cart={cart} isConfirm={true} />
               ))}
           </List>
         </div>
@@ -81,5 +69,51 @@ const OrderConfirm = () => {
     </section>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  // セクション1
+  topSection: {
+    padding: '40px 20px 0',
+    [theme.breakpoints.up('md')]: {
+      // PC
+      padding: '60px 40px',
+    },
+  },
+  topSectionTitle: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    marginBottom: '32px',
+    [theme.breakpoints.down('xs')]: {
+      // SP
+      fontSize: '20px',
+    },
+    [theme.breakpoints.up('sm')]: {
+      // タブレット
+      fontSize: '24px',
+    },
+    [theme.breakpoints.up('md')]: {
+      // PC
+      fontSize: '28px',
+    },
+  },
+  detailBox: {
+    margin: '0 auto',
+    [theme.breakpoints.down('sm')]: {
+      width: 320,
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: 512,
+    },
+  },
+  orderBox: {
+    border: '1px solid rgba(0, 0, 0, 0.2)',
+    borderRadius: 4,
+    boxShadow: '0 4px 2px 2px rgba(0, 0, 0, 0.2)',
+    height: 256,
+    margin: '24px auto 16px auto',
+    padding: 16,
+    width: 288,
+  },
+}));
 
 export default OrderConfirm;

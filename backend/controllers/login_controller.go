@@ -25,7 +25,7 @@ func (lc *LoginController) Login(c echo.Context) error {
 	user, err := um.FindByEmail(loginForm.Email)
 	if err != nil || user == nil {
 		// エラーもしくはユーザーが存在しない
-		return c.JSON(http.StatusOK, badRequestResponse([]string{"メンバーが見つかりません"}))
+		return c.JSON(http.StatusOK, notFoundResponse([]string{"メンバーが見つかりません"}))
 	}
 	paramPasswordHash := utils.GetEncryptedHash(loginForm.Password)
 	if paramPasswordHash != user.Password {
@@ -35,9 +35,15 @@ func (lc *LoginController) Login(c echo.Context) error {
 	if err := authHandler.Login(c, user.ID); err != nil {
 		return c.JSON(http.StatusOK, unauthorizedResponse([]string{"ログインに失敗しました"}))
 	}
+	cm := models.Cart{}
+	cartList, err := cm.FindByUserIdWithProduct(user.ID)
+	if err != nil {
+		c.Logger().Error(err)
+	}
 	return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
-		"user":    user,
-		"message": "ログインしました",
+		"user":     user,
+		"cartList": cartList,
+		"message":  "ログインしました",
 	}))
 }
 

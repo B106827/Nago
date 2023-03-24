@@ -22,10 +22,10 @@ export const UsersReducer = (state = initialState.users, action) => {
       return {
         ...action.payload,
       };
-    case Actions.FETCH_PRODUCTS_IN_CART:
+    case Actions.UPDATE_CART:
       return {
         ...state,
-        cart: [...action.payload],
+        cartList: [...action.payload],
       };
     case Actions.FETCH_ORDERS_HISTORY:
       return {

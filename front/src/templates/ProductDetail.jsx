@@ -1,10 +1,15 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { push } from 'connected-react-router';
 import { makeStyles } from '@material-ui/styles';
 import HTMLReactParser from 'html-react-parser';
 import { ImageSwiper } from '../components/Products';
-import { addProductToCart } from '../reducks/users/operations';
-import { constants } from '../utils/constants';
+import { showMessageAction } from '../reducks/messages/actions';
+import { getWindowSize } from '../reducks/utils/selectors';
+import { fetchProduct } from '../reducks/products/operations';
+import { updateCart } from '../reducks/users/operations';
+import { getProduct } from '../reducks/products/selectors';
 import product_top from '../assets/img/src/nago_product_top.png';
 import flow_1 from '../assets/img/svg/nago_flow_1.svg';
 import flow_2 from '../assets/img/svg/nago_flow_2.svg';
@@ -13,14 +18,53 @@ import flow_4 from '../assets/img/svg/nago_flow_4.svg';
 import flow_5 from '../assets/img/svg/nago_flow_5.svg';
 import flow_6 from '../assets/img/svg/nago_flow_6.svg';
 import { theme } from '../assets/theme';
-import { getWindowSize } from '../reducks/utils/selectors';
+import { SelectBox, PrimaryButton } from '../components/UIkit';
 
 const ProductDetail = () => {
-  const classes = useStyles();
-  //const dispatch = useDispatch();
-  const selector = useSelector((state) => state);
+  const classes    = useStyles();
+  const dispatch   = useDispatch();
+  const selector   = useSelector((state) => state);
   const windowSize = getWindowSize(selector);
-  //const path = selector.router.location.pathname;
+
+  const { productId } = useParams();
+  if (!productId) {
+    dispatch(showMessageAction('error', '無効なURLです'));
+    dispatch(push('/'));
+  } else {
+    useEffect(() => {
+      dispatch(fetchProduct(productId));
+    }, []);
+  }
+
+  const [product, setProduct]     = useState(null);
+  const [cartNum, setCartNum]     = useState(0);
+  const [options, setOptions]     = useState(null);
+  const [selErr, setSelErr]       = useState(false);
+  const [selErrMsg, setSelErrMsg] = useState('');
+
+  const storeProduct = getProduct(selector);
+
+  useEffect(() => {
+    if (storeProduct) {
+      setProduct(storeProduct);
+      const tmpOptions = [{
+        id: 0,
+        name: "-",
+      }];
+      if (storeProduct.stock > 0) {
+        for (let i = 1; i <= storeProduct.stock; i++) {
+          tmpOptions.push({
+            id: i,
+            name: i,
+          });
+        }
+      } else {
+        setSelErr(true);
+        setSelErrMsg('在庫がありません');
+      }
+      setOptions(tmpOptions);
+    }
+  }, [storeProduct]);
 
   const returnCodeToBr = (text) => {
     if (text === '') {
@@ -42,24 +86,13 @@ const ProductDetail = () => {
     );
   };
 
-  //const addProduct = useCallback();
-  //(selectedSize) => {
-  //  //const timestamp = FirebaseTimestamp.now();
-  //  dispatch(
-  //    addProductToCart({
-  //      //added_at: timestamp,
-  //      description: product.description,
-  //      gender: product.gender,
-  //      images: product.images,
-  //      name: product.name,
-  //      price: product.price,
-  //      productId: product.id,
-  //      quantity: 1,
-  //    })
-  //  );
-  //},
-  //[dispatch, product]
-  const product = constants.product;
+  const addToCart = useCallback(() => {
+    if (!cartNum || cartNum === 0) {
+      dispatch(showMessageAction('error', '数量を選択してください'));
+      return;
+    }
+    dispatch(updateCart(Number(productId), cartNum));
+  }, [cartNum]);
 
   return (
     <section
@@ -81,6 +114,8 @@ const ProductDetail = () => {
               </h2>
               <p className={classes.price}>¥{product.price.toLocaleString()}</p>
               <div className='module-spacer--small' />
+              <SelectBox label={'数量※'} required={true} value={cartNum} options={options} select={setCartNum} error={selErr} errorMsg={selErrMsg} />
+              <PrimaryButton label={'カートに入れる'} onClick={addToCart} addStyle={{ width: '100%' }} />
               <div className='module-spacer--small' />
               <p>{returnCodeToBr(product.description)}</p>
             </div>

@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { theme } from '../assets/theme';
-import { constants } from '../utils/constants';
 import { fetchProducts } from '../reducks/products/operations';
 import { getProducts } from '../reducks/products/selectors';
 import { ProductCard } from '../components/Products';
@@ -21,8 +19,7 @@ const Home = () => {
   const fetchProductsList = getProducts(selector);
   useEffect(() => {
     if (fetchProductsList) setProducts(fetchProductsList);
-    console.log(fetchProductsList);
-  }, [fetchProductsList])
+  }, [fetchProductsList]);
 
   return (
     <section>
@@ -46,7 +43,7 @@ const Home = () => {
 };
 
 // スタイル
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   // セクション1
   topSection: {
     padding: '40px 20px 0',
