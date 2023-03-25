@@ -73,12 +73,6 @@ export const fetchOrdersHistory = () => {
   };
 };
 
-export const fetchProductsInCart = (products) => {
-  return async (dispatch) => {
-//    dispatch(fetchProductsInCartAction(products));
-  };
-};
-
 //export const orderProduct = (productsInCart, amount) => {
 //  return async (dispatch, getState) => {
 //    const timestamp = FirebaseTimestamp.now();

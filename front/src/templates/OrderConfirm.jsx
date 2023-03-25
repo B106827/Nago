@@ -16,7 +16,7 @@ const OrderConfirm = () => {
   const selector = useSelector((state) => state);
   const cartList = getMyCartList(selector);
   useEffect(() => {
-    if (!cartList || cartList.length == 0) {
+    if (!cartList || cartList.length === 0) {
       dispatch(push('/'));
     }
   })

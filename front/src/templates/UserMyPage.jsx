@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import List from '@material-ui/core/List';
 import { makeStyles } from '@material-ui/styles';
 import { fetchMyInfo } from '../reducks/users/operations';
