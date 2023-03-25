@@ -46,6 +46,7 @@ export const login = (email, password) => {
       dispatch
     )
       .then((json) => {
+        if (!json) return;
         if (json.status === 200) {
           const user = json.result.user;
           const cartList = json.result.cartList;
@@ -61,13 +62,8 @@ export const login = (email, password) => {
             dispatch(push('/'));
           }
         } else {
-          console.log(json);
           dispatch(showMessageAction('error', json.messages));
         }
-      })
-      .catch((error) => {
-        console.log('error :', error);
-        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
       });
   };
 };
@@ -91,6 +87,7 @@ export const registerEmail = (email) => {
       dispatch
     )
       .then((json) => {
+        if (!json) return;
         if (json.status === 200) {
           dispatch(
             showMessageAction(
@@ -101,10 +98,6 @@ export const registerEmail = (email) => {
         } else {
           dispatch(showMessageAction('error', json.messages));
         }
-      })
-      .catch((error) => {
-        console.log('error: ', error);
-        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
       });
   };
 };
@@ -128,6 +121,7 @@ export const checkRegisterUrl = (tmpId) => {
       dispatch
     )
       .then((json) => {
+        if (!json) return;
         if (json.status === 200) {
           dispatch(showMessageAction('info', '新規登録を進めてください'));
           if (json.result.email) {
@@ -140,11 +134,6 @@ export const checkRegisterUrl = (tmpId) => {
           dispatch(showMessageAction('error', json.messages));
           dispatch(push('/'));
         }
-      })
-      .catch((error) => {
-        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
-        console.log(error);
-        dispatch(push('/'));
       });
   };
 };
@@ -176,6 +165,7 @@ export const register = (tmpId, name, email, password, confirmPassword) => {
       dispatch
     )
       .then((json) => {
+        if (!json) return;
         if (json.status === 200) {
           const user = json.result.user;
           if (user) {
@@ -192,10 +182,6 @@ export const register = (tmpId, name, email, password, confirmPassword) => {
         } else {
           dispatch(showMessageAction('error', json.messages));
         }
-      })
-      .catch((error) => {
-        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
-        console.log(error);
       });
   };
 };
@@ -211,6 +197,7 @@ export const logout = () => {
       dispatch
     )
       .then((json) => {
+        if (!json) return;
         if (json.status === 200) {
           dispatch(logoutAction());
           dispatch(showMessageAction('success', json.result.message));
@@ -218,10 +205,6 @@ export const logout = () => {
         } else {
           dispatch(showMessageAction('error', json.messages));
         }
-      })
-      .catch((error) => {
-        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
-        console.log(error);
       });
   };
 };
@@ -237,16 +220,12 @@ export const fetchMyInfo = () => {
       dispatch
     )
       .then((json) => {
+        if (!json) return;
         if (json.status === 200) {
-          console.log(json);
           dispatch(showMessageAction('success', json.result.message));
         } else {
           dispatch(showMessageAction('error', json.messages));
         }
-      })
-      .catch((error) => {
-        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
-        console.log(error);
       });
   };
 };
@@ -272,17 +251,13 @@ export const updateCart = (productId, cartNum) => {
       dispatch
     )
       .then((json) => {
+        if (!json) return;
         if (json.status === 200) {
           dispatch(updateCartAction(json.result.updatedCartList));
           dispatch(showMessageAction('success', json.result.message));
         } else {
-          console.log(json);
           dispatch(showMessageAction('error', json.messages));
         }
-      })
-      .catch((error) => {
-        console.log('error :', error);
-        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
       });
   };
 };
@@ -306,17 +281,13 @@ export const deleteCart = (cartId) => {
       dispatch
     )
       .then((json) => {
+        if (!json) return;
         if (json.status === 200) {
           dispatch(updateCartAction(json.result.updatedCartList));
           dispatch(showMessageAction('success', json.result.message));
         } else {
-          console.log(json);
           dispatch(showMessageAction('error', json.messages));
         }
-      })
-      .catch((error) => {
-        console.log('error :', error);
-        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
       });
   };
 };

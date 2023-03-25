@@ -1,24 +1,12 @@
 import config from '../config/base';
 import { showMessageAction } from '../reducks/messages/actions';
-
-const networkTimeout = 10000;
-
-let networkErrorFlg = false;
-
-export const commonActions = {
-  networkError(dispatch) {
-    dispatch(
-      showMessageAction(
-        'error',
-        '予期せぬエラーが発生しました。解消されない場合はお手数ですが運営元にお問い合わせください'
-      )
-    );
-  },
-};
+import { logoutAction } from '../reducks/users/actions';
 
 export const fetchWrapper = (args, dispatch) => {
   let { type, url, params = {} } = args; // eslint-disable-line prefer-const
-  let options = null;
+  let options             = null;
+  const networkTimeout    = 10000;
+  let networkErrorFlg     = false;
 
   url = config.apiUrl + url;
 
@@ -64,112 +52,96 @@ export const fetchWrapper = (args, dispatch) => {
       reject(new Error('timeout'));
     }, networkTimeout);
     fetch(url, options).then(resolve, reject);
-  })
-    // リクエスト以前の段階でのエラー処理
-    .catch((e) => handleNetworkError(e))
-    // HTTPリクエストのステータスごとに処理
-    .then((res) => handleStatusErrors(res))
-    // ビジネスロジックの処理結果を扱う
-    .then((json) => handleResult(json));
-
-  const handleNetworkError = (error) => {
-    if (networkErrorFlg) return;
-    // 連続でエラーメッセージが出るのを制限
-    console.log('Promise error', error);
-    commonActions.networkError(dispatch);
-    networkErrorFlg = true;
-    setTimeout(() => {
-      networkErrorFlg = false;
-    }, 500);
-  };
+  }).then((res) => handleStatusErrors(res))
+    .then((json) => handleResult(json))
+    .catch((e) => handleServerError(e));
 
   const handleStatusErrors = (res) => {
     if (!res) return;
     switch (Number(res.status)) {
       case 200:
-        return res.json(); // API側バリデーションエラー等も含む
+        return res.json();                  // API側バリデーションエラー等も含む
+      case 400:
+        return handleStatus400(res);        // API側不正なリクエストエラー
       case 401:
-        return handleStatus401(res); // API側認証エラー
+        return handleStatus401(res);        // API側認証エラー
       case 404:
-        return handleStatus404(res); // API側Not Found エラー
+        return handleStatus404(res);        // API側Not Foundエラー
       case 500:
-        return handeleStatus500(res); // API側サーバーエラー
+        return handeleStatus500(res);       // API側サーバーエラー
       default:
-        return handleErrors(res); // API側想定外のエラー
+        return handleUnexpectedErrors(res); // API側想定外のエラー
     }
+  };
+
+  const handleStatus400 = (res) => {
+    console.log('400:bad request', res);
+    throw new Error('不正なリクエストです');
   };
 
   const handleStatus401 = (res) => {
     console.log('401:unauthorized', res);
-    commonActions.networkError(dispatch);
-    return;
+    dispatch(logoutAction());
+    throw new Error('ログインしてください');
   };
 
   const handleStatus404 = (res) => {
     console.log('404:not found', res);
-    commonActions.networkError(dispatch);
-    return;
+    throw new Error('ページが見つかりません');
   };
 
   const handeleStatus500 = (res) => {
     console.log('500:internal server error', res);
-    commonActions.networkError(dispatch);
-    return;
+    throw new Error('エラーが発生しました');
   };
 
-  const handleErrors = (res) => {
-    console.log('unknown error', res);
-    commonActions.networkError(dispatch);
-    return;
+  const handleUnexpectedErrors = (res) => {
+    console.log('unexpected error', res);
+    throw new Error('予期せぬエラーが発生しました');
   };
 
-  // HTTPリクエスト自体は成功し、ビジネスロジックの処理結果を扱う
+  // HTTPリクエストは成功し（ステータス200）、ビジネスロジックの処理結果を扱う
   const handleResult = (json) => {
     if (!json) return;
     switch (Number(json.status)) {
       case 200:
-        return json; // API側処理成功
+        return json;                    // API側処理成功
       case 400:
-        return fixResponse400(json); // リクエスト内容に問題あり
+        return fixResponse(json, true); // リクエスト内容に問題あり
       case 401:
-        return fixResponse401(json); // 認証内容に問題あり
+        return fixResponse(json);       // 認証内容に問題あり
       case 404:
-        return fixResponse404(json); // リクエスト先が見つからない
+        return fixResponse(json);       // リクエスト先が見つからない
       case 500:
-        return fixResponse500(json); // API側の処理に問題あり
+        return fixResponse(json);       // API側の処理に問題あり
       default:
         return json;
     }
   };
 
-  const fixResponse400 = (json) => {
-    const result = json.result;
-    if (!result) return json;
-    // バリデーションエラーの該当箇所を調整する
-    json.errorKeys = Object.keys(result);
-    json.messages  = Object.values(result);
-    return json;
-  };
-
-  const fixResponse401 = (json) => {
+  const fixResponse = (json, isValidError = false) => {
     const result = json.result;
     if (!result) return json;
     json.messages = Object.values(result);
+    if (isValidError) {
+      json.errorKeys = Object.keys(result);
+    }
     return json;
   };
 
-  const fixResponse404 = (json) => {
-    const result = json.result;
-    if (!result) return json;
-    json.messages = Object.values(result);
-    return json;
-  };
-
-  const fixResponse500 = (json) => {
-    const result = json.result;
-    if (!result) return json;
-    json.messages = Object.values(result);
-    return json;
+  const handleServerError = (error) => {
+    if (networkErrorFlg) return;
+    // 連続でエラーメッセージが出るのを制限
+    networkErrorFlg = true;
+    dispatch(
+      showMessageAction(
+        'error',
+        error.message
+      )
+    );
+    setTimeout(() => {
+      networkErrorFlg = false;
+    }, 500);
   };
 
   return result;

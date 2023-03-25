@@ -21,7 +21,7 @@ func (am *AuthMiddleware) Authenticate() echo.MiddlewareFunc {
 
 	jwtConfig := middleware.JWTConfig{
 		Claims:         &types.JwtCustomClaims{},
-		SigningKey:     []byte(conf.GetString("session.secret")),
+		SigningKey:     []byte(conf.GetString("jwt.secret")),
 		TokenLookup:    "cookie:" + constants.SESSION_COOKIE_KEY_NAME,
 		SuccessHandler: setUser,
 	}
