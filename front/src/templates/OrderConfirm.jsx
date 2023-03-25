@@ -1,8 +1,13 @@
-import { useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMyCartList } from '../reducks/users/selectors';
 import { makeStyles } from '@material-ui/styles';
 import { CartListItem } from '../components/Products';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import { PrimaryButton, TextDetail } from '../components/UIkit';
@@ -14,6 +19,12 @@ const OrderConfirm = () => {
   const classes  = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
+  const [cartListOpen, setCartListOpen] = useState(false);
+
+  const cartListClick = () => {
+    setCartListOpen(!cartListOpen);
+  };
+
   const cartList = getMyCartList(selector);
   useEffect(() => {
     if (!cartList || cartList.length === 0) {
@@ -38,14 +49,20 @@ const OrderConfirm = () => {
   return (
     <section className={classes.topSection}>
       <h2 className={classes.topSectionTitle}>注文の確認</h2>
-      <div className='p-grid__row'>
+      <div className={'p-grid__row' + ' ' + `${classes.topSectionWrapper}`}>
         <div className={classes.detailBox}>
-          <List>
-            {cartList && cartList.length > 0 &&
-              cartList.map((cart) => (
-                <CartListItem key={cart.id} cart={cart} isConfirm={true} />
-              ))}
-          </List>
+          <ListItem button onClick={cartListClick}>
+            <ListItemText primary="カートの中身を確認する" />
+            {cartListOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={cartListOpen} timeout='auto' unmountOnExit>
+            <List>
+              {cartList && cartList.length > 0 &&
+                cartList.map((cart) => (
+                  <CartListItem key={cart.id} cart={cart} isConfirm={true} />
+                ))}
+            </List>
+          </Collapse>
         </div>
         <div className={classes.orderBox}>
           <TextDetail
@@ -79,6 +96,11 @@ const useStyles = makeStyles((theme) => ({
       padding: '60px 40px',
     },
   },
+  topSectionWrapper: {
+    justifyContent: 'center',
+    maxWidth: theme.size.window.contentMaxWidth,
+    margin: '0 auto',
+  },
   topSectionTitle: {
     textAlign: 'center',
     fontWeight: 'bold',
@@ -102,7 +124,7 @@ const useStyles = makeStyles((theme) => ({
       width: 320,
     },
     [theme.breakpoints.up('sm')]: {
-      width: 512,
+      width: 600,
     },
   },
   orderBox: {
@@ -110,9 +132,12 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 4,
     boxShadow: '0 4px 2px 2px rgba(0, 0, 0, 0.2)',
     height: 256,
-    margin: '24px auto 16px auto',
+    margin: '0 auto 16px auto',
     padding: 16,
-    width: 288,
+    width: 300,
+    [theme.breakpoints.down('sm')]: {
+      marginTop: 16,
+    },
   },
 }));
 
