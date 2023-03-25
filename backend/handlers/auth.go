@@ -21,20 +21,20 @@ func (*Auth) Login(c echo.Context, userid uint) error {
 		userid,
 		jwt.StandardClaims{
 			// 1日
-			ExpiresAt: time.Now().Add(time.Hour * time.Duration(conf.GetInt("session.expireHour"))).Unix(),
+			ExpiresAt: time.Now().Add(time.Hour * time.Duration(conf.GetInt("jwt.expireHour"))).Unix(),
 		},
 	}
 	// create token with claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	// generate encoded token
-	signingKey := []byte(conf.GetString("session.secret"))
+	signingKey := []byte(conf.GetString("jwt.secret"))
 	t, err := token.SignedString(signingKey)
 	if err != nil {
 		return err
 	}
 	// set cookie
 	cookie := &http.Cookie{
-		Expires:  time.Now().Add(time.Hour * time.Duration(conf.GetInt("session.expireHour"))),
+		Expires:  time.Now().Add(time.Hour * time.Duration(conf.GetInt("jwt.expireHour"))),
 		HttpOnly: true,
 		Secure:   true,
 		Name:     constants.SESSION_COOKIE_KEY_NAME,

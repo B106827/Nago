@@ -16,6 +16,7 @@ export const fetchProducts = () => {
       dispatch,
     )
       .then((json) => {
+        if (!json) return;
         if (json.status === 200) {
           const products = json.result.products;
           if (Array.isArray(products)) {
@@ -23,11 +24,9 @@ export const fetchProducts = () => {
               fetchProductsAction(products)
             );
           }
+        } else {
+          dispatch(showMessageAction('error', json.messages));
         }
-      })
-      .catch((error) => {
-        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
-        console.log(error);
       });
   };
 };
@@ -42,6 +41,7 @@ export const fetchProduct = (productId) => {
       dispatch,
     )
       .then((json) => {
+        if (!json) return;
         if (json.status === 200) {
           const product = json.result.product;
           if (product) {
@@ -53,10 +53,6 @@ export const fetchProduct = (productId) => {
           dispatch(showMessageAction('error', json.messages));
           dispatch(push('/'));
         }
-      })
-      .catch((error) => {
-        dispatch(showMessageAction('error', '予期せぬエラーが発生しました'));
-        console.log(error);
       });
   };
 }
