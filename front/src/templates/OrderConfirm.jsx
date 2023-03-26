@@ -13,7 +13,7 @@ import Divider from '@material-ui/core/Divider';
 import { PrimaryButton, TextDetail } from '../components/UIkit';
 import { push } from 'connected-react-router';
 import config from '../config/base';
-//import { orderProduct } from '../reducks/products/operations';
+import { createOrder } from '../reducks/users/operations';
 
 const OrderConfirm = () => {
   const classes  = useStyles();
@@ -42,8 +42,8 @@ const OrderConfirm = () => {
   const tax         = subtotal * config.taxRate;
   const total       = subtotal + shippingFee + tax;
 
-  const order = useCallback(() => {
-    //   dispatch(orderProduct(cartList, total));
+  const goToOrder = useCallback(() => {
+    dispatch(createOrder(cartList, total));
   }, [dispatch, cartList, total]);
 
   return (
@@ -80,7 +80,7 @@ const OrderConfirm = () => {
             label={'合計(税込)'}
             value={'￥' + total.toLocaleString()}
           />
-          <PrimaryButton label={'注文する'} onClick={order} />
+          <PrimaryButton label={'支払い情報入力へ進む'} onClick={goToOrder} />
         </div>
       </div>
     </section>

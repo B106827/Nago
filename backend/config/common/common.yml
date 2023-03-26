@@ -3,3 +3,6 @@ jwt:
 
 mail:
   contentType: "text/plain"
+
+url:
+  stripeCheckout: "checkout.stripe.com"
