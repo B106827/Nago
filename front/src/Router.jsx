@@ -1,13 +1,13 @@
 import { Switch, Route } from 'react-router';
 import {
   CartList,
-  EmailRegister,
+  RegisterEmail,
   Home,
   Login,
   NotFound,
   OrderConfirm,
   OrderHistory,
-  PasswordReset,
+  ResetPassword,
   ProductDetail,
   Register,
   UserMyPage,
@@ -19,9 +19,9 @@ const Router = () => {
     <Switch>
       <Route exact path={'/'} component={Home} />
       <Route path={'/register/:tmpId?'} component={Register} />
-      <Route exact path={'/email_register'} component={EmailRegister} />
+      <Route exact path={'/email_register'} component={RegisterEmail} />
       <Route exact path={'/login'} component={Login} />
-      <Route exact path={'/password_reset'} component={PasswordReset} />
+      <Route exact path={'/password_reset'} component={ResetPassword} />
       <Route exact path={'/product/:productId?'} component={ProductDetail} />
       <Auth>
         <Switch>

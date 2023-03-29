@@ -9,15 +9,14 @@ const SelectBox = (props) => {
   const classes = useStyles();
 
   return (
-    <FormControl className={classes.formControl} error={props.error} disabled={props.error}>
+    <FormControl required={props.required} className={classes.formControl} error={props.error} disabled={props.error}>
       <InputLabel className={classes.selectBoxLabel}>{props.label}</InputLabel>
       <Select
         className={classes.selectBox}
-        required={props.required}
         value={props.value}
         onChange={(event) => props.select(event.target.value)}
       >
-        {props.options.map((option) => (
+        {props.options && props.options.map((option) => (
           <MenuItem key={option.id} value={option.id}>
             {option.name}
           </MenuItem>

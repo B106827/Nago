@@ -58,3 +58,11 @@ CREATE TABLE IF NOT EXISTS cart (
   PRIMARY KEY (id),
   UNIQUE KEY cart_unique01 (user_id, product_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT 'カート';
+
+CREATE TABLE IF NOT EXISTS pref_master (
+  id         INT UNSIGNED NOT NULL AUTO_INCREMENT                                     COMMENT 'ID',
+  name       VARCHAR(255) NOT NULL                                                    COMMENT '都道府県名',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP                             COMMENT '作成日時',
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
+  PRIMARY KEY (id),
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '都道府県マスター';

@@ -8,6 +8,11 @@ export const UtilsReducer = (state = initialState.utils, action) => {
         ...state,
         windowSize: { ...action.payload },
       };
+    case Actions.FETCH_PREF_MASTER:
+      return {
+        ...state,
+        prefMaster: [...action.payload],
+      };
     default:
       return state;
   }

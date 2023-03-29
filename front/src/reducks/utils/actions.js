@@ -8,3 +8,11 @@ export const windowResizeAction = (windowSize) => {
     },
   };
 };
+
+export const FETCH_PREF_MASTER = 'FETCH_PREF_MASTER';
+export const fetchPrefMasterAction = (prefMaster) => {
+  return {
+    type: FETCH_PREF_MASTER,
+    payload: prefMaster,
+  };
+};

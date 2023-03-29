@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getMyCartList } from '../reducks/users/selectors';
 import { makeStyles } from '@material-ui/styles';
 import { CartListItem } from '../components/Products';
+import { RegisterAddress } from '../components/Orders';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
@@ -21,10 +22,10 @@ const OrderConfirm = () => {
   const selector = useSelector((state) => state);
   const [cartListOpen, setCartListOpen] = useState(false);
 
+  // カート
   const cartListClick = () => {
     setCartListOpen(!cartListOpen);
   };
-
   const cartList = getMyCartList(selector);
   useEffect(() => {
     if (!cartList || cartList.length === 0) {
@@ -32,16 +33,15 @@ const OrderConfirm = () => {
     }
   })
 
+  // 会計
   const subtotal = useMemo(() => {
     return cartList.reduce((sum, cart) => {
       return sum += (cart.product.price * cart.num);
     }, 0);
   }, [cartList]);
-
   const shippingFee = 0;
   const tax         = subtotal * config.taxRate;
   const total       = subtotal + shippingFee + tax;
-
   const goToOrder = useCallback(() => {
     dispatch(createOrder(cartList, total));
   }, [dispatch, cartList, total]);
@@ -50,7 +50,9 @@ const OrderConfirm = () => {
     <section className={classes.topSection}>
       <h2 className={classes.topSectionTitle}>注文の確認</h2>
       <div className={'p-grid__row' + ' ' + `${classes.topSectionWrapper}`}>
-        <div className={classes.detailBox}>
+
+        <div className={classes.cartBox}>
+          {/* カートの中身（アコーディオン) */}
           <ListItem button onClick={cartListClick}>
             <ListItemText primary="カートの中身を確認する" />
             {cartListOpen ? <ExpandLess /> : <ExpandMore />}
@@ -63,7 +65,12 @@ const OrderConfirm = () => {
                 ))}
             </List>
           </Collapse>
+          <div className='module-spacer--small' />
+          {/* 届け先 */}
+          <RegisterAddress />
         </div>
+
+        {/* 会計 */}
         <div className={classes.orderBox}>
           <TextDetail
             label={'商品合計'}
@@ -82,6 +89,7 @@ const OrderConfirm = () => {
           />
           <PrimaryButton label={'支払い情報入力へ進む'} onClick={goToOrder} />
         </div>
+
       </div>
     </section>
   );
@@ -118,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '28px',
     },
   },
-  detailBox: {
+  cartBox: {
     margin: '0 auto',
     [theme.breakpoints.down('sm')]: {
       width: 320,

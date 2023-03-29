@@ -114,7 +114,15 @@ const ProductDetail = () => {
               </h2>
               <p className={classes.price}>¥{product.price.toLocaleString()}</p>
               <div className='module-spacer--small' />
-              <SelectBox label={'数量※'} required={true} value={cartNum} options={options} select={setCartNum} error={selErr} errorMsg={selErrMsg} />
+              <SelectBox
+                label={'数量※'}
+                required={true}
+                value={cartNum}
+                options={options}
+                select={setCartNum}
+                error={selErr}
+                errorMsg={selErrMsg}
+              />
               <PrimaryButton label={'カートに入れる'} onClick={addToCart} addStyle={{ width: '100%' }} />
               <div className='module-spacer--small' />
               <p>{returnCodeToBr(product.description)}</p>

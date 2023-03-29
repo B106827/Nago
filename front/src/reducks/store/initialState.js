@@ -5,6 +5,7 @@ const initialState = {
       width: window.innerWidth,
       height: window.innerHeight,
     },
+    prefMaster: [],
   },
   message: {
     state: false,

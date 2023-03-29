@@ -2,6 +2,7 @@ import config from '../config/base';
 import { showMessageAction } from '../reducks/messages/actions';
 import { logoutAction } from '../reducks/users/actions';
 
+
 export const fetchWrapper = (args, dispatch) => {
   let { type, url, params = {} } = args; // eslint-disable-line prefer-const
   let options             = null;
@@ -75,8 +76,18 @@ export const fetchWrapper = (args, dispatch) => {
   };
 
   const handleStatus400 = (res) => {
-    console.log('400:bad request', res);
-    throw new Error('不正なリクエストです');
+    console.log(localStorage.getItem('persist:development:root'));
+    // TODO: API側でmissing or malformed jwtの場合のレスポンスをリファクタリングし、resをthenで繋げなくても判別するようにする
+    res.json().then(data => {
+      if (data.message && data.message === 'missing or malformed jwt') {
+        dispatch(logoutAction());
+        throw new Error('ログインしてださい');
+      } else {
+        throw new Error('不正なリクエストです');
+      }
+    }).catch((e) => {
+      throw new Error(e.message);
+    });
   };
 
   const handleStatus401 = (res) => {

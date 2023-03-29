@@ -1,11 +1,11 @@
 import { useCallback, useState, useEffect } from 'react';
 import { TextInput, PrimaryButton } from '../components/UIkit';
-import { registerEmail } from '../reducks/users/operations';
+import { resetPassword } from '../reducks/users/operations';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import { getIsLogedIn } from '../reducks/users/selectors';
 
-const EmailRegister = () => {
+const ResetPassword = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
   const isLogedIn = getIsLogedIn(selector);
@@ -26,12 +26,7 @@ const EmailRegister = () => {
 
   return (
     <div className='c-section-container'>
-      <h2 className='u-text__headline__k u-text-center'>新規登録</h2>
-      <p className='u-text-center'>
-        登録用URLをお送りします
-        <br />
-        メールアドレスを入力して下さい
-      </p>
+      <h2 className='u-text__headline__k u-text-center'>パスワードリセット</h2>
       <div className='module-spacer--medium' />
       <TextInput
         fullWidth={true}
@@ -46,17 +41,17 @@ const EmailRegister = () => {
       <div className='module-spacer--medium' />
       <div className='center'>
         <PrimaryButton
-          label={'メールアドレスを登録する'}
-          onClick={() => dispatch(registerEmail(email))}
+          label={'パスワードリセット'}
+          onClick={() => dispatch(resetPassword(email))}
           addStyle={{ fontWeight: 'bold' }}
         />
         <div className='module-spacer--medium' />
         <p className='cursor-pointer' onClick={() => dispatch(push('/login'))}>
-          アカウントをお持ちの方はこちら
+          ログイン画面に戻る
         </p>
       </div>
     </div>
   );
 };
 
-export default EmailRegister;
+export default ResetPassword;

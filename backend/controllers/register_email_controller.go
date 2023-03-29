@@ -16,7 +16,7 @@ import (
 type RegisterEmailController struct{}
 
 // メールアドレス仮登録処理
-func (rec *RegisterEmailController) RegisterEmail(c echo.Context) error {
+func (rec *RegisterEmailController) Create(c echo.Context) error {
 	registerEmailForm := new(registerEmailForms.RegisterEmailForm)
 	cc := c.(*contexts.CustomContext)
 	if err := cc.BindValidate(registerEmailForm); err != nil {

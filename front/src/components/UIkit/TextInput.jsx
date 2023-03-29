@@ -5,6 +5,8 @@ const TextInput = (props) => {
     <TextField
       fullWidth={props.fullWidth}
       label={props.label}
+      placeholder={props.placeholder}
+      helperText={props.helperText}
       margin='dense'
       multiline={props.multiline}
       required={props.required}
@@ -14,6 +16,9 @@ const TextInput = (props) => {
       onChange={props.onChange}
       variant={props.variant}
       InputProps={props.InputProps}
+      InputLabelProps={{
+        shrink: true,
+      }}
     />
   );
 };
