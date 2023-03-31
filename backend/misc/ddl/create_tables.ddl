@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS user (
   id         INT UNSIGNED NOT NULL AUTO_INCREMENT                                     COMMENT 'ID',
   email      VARCHAR(255) NOT NULL                                                    COMMENT 'メールアドレス',
   password   VARCHAR(255) NOT NULL                                                    COMMENT 'パスワード',
-  name       VARCHAR(255) NOT NULL                                                    COMMENT '名前',
   status     INT NOT NULL DEFAULT 1                                                   COMMENT 'ユーザーステータス',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP                             COMMENT '作成日時',
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
@@ -44,7 +43,7 @@ CREATE TABLE IF NOT EXISTS product_image (
   url        TEXT                                                                     COMMENT '画像URL',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP                             COMMENT '作成日時',
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
   KEY product_image_index01 (product_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '商品画像';
 
@@ -64,5 +63,5 @@ CREATE TABLE IF NOT EXISTS pref_master (
   name       VARCHAR(255) NOT NULL                                                    COMMENT '都道府県名',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP                             COMMENT '作成日時',
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
-  PRIMARY KEY (id),
+  PRIMARY KEY (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '都道府県マスター';
