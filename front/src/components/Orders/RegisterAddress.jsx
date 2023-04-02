@@ -1,45 +1,36 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { TextInput, SelectBox } from '../UIkit';
 import { fetchPrefMaster } from '../../reducks/utils/operations';
 import { getPrefMaster } from '../../reducks/utils/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 
-const RegisterAddress = () => {
+const RegisterAddress = (props) => {
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
 
-  const [name, setName]                   = useState(''),
-    [postcode, setPostcode]               = useState(''),
-    [prefOptions, setPrefOptions]         = useState(null),
-    [prefId, setPrefId]                   = useState(0),
-    [primaryAddrss, setPrimaryAddrss]     = useState(''),
-    [secondaryAddrss, setSecondaryAddrss] = useState(''),
-    [phoneNumber, setPhoneNumber]         = useState('');
+  const inputName = (event) => {
+    props.setAddress({ ...props.address, name: event.target.value });
+  };
+  const inputPostcode = (event) => {
+    props.setAddress({ ...props.address, postcode: event.target.value });
+  };
+  const inputPrefId = (value) => {
+    props.setAddress({ ...props.address, prefId: value });
+  };
+  const inputPrimaryAddress = (event) => {
+    props.setAddress({ ...props.address, primaryAddress: event.target.value });
+  };
+  const inputSecondaryAddress = (event) => {
+    props.setAddress({ ...props.address, secondaryAddress: event.target.value });
+  };
+  const inputPhoneNumber = (event) => {
+    props.setAddress({ ...props.address, phoneNumber: event.target.value });
+  };
 
-  const inputName = useCallback((event) => {
-    setName(event.target.value);
-  }, [setName]);
-
-  const inputPostcode = useCallback((event) => {
-    setPostcode(event.target.value);
-  }, [setPostcode]);
-
-  const inputPrimaryAddress = useCallback((event) => {
-    setPrimaryAddrss(event.target.value);
-  }, [setPrimaryAddrss]);
-
-  const inputSecondaryAddress = useCallback((event) => {
-    setSecondaryAddrss(event.target.value);
-  }, [setSecondaryAddrss]);
-
-  const inputPhoneNumber = useCallback((event) => {
-    setPhoneNumber(event.target.value);
-  }, [setPhoneNumber]);
-
+  const [prefOptions, setPrefOptions] = useState(null);
   useEffect(() => {
     dispatch(fetchPrefMaster());
   }, []);
-
   const storePrefMaster = getPrefMaster(selector);
   useEffect(() => {
     if (storePrefMaster) {
@@ -58,24 +49,22 @@ const RegisterAddress = () => {
       <TextInput
         fullWidth={true}
         label={'お名前'}
-        placeholder={'山田 太郎'}
-        helperText={'姓と名の間にスペースを入れてください'}
+        helperText={'姓と名の間にスペースを入れてください（例：山田 太郎）'}
         multiline={false}
         required={true}
         rows={1}
-        value={name}
+        value={props.address.name}
         type={'text'}
         onChange={inputName}
       />
       <TextInput
         fullWidth={true}
         label={'郵便番号'}
-        placeholder={'123-4567'}
-        helperText={'ハイフンを入れてください'}
+        helperText={'ハイフンを入れてください（例：123-4567）'}
         multiline={false}
         required={true}
         rows={1}
-        value={postcode}
+        value={props.address.postcode}
         type={'text'}
         onChange={inputPostcode}
       />
@@ -83,43 +72,40 @@ const RegisterAddress = () => {
       <SelectBox
         label={'都道府県'}
         required={true}
-        value={prefId}
+        value={props.address.prefId}
         options={prefOptions}
-        select={setPrefId}
+        select={inputPrefId}
       />
       <TextInput
         fullWidth={true}
         label={'住所1'}
-        placeholder={'市区町村 番地'}
-        helperText={'ハイフンを入力してください'}
+        helperText={'例：新宿区西新宿2-8-1'}
         multiline={false}
         required={true}
         rows={1}
-        value={primaryAddrss}
+        value={props.address.primaryAddress}
         type={'text'}
         onChange={inputPrimaryAddress}
       />
       <TextInput
         fullWidth={true}
         label={'住所2'}
-        placeholder={'建物名 部屋番号'}
-        helperText={'マンションやアパートの方は必須です'}
+        helperText={'マンションやアパートの方は必須です（例：マンションボンゴA 201号室）'}
         multiline={false}
         required={false}
         rows={1}
-        value={secondaryAddrss}
+        value={props.address.secondaryAddress}
         type={'text'}
         onChange={inputSecondaryAddress}
       />
       <TextInput
         fullWidth={true}
         label={'電話番号'}
-        placeholder={'090-1234-5678'}
-        helperText={'ハイフンを入れてください'}
+        helperText={'ハイフンを入れてください（例：090-1234-5678）'}
         multiline={false}
         required={true}
         rows={1}
-        value={phoneNumber}
+        value={props.address.phoneNumber}
         type={'text'}
         onChange={inputPhoneNumber}
       />

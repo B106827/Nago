@@ -1,6 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMyCartList } from '../reducks/users/selectors';
 import { makeStyles } from '@material-ui/styles';
 import { CartListItem } from '../components/Products';
 import { RegisterAddress } from '../components/Orders';
@@ -14,6 +13,8 @@ import Divider from '@material-ui/core/Divider';
 import { PrimaryButton, TextDetail } from '../components/UIkit';
 import { push } from 'connected-react-router';
 import config from '../config/base';
+import { showMessageAction } from '../reducks/messages/actions';
+import { getMyCartList } from '../reducks/users/selectors';
 import { createOrder } from '../reducks/users/operations';
 
 const OrderConfirm = () => {
@@ -33,6 +34,16 @@ const OrderConfirm = () => {
     }
   })
 
+  // お届け先
+  const [address, setAddress] = useState({
+    name: '',
+    postcode: '',
+    prefId: 0,
+    primaryAddress: '',
+    secondaryAddress: '',
+    phoneNumber: '',
+  });
+
   // 会計
   const subtotal = useMemo(() => {
     return cartList.reduce((sum, cart) => {
@@ -43,8 +54,18 @@ const OrderConfirm = () => {
   const tax         = subtotal * config.taxRate;
   const total       = subtotal + shippingFee + tax;
   const goToOrder = useCallback(() => {
-    dispatch(createOrder(cartList, total));
-  }, [dispatch, cartList, total]);
+    if (
+      !address.name
+      || !address.postcode
+      || !address.prefId
+      || !address.primaryAddress
+      || !address.phoneNumber
+    ) {
+      dispatch(showMessageAction('error', 'お届け先に未入力項目があります'));
+      return;
+    }
+    dispatch(createOrder(total, address));
+  }, [dispatch, address, total]);
 
   return (
     <section className={classes.topSection}>
@@ -52,6 +73,7 @@ const OrderConfirm = () => {
       <div className={'p-grid__row' + ' ' + `${classes.topSectionWrapper}`}>
 
         <div className={classes.cartBox}>
+
           {/* カートの中身（アコーディオン) */}
           <ListItem button onClick={cartListClick}>
             <ListItemText primary="カートの中身を確認する" />
@@ -66,8 +88,10 @@ const OrderConfirm = () => {
             </List>
           </Collapse>
           <div className='module-spacer--small' />
+
           {/* 届け先 */}
-          <RegisterAddress />
+          <RegisterAddress address={address} setAddress={setAddress} />
+
         </div>
 
         {/* 会計 */}

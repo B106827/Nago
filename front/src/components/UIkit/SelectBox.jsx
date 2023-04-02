@@ -23,7 +23,7 @@ const SelectBox = (props) => {
         ))}
       </Select>
       {props.error && (
-        <FormHelperText className={classes.selectBoxLabel}>{props.errorMsg}</FormHelperText>
+        <FormHelperText className={classes.selectBoxHelperTxt}>{props.errorMsg}</FormHelperText>
       )}
     </FormControl>
   );
@@ -35,10 +35,14 @@ const useStyles = makeStyles({
     minWidth: 128,
     width: '100%',
   },
-  selectBox: {
-    fontSize: 20
-  },
   selectBoxLabel: {
+    fontSize: '1.3rem',
+  },
+  selectBox: {
+    fontSize: 18,
+    paddingTop: 10,
+  },
+  selectBoxHelperTxt: {
     fontSize: 18
   }
 });

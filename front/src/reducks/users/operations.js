@@ -293,22 +293,23 @@ export const deleteCart = (cartId) => {
 };
 
 // 決済情報入力へ
-export const createOrder = () => {
-  return (dispatch) => {
-    fetchWrapper(
-      {
-        type: 'POST',
-        url: '/order/create',
-      },
-      dispatch
-    )
-      .then((json) => {
-        if (!json) return;
-        if (json.status === 200) {
-          location.href = json.result.orderSession.url;
-        } else {
-          dispatch(showMessageAction('error', json.messages));
-        }
-      });
-  };
+export const createOrder = (total, address) => {
+  console.log(total, address);
+  //return (dispatch) => {
+  //  fetchWrapper(
+  //    {
+  //      type: 'POST',
+  //      url: '/order/create',
+  //    },
+  //    dispatch
+  //  )
+  //    .then((json) => {
+  //      if (!json) return;
+  //      if (json.status === 200) {
+  //        location.href = json.result.orderSession.url;
+  //      } else {
+  //        dispatch(showMessageAction('error', json.messages));
+  //      }
+  //    });
+  //};
 };

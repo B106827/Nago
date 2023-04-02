@@ -35,14 +35,13 @@ const ProductDetail = () => {
       dispatch(fetchProduct(productId));
     }, []);
   }
+  const storeProduct = getProduct(selector);
 
   const [product, setProduct]     = useState(null);
   const [cartNum, setCartNum]     = useState(0);
   const [options, setOptions]     = useState(null);
   const [selErr, setSelErr]       = useState(false);
   const [selErrMsg, setSelErrMsg] = useState('');
-
-  const storeProduct = getProduct(selector);
 
   useEffect(() => {
     if (storeProduct) {
@@ -58,6 +57,7 @@ const ProductDetail = () => {
             name: i,
           });
         }
+        setSelErr(false);
       } else {
         setSelErr(true);
         setSelErrMsg('在庫がありません');
