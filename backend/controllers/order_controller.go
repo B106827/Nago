@@ -1,7 +1,10 @@
 package controllers
 
 import (
+	"NagoBackend/server/contexts"
 	"net/http"
+
+	orderAddressForms "NagoBackend/forms/order"
 
 	"github.com/labstack/echo/v4"
 	"github.com/stripe/stripe-go/v74"
@@ -11,6 +14,11 @@ import (
 type OrderController struct{}
 
 func (oc *OrderController) Create(c echo.Context) error {
+	orderAddressForm := new(orderAddressForms.OrderAddressForm)
+	cc := c.(*contexts.CustomContext)
+	if err := cc.BindValidate(orderAddressForm); err != nil {
+		return c.JSON(http.StatusOK, customValidErrResponse(err))
+	}
 	stripe.Key = "sk_test_uSulkkzFxWPELicylSa7jMb6"
 	params := &stripe.CheckoutSessionParams{
 		Mode: stripe.String(string(stripe.CheckoutSessionModePayment)),

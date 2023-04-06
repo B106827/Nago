@@ -15,7 +15,7 @@ func (f RegisterEmailForm) Validate() error {
 			&f.Email,
 			validation.Required.Error("メールアドレスは入力必須です"),
 			validation.RuneLength(5, 255).Error("メールアドレスは {min}〜{max} 文字です"),
-			is.Email.Error("メールアドレスが不正な形跡です"),
+			is.Email.Error("メールアドレスが不正な形式です"),
 		),
 	)
 }

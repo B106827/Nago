@@ -16,3 +16,18 @@ export const fetchPrefMasterAction = (prefMaster) => {
     payload: prefMaster,
   };
 };
+
+export const CUSTOM_VALID_ERR = 'CUSTOM_VALID_ERR';
+export const customValidErrAction = (customValidErrResult) => {
+  return {
+    type: CUSTOM_VALID_ERR,
+    payload: customValidErrResult,
+  };
+};
+
+export const CUSTOM_VALID_ERR_RESET = 'CUSTOM_VALID_ERR_RESET';
+export const customValidErrResetAction = () => {
+  return {
+    type: CUSTOM_VALID_ERR_RESET,
+  };
+};

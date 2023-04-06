@@ -1,6 +1,7 @@
 import { push } from 'connected-react-router';
 import { fetchWrapper } from '../../utils/http';
 import { showMessageAction } from '../messages/actions';
+import { customValidErrAction } from '../utils/actions';
 import {
   loginAction,
   logoutAction,
@@ -294,22 +295,30 @@ export const deleteCart = (cartId) => {
 
 // 決済情報入力へ
 export const createOrder = (total, address) => {
-  console.log(total, address);
-  //return (dispatch) => {
-  //  fetchWrapper(
-  //    {
-  //      type: 'POST',
-  //      url: '/order/create',
-  //    },
-  //    dispatch
-  //  )
-  //    .then((json) => {
-  //      if (!json) return;
-  //      if (json.status === 200) {
-  //        location.href = json.result.orderSession.url;
-  //      } else {
-  //        dispatch(showMessageAction('error', json.messages));
-  //      }
-  //    });
-  //};
+  const params = {
+    total,
+    ...address,
+  };
+  return (dispatch) => {
+    fetchWrapper(
+      {
+        type: 'POST',
+        url: '/order/create',
+        params: params,
+      },
+      dispatch
+    )
+      .then((json) => {
+        console.log('hoge', json);
+        if (!json) return;
+        if (json.status === 200) {
+          location.href = json.result.orderSession.url;
+        } else {
+          dispatch(showMessageAction('error', json.messages));
+          if (json.isCustomValidErr) {
+            dispatch(customValidErrAction(json.result));
+          }
+        }
+      });
+  };
 };

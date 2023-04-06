@@ -22,6 +22,7 @@ const TextInput = (props) => {
         shrink: true,
       }}
       className={classes.root}
+      error={props.error}
     />
   );
 };
@@ -33,6 +34,9 @@ const useStyles = makeStyles({
     },
     '& .MuiInput-input': {
       paddingTop: 10
+    },
+    '& .MuiFormHelperText-root': {
+      fontSize: '0.9rem'
     },
   },
 });

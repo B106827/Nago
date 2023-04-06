@@ -6,6 +6,10 @@ const initialState = {
       height: window.innerHeight,
     },
     prefMaster: [],
+    validation: {
+      error: false,
+      errorResult: null,
+    }
   },
   message: {
     state: false,

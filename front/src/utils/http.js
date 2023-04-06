@@ -2,7 +2,6 @@ import config from '../config/base';
 import { showMessageAction } from '../reducks/messages/actions';
 import { logoutAction } from '../reducks/users/actions';
 
-
 export const fetchWrapper = (args, dispatch) => {
   let { type, url, params = {} } = args; // eslint-disable-line prefer-const
   let options             = null;
@@ -115,27 +114,25 @@ export const fetchWrapper = (args, dispatch) => {
   const handleResult = (json) => {
     if (!json) return;
     switch (Number(json.status)) {
-      case 200:
-        return json;                    // API側処理成功
+      case 200: // API側処理成功
+        return json;
       case 400:
-        return fixResponse(json, true); // リクエスト内容に問題あり
       case 401:
-        return fixResponse(json);       // 認証内容に問題あり
       case 404:
-        return fixResponse(json);       // リクエスト先が見つからない
-      case 500:
-        return fixResponse(json);       // API側の処理に問題あり
+      case 500: // API側の処理に問題あり
+        return fixResponse(json);
       default:
         return json;
     }
   };
 
-  const fixResponse = (json, isValidError = false) => {
-    const result = json.result;
-    if (!result) return json;
-    json.messages = Object.values(result);
-    if (isValidError) {
-      json.errorKeys = Object.keys(result);
+  const fixResponse = (json) => {
+    if (!json.result) return json;
+    if (json.isCustomValidErr) {
+      // カスタムバリデーションエラー
+      json.messages = ['入力内容に誤りがあります'];
+    } else {
+      json.messages = Object.values(json.result);
     }
     return json;
   };

@@ -10,7 +10,7 @@ const SelectBox = (props) => {
 
   return (
     <FormControl required={props.required} className={classes.formControl} error={props.error} disabled={props.error}>
-      <InputLabel className={classes.selectBoxLabel}>{props.label}</InputLabel>
+      <InputLabel className={classes.selectBoxLabel} error={props.validErr}>{props.label}</InputLabel>
       <Select
         className={classes.selectBox}
         value={props.value}
@@ -22,8 +22,8 @@ const SelectBox = (props) => {
           </MenuItem>
         ))}
       </Select>
-      {props.error && (
-        <FormHelperText className={classes.selectBoxHelperTxt}>{props.errorMsg}</FormHelperText>
+      {props.errorMsg && (
+        <FormHelperText error className={classes.selectBoxHelperErrTxt}>{props.errorMsg}</FormHelperText>
       )}
     </FormControl>
   );
@@ -42,8 +42,8 @@ const useStyles = makeStyles({
     fontSize: 18,
     paddingTop: 10,
   },
-  selectBoxHelperTxt: {
-    fontSize: 18
+  selectBoxHelperErrTxt: {
+    fontSize: '0.9rem',
   }
 });
 
