@@ -119,7 +119,7 @@ const RegisterAddress = (props) => {
       <TextInput
         fullWidth={true}
         label={'電話番号'}
-        helperText={validErr && validErrResult.phoneNumber || '（ハイフンを入れてください：例 「090-1234-5678」）'}
+        helperText={validErr && validErrResult.phoneNumber || '（市外局番及びハイフンを入れてください：例 「090-1234-5678」）'}
         multiline={false}
         required={true}
         rows={1}
