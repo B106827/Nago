@@ -1,10 +1,13 @@
 package controllers
 
 import (
+	"NagoBackend/models"
 	"NagoBackend/server/contexts"
+	"fmt"
 	"net/http"
+	"time"
 
-	orderAddressForms "NagoBackend/forms/order"
+	orderDeliveryInfoForms "NagoBackend/forms/order"
 
 	"github.com/labstack/echo/v4"
 	"github.com/stripe/stripe-go/v74"
@@ -14,11 +17,23 @@ import (
 type OrderController struct{}
 
 func (oc *OrderController) Create(c echo.Context) error {
-	orderAddressForm := new(orderAddressForms.OrderAddressForm)
+	orderDeliveryInfoForm := new(orderDeliveryInfoForms.OrderDeliveryInfoForm)
 	cc := c.(*contexts.CustomContext)
-	if err := cc.BindValidate(orderAddressForm); err != nil {
+	if err := cc.BindValidate(orderDeliveryInfoForm); err != nil {
+		fmt.Printf("%v", orderDeliveryInfoForm.Total)
 		return c.JSON(http.StatusOK, customValidErrResponse(err))
 	}
+	// TODO: totalの確認
+	user := c.Get("user").(*models.User)
+	om := models.Order{}
+	om.UserID = user.ID
+	om.TotalPrice = orderDeliveryInfoForm.Total
+	om.OrderedAt = time.Now()
+	if err := om.Create(); err != nil {
+		c.Logger().Error(err)
+		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
+	}
+	return nil
 	stripe.Key = "sk_test_uSulkkzFxWPELicylSa7jMb6"
 	params := &stripe.CheckoutSessionParams{
 		Mode: stripe.String(string(stripe.CheckoutSessionModePayment)),

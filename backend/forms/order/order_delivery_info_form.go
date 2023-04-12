@@ -2,12 +2,12 @@ package forms
 
 import (
 	"NagoBackend/utils"
+	"strconv"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
-	"github.com/k0kubun/pp"
 )
 
-type OrderAddressForm struct {
+type OrderDeliveryInfoForm struct {
 	Total            uint   `json:"total"`
 	Name             string `json:"name"`
 	Postcode         string `json:"postcode"`
@@ -17,11 +17,23 @@ type OrderAddressForm struct {
 	PhoneNumber      string `json:"phoneNumber"`
 }
 
-func (f OrderAddressForm) Validate() error {
+func (f OrderDeliveryInfoForm) Validate() error {
 	return validation.ValidateStruct(&f,
 		validation.Field(
 			&f.Total,
 			validation.Required.Error("パラメータが不正です"),
+			validation.By(func(value interface{}) error {
+				total, ok := value.(uint)
+				if !ok {
+					return validation.NewError("custom", "パラメータが不正です")
+				}
+				// uint→int→string に変換して正規表現のチェックを通す
+				s := strconv.Itoa(int(total))
+				if !utils.CheckNumericByRegexp(s) {
+					return validation.NewError("custom", "パラメータが不正です")
+				}
+				return nil
+			}),
 		),
 		validation.Field(
 			&f.Name,
@@ -31,11 +43,9 @@ func (f OrderAddressForm) Validate() error {
 				if !ok {
 					return validation.NewError("custom", "パラメータが不正です")
 				}
-				result, errMsg := utils.CheckNameByRegexp(name)
-				if errMsg != "" {
+				if _, errMsg := utils.CheckNameByRegexp(name); errMsg != "" {
 					return validation.NewError("custom", errMsg)
 				}
-				pp.Print(result)
 				return nil
 			}),
 		),

@@ -14,7 +14,7 @@ type User struct {
 	Email     string `json:"email" gorm:"column(email);size(255);unique;not null;type(varchar(255));"`
 	Password  string `json:"-"     gorm:"column(password);size(255);not null;type(varchar(255));"`
 	Name      string `json:"name"  gorm:"column(name);size(255);not null;type(varchar(255));"`
-	Status    uint   `json:"-"     gorm:"column(status);default(1);type(int);"`
+	Status    uint   `json:"-"     gorm:"column(status);not null;default(1);type(uint);"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
