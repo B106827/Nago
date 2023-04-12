@@ -16,6 +16,7 @@ import config from '../config/base';
 import { getMyCartList } from '../reducks/users/selectors';
 import { createOrder } from '../reducks/users/operations';
 import { customValidErrResetAction } from '../reducks/utils/actions';
+import { showMessageAction } from '../reducks/messages/actions';
 
 const OrderConfirm = () => {
   const classes  = useStyles();
@@ -54,16 +55,16 @@ const OrderConfirm = () => {
   const tax         = subtotal * config.taxRate;
   const total       = subtotal + shippingFee + tax;
   const goToOrder = useCallback(() => {
-    //if (
-    //  !address.name
-    //  || !address.postcode
-    //  || !address.prefId
-    //  || !address.primaryAddress
-    //  || !address.phoneNumber
-    //) {
-    //  dispatch(showMessageAction('error', 'お届け先に未入力項目があります'));
-    //  return;
-    //}
+    if (
+      !address.name
+      || !address.postcode
+      || !address.prefId
+      || !address.primaryAddress
+      || !address.phoneNumber
+    ) {
+      dispatch(showMessageAction('error', 'お届け先に未入力項目があります'));
+      return;
+    }
     dispatch(customValidErrResetAction());
     dispatch(createOrder(total, address));
   }, [dispatch, address, total]);

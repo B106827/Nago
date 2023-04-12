@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"NagoBackend/config"
 	"NagoBackend/models"
 	"NagoBackend/server/contexts"
 	"fmt"
@@ -23,17 +24,34 @@ func (oc *OrderController) Create(c echo.Context) error {
 		fmt.Printf("%v", orderDeliveryInfoForm.Total)
 		return c.JSON(http.StatusOK, customValidErrResponse(err))
 	}
-	// TODO: totalの確認
 	user := c.Get("user").(*models.User)
+	cm := models.Cart{}
+	cartList, err := cm.FindByUserIdWithProduct(user.ID)
+	if err != nil || cartList == nil {
+		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
+	}
+	total := uint(0)
+	for _, cart := range cartList {
+		total += cart.Num * cart.Product.Price
+	}
+	cartTotal := float64(total) * (1 + config.GetConfig().GetFloat64("price.taxRate"))
+	if uint(cartTotal) != orderDeliveryInfoForm.Total {
+		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
+	}
+
 	om := models.Order{}
 	om.UserID = user.ID
-	om.TotalPrice = orderDeliveryInfoForm.Total
+	om.TotalPrice = uint(cartTotal)
 	om.OrderedAt = time.Now()
 	if err := om.Create(); err != nil {
 		c.Logger().Error(err)
 		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
 	}
-	return nil
+	odim := models.OrderDeliveryInfo{}
+	if err := odim.Create(user.ID, om.ID, *orderDeliveryInfoForm); err != nil {
+		c.Logger().Error(err)
+		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
+	}
 	stripe.Key = "sk_test_uSulkkzFxWPELicylSa7jMb6"
 	params := &stripe.CheckoutSessionParams{
 		Mode: stripe.String(string(stripe.CheckoutSessionModePayment)),
@@ -44,7 +62,7 @@ func (oc *OrderController) Create(c echo.Context) error {
 					ProductData: &stripe.CheckoutSessionLineItemPriceDataProductDataParams{
 						Name: stripe.String("T-shirt"),
 					},
-					UnitAmount: stripe.Int64(2000),
+					UnitAmount: stripe.Int64(int64(om.TotalPrice)),
 				},
 				Quantity: stripe.Int64(1),
 			},

@@ -2,6 +2,8 @@ package utils
 
 import (
 	"regexp"
+
+	"golang.org/x/text/width"
 )
 
 // 半角数値のみの構成かどうかを正規表現で確認する
@@ -14,21 +16,21 @@ func CheckNumericByRegexp(numStr string) bool {
 // 氏名を正規表現で確認する
 func CheckNameByRegexp(name string) ([][]string, string) {
 	// 「(半角全角スペース以外の文字)(半角全角スペース)(文字)」
-	r := regexp.MustCompile(`^([^ 　]+)( |　)+(.+)$`)
+	r := regexp.MustCompile(`^([^ 　]+)[ |　]+(.+)$`)
 	if r.MatchString(name) {
 		return r.FindAllStringSubmatch(name, -1), ""
 	}
-	return nil, "姓と名の間にスペースを入れてください"
+	return nil, "姓と名の間にスペースを入れてください：例「山田 太郎」"
 }
 
 // 郵便番号を正規表現で確認する
 func CheckPostcodeByRegexp(postcode string) ([][]string, string) {
-	// 「[半角全角3桁の数値][半角全角ハイフン][半角全角4桁の数値]」
-	r := regexp.MustCompile(`^[0-9０-９]{3}[-ー][0-9０-９]{4}$`)
+	// 「(半角全角3桁の数値)[半角全角ハイフン](半角全角4桁の数値)」
+	r := regexp.MustCompile(`^([0-9０-９]{3})[-ー]([0-9０-９]{4})$`)
 	if r.MatchString(postcode) {
 		return r.FindAllStringSubmatch(postcode, -1), ""
 	}
-	return nil, "郵便番号の形式が不適切です"
+	return nil, "郵便番号の形式が不適切です：例「123-4567」"
 }
 
 // 市区町村以降の住所を正規表現で確認する
@@ -43,10 +45,15 @@ func CheckPrimaryAddressByRegexp(primaryAddress string) (string, string) {
 
 // 市区町村以降の住所を正規表現で確認する
 func CheckPhoneNumberByRegexp(phoneNumber string) ([][]string, string) {
-	// [半角全角0][半角全角1〜3桁の数字][半角全角ハイフン][半角全角1〜4桁の数字][半角全角4桁の数字]」
-	r := regexp.MustCompile(`^[0０][0-9０-９]{1,3}[-ー][0-9０-９]{1,4}[-ー][0-9０-９]{4}$`)
+	// 「([半角全角0][半角全角1〜3桁の数字])[半角全角ハイフン]([半角全角1〜4桁の数字])[半角全角ハイフン]([半角全角4桁の数字])」
+	r := regexp.MustCompile(`^([0０][0-9０-９]{1,3})[-ー]([0-9０-９]{1,4})[-ー]([0-9０-９]{4})$`)
 	if r.MatchString(phoneNumber) {
 		return r.FindAllStringSubmatch(phoneNumber, -1), ""
 	}
-	return nil, "電話番号の形式が不適切です"
+	return nil, "電話番号の形式が不適切です：例「090-1234-5678」"
+}
+
+// 全角英数字を半角に変換する
+func ConvertHankakuAlphanumeric(str string) string {
+	return width.Fold.String(str)
 }
