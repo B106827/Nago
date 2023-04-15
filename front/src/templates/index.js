@@ -4,6 +4,8 @@ export { default as Home } from './Home';
 export { default as Login } from './Login';
 export { default as NotFound } from './NotFound';
 export { default as OrderConfirm } from './OrderConfirm';
+export { default as OrderSuccessCallback } from './OrderSuccessCallback';
+export { default as OrderCancelCallback } from './OrderCancelCallback';
 export { default as OrderHistory } from './OrderHistory';
 export { default as ResetPassword } from './ResetPassword';
 export { default as ProductDetail } from './ProductDetail';

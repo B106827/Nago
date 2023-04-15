@@ -2,6 +2,11 @@ package constants
 
 const (
 	/*
+	  サービス関連
+	*/
+	SERVICE_NAME = "Nago"
+
+	/*
 	  ユーザー関連
 	*/
 	// アクティブユーザーのステータス
@@ -28,4 +33,11 @@ const (
 	*/
 	// 有効な商品のステータス
 	PRODUCT_STATUS_ACTIVE = 1
+
+	/*
+	  Stripe・注文関連
+	*/
+	ORDER_CURRENCY     = "jpy"
+	ORDER_SUCCESS_PATH = "/order/success"
+	ORDER_CANCEL_PATH  = "/order/cancel"
 )

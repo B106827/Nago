@@ -1,10 +1,11 @@
 package models
 
 import (
-	"NagoBackend/database"
 	forms "NagoBackend/forms/order"
 	"NagoBackend/utils"
 	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 type OrderDeliveryInfo struct {
@@ -29,7 +30,7 @@ func (OrderDeliveryInfo) TableName() string {
 	return "order_delivery_info"
 }
 
-func (odi *OrderDeliveryInfo) Create(userId uint, orderId uint, odif forms.OrderDeliveryInfoForm) error {
+func (odi *OrderDeliveryInfo) Create(tx *gorm.DB, userId uint, orderId uint, odif forms.OrderDeliveryInfoForm) error {
 	name, _ := utils.CheckNameByRegexp(odif.Name)
 	postcode, _ := utils.CheckPostcodeByRegexp(odif.Postcode)
 	phoneNumber, _ := utils.CheckPhoneNumberByRegexp(odif.PhoneNumber)
@@ -51,6 +52,5 @@ func (odi *OrderDeliveryInfo) Create(userId uint, orderId uint, odif forms.Order
 	odi.SecondaryPhoneNumber = utils.ConvertHankakuAlphanumeric(phoneNumber[0][2])
 	odi.ThirdPhoneNumber = utils.ConvertHankakuAlphanumeric(phoneNumber[0][3])
 
-	db := database.GetDB()
-	return db.Create(odi).Error
+	return tx.Create(odi).Error
 }

@@ -2,7 +2,10 @@ package models
 
 import (
 	"NagoBackend/database"
+	"errors"
 	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 type Order struct {
@@ -15,11 +18,28 @@ type Order struct {
 	UpdatedAt  time.Time `json:"-"`
 }
 
+const (
+	STATUS_PENDING = 0
+)
+
 func (Order) TableName() string {
 	return "order"
 }
 
-func (o *Order) Create() error {
+func (o *Order) FindById(id uint) (*Order, error) {
 	db := database.GetDB()
-	return db.Create(o).Error
+	var res Order
+	result := db.Where("id = ?", id).First(&res).Error
+	if errors.Is(result, gorm.ErrRecordNotFound) {
+		// データが存在しない
+		return nil, nil
+	} else if result != nil {
+		// 上記以外のエラー
+		return nil, result
+	}
+	return &res, nil
+}
+
+func (o *Order) Create(tx *gorm.DB) error {
+	return tx.Create(o).Error
 }

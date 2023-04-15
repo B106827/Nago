@@ -75,6 +75,8 @@ func InitRouter(e *echo.Echo) {
 	// 決済処理
 	orderController := controllers.OrderController{}
 	apiO.POST("/create", orderController.Create)
+	// 決済結果確認処理
+	apiO.POST("/check", orderController.Check)
 
 	/*
 	  /api/master

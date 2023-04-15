@@ -6,6 +6,8 @@ import {
   Login,
   NotFound,
   OrderConfirm,
+  OrderSuccessCallback,
+  OrderCancelCallback,
   OrderHistory,
   ResetPassword,
   ProductDetail,
@@ -28,6 +30,8 @@ const Router = () => {
           <Route exact path={'/user/mypage'} component={UserMyPage} />
           <Route exact path={'/cart'} component={CartList} />
           <Route exact path={'/order/confirm'} component={OrderConfirm} />
+          <Route exact path={'/order/success'} component={OrderSuccessCallback} />
+          <Route exact path={'/order/cancel'} component={OrderCancelCallback} />
           <Route exact path={'/order/history'} component={OrderHistory} />
           <Route component={NotFound} />
         </Switch>

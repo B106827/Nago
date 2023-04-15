@@ -309,7 +309,6 @@ export const createOrder = (total, address) => {
       dispatch
     )
       .then((json) => {
-        console.log('hoge', json);
         if (!json) return;
         if (json.status === 200) {
           location.href = json.result.orderSession.url;
@@ -318,6 +317,32 @@ export const createOrder = (total, address) => {
           if (json.isCustomValidErr) {
             dispatch(customValidErrAction(json.result));
           }
+        }
+      });
+  };
+};
+
+// 決済完了後の決済結果確認
+export const checkCheckoutResult = (sessionId, orderId) => {
+  return async (dispatch) => {
+    const params = {
+      sessionId,
+      orderId: Number(orderId),
+    };
+    fetchWrapper(
+      {
+        type: 'POST',
+        url: '/order/check',
+        params: params,
+      },
+      dispatch
+    )
+      .then((json) => {
+        if (!json) return;
+        if (json.status === 200) {
+          console.log(json);
+        } else {
+          dispatch(showMessageAction('error', json.messages));
         }
       });
   };
