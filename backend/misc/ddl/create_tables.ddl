@@ -85,7 +85,6 @@ CREATE TABLE IF NOT EXISTS order_detail (
 
 CREATE TABLE IF NOT EXISTS order_delivery_info (
   id                     INT UNSIGNED NOT NULL AUTO_INCREMENT                                     COMMENT 'ID',
-  user_id                INT UNSIGNED NOT NULL                                                    COMMENT 'ユーザーID',
   order_id               INT UNSIGNED NOT NULL                                                    COMMENT '注文情報ID',
   last_name              VARCHAR(255) NOT NULL                                                    COMMENT '名字',
   first_name             VARCHAR(255) NOT NULL                                                    COMMENT '名前',
@@ -100,5 +99,17 @@ CREATE TABLE IF NOT EXISTS order_delivery_info (
   created_at             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP                             COMMENT '作成日時',
   updated_at             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
   PRIMARY KEY (id),
-  KEY order_delivery_info_index01 (user_id, order_id)
+  KEY order_delivery_info_index01 (order_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '注文情報 > 配送先情報';
+
+-- Stripe以外の決済手段に変更する場合は新規にテーブルを用意する
+CREATE TABLE IF NOT EXISTS order_stripe_deaitl (
+  id          INT UNSIGNED NOT NULL AUTO_INCREMENT                                     COMMENT 'ID',
+  order_id    INT UNSIGNED NOT NULL                                                    COMMENT '注文情報ID',
+  stripe_id   VARCHAR(255) NOT NULL                                                    COMMENT 'StripeセッションID',
+  result_data JSON NOT NULL                                                            COMMENT 'Stripeセッション結果（JSON）'
+  created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP                             COMMENT '作成日時',
+  updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
+  PRIMARY KEY (id),
+  KEY order_stripe_detail_index01 (order_id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '注文情報 > 決済情報';
