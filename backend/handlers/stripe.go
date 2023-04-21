@@ -26,6 +26,7 @@ func (*StripeHandler) CreateSession(orderId uint, price uint) (*stripe.CheckoutS
 					ProductData: &stripe.CheckoutSessionLineItemPriceDataProductDataParams{
 						Name: stripe.String(constants.SERVICE_NAME),
 					},
+					UnitAmount: stripe.Int64(int64(price)),
 				},
 				Quantity: stripe.Int64(1),
 			},
@@ -34,4 +35,11 @@ func (*StripeHandler) CreateSession(orderId uint, price uint) (*stripe.CheckoutS
 		CancelURL:  stripe.String(orderCancelURL),
 	}
 	return session.New(params)
+}
+
+func (*StripeHandler) CheckSessionResult(sessionId string) (*stripe.CheckoutSession, error) {
+	conf := config.GetConfig()
+	stripe.Key = conf.GetString("stripe.testKey")
+
+	return session.Get(sessionId, nil)
 }

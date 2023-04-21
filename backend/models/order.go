@@ -19,7 +19,9 @@ type Order struct {
 }
 
 const (
-	STATUS_PENDING = 0
+	ORDER_STATUS_PENDING  = 0
+	ORDER_STATUS_COMPLETE = 1
+	ORDER_STATUS_FAILED   = 2
 )
 
 func (Order) TableName() string {
@@ -42,4 +44,8 @@ func (o *Order) FindById(id uint) (*Order, error) {
 
 func (o *Order) Create(tx *gorm.DB) error {
 	return tx.Create(o).Error
+}
+
+func (o *Order) UpdateStatusComplete(tx *gorm.DB) error {
+	return tx.Model(o).Update("status", ORDER_STATUS_COMPLETE).Error
 }

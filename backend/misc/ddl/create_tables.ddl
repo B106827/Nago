@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS user (
   id         INT UNSIGNED NOT NULL AUTO_INCREMENT                                     COMMENT 'ID',
   email      VARCHAR(255) NOT NULL                                                    COMMENT 'メールアドレス',
   password   VARCHAR(255) NOT NULL                                                    COMMENT 'パスワード',
-  name       VARCHAR(255) NOT NULL                                                    COMMENT '名前',
+  name       VARCHAR(255)                                                             COMMENT '名前',
   status     INT NOT NULL DEFAULT 1                                                   COMMENT 'ユーザーステータス',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP                             COMMENT '作成日時',
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS product_image (
   url        TEXT                                                                     COMMENT '画像URL',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP                             COMMENT '作成日時',
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
   KEY product_image_index01 (product_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '商品画像';
 
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `order` (
   created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP                             COMMENT '作成日時',
   updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
   PRIMARY KEY (id),
-  KEY order_index01 (user_id, status_flg)
+  KEY order_index01 (user_id, status)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '注文情報';
 
 CREATE TABLE IF NOT EXISTS order_detail (
@@ -103,13 +103,21 @@ CREATE TABLE IF NOT EXISTS order_delivery_info (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '注文情報 > 配送先情報';
 
 -- Stripe以外の決済手段に変更する場合は新規にテーブルを用意する
-CREATE TABLE IF NOT EXISTS order_stripe_deaitl (
+CREATE TABLE IF NOT EXISTS order_stripe_detail (
   id          INT UNSIGNED NOT NULL AUTO_INCREMENT                                     COMMENT 'ID',
   order_id    INT UNSIGNED NOT NULL                                                    COMMENT '注文情報ID',
   stripe_id   VARCHAR(255) NOT NULL                                                    COMMENT 'StripeセッションID',
-  result_data JSON NOT NULL                                                            COMMENT 'Stripeセッション結果（JSON）'
+  result_data JSON NOT NULL                                                            COMMENT 'Stripeセッション結果（JSON）',
   created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP                             COMMENT '作成日時',
   updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
   PRIMARY KEY (id),
   KEY order_stripe_detail_index01 (order_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '注文情報 > 決済情報';
+
+CREATE TABLE IF NOT EXISTS pref_master (
+  id          INT UNSIGNED NOT NULL AUTO_INCREMENT                                     COMMENT 'ID',
+  name        VARCHAR(255) NOT NULL                                                    COMMENT '都道府県名',
+  created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP                             COMMENT '作成日時',
+  updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
+  PRIMARY KEY (id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '都道府県マスター';
