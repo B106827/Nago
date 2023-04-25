@@ -42,10 +42,10 @@ func (o *Order) FindById(id uint) (*Order, error) {
 	return &res, nil
 }
 
-func (o *Order) Create(tx *gorm.DB) error {
+func (o *Order) CreateInTx(tx *gorm.DB) error {
 	return tx.Create(o).Error
 }
 
-func (o *Order) UpdateStatusComplete(tx *gorm.DB) error {
+func (o *Order) UpdateStatusCompleteInTx(tx *gorm.DB) error {
 	return tx.Model(o).Update("status", ORDER_STATUS_COMPLETE).Error
 }

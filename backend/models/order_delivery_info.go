@@ -29,7 +29,7 @@ func (OrderDeliveryInfo) TableName() string {
 	return "order_delivery_info"
 }
 
-func (odi *OrderDeliveryInfo) Create(tx *gorm.DB, orderId uint, odif forms.OrderDeliveryInfoForm) error {
+func (odi *OrderDeliveryInfo) CreateInTx(tx *gorm.DB, orderId uint, odif forms.OrderDeliveryInfoForm) error {
 	name, _               := utils.CheckNameByRegexp(odif.Name)
 	postcode, _           := utils.CheckPostcodeByRegexp(odif.Postcode)
 	phoneNumber, _        := utils.CheckPhoneNumberByRegexp(odif.PhoneNumber)

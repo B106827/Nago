@@ -33,29 +33,43 @@ func (oc *OrderController) Create(c echo.Context) error {
 		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
 	}
 	total := uint(0)
+	// 決済詳細情報用にデータを準備しておく
+	orderDetails := []map[string]uint{}
 	for _, cart := range cartList {
 		total += cart.Num * cart.Product.Price
+		orderDetails = append(orderDetails, map[string]uint{
+			"productId": cart.ProductID,
+			"price":     cart.Product.Price,
+			"num":       cart.Num,
+		})
 	}
 	conf := config.GetConfig()
 	cartTotal := float64(total) * (1 + conf.GetFloat64("price.taxRate"))
 	if uint(cartTotal) != orderDeliveryInfoForm.Total {
+		// 合計金額の確認
 		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
 	}
 
 	// トランザクション内で処理する
 	err = database.ExecuteInTx(func(tx *gorm.DB) error {
+		// 決済情報の登録
 		om            := models.Order{}
 		om.UserID      = user.ID
 		om.TotalPrice  = uint(cartTotal)
 		om.OrderedAt   = time.Now()
-		if err := om.Create(tx); err != nil {
+		if err := om.CreateInTx(tx); err != nil {
 			return err
 		}
+		// 決済詳細情報の登録
+		odm := models.OrderDetail{}
+		if err := odm.CreateInTx(tx, om.ID, &orderDetails); err != nil {
+			return err
+		}
+		// 送り先情報の登録
 		odim := models.OrderDeliveryInfo{}
-		if err := odim.Create(tx, om.ID, *orderDeliveryInfoForm); err != nil {
+		if err := odim.CreateInTx(tx, om.ID, *orderDeliveryInfoForm); err != nil {
 			return err
 		}
-		// TODO: order_detail の登録
 		// Stripe Checkoutセッションを開始する
 		stripeHandler := handlers.StripeHandler{}
 		s, err := stripeHandler.CreateSession(om.ID, om.TotalPrice)
@@ -109,10 +123,14 @@ func (oc *OrderController) Check(c echo.Context) error {
 		osdm.OrderID     = order.ID
 		osdm.StripeID    = s.ID
 		osdm.ResultData  = datatypes.JSON(sJson)
-		if err := osdm.Create(tx); err != nil {
+		if err := osdm.CreateInTx(tx); err != nil {
 			return err
 		}
-		if err := om.UpdateStatusComplete(tx); err != nil {
+		if err := order.UpdateStatusCompleteInTx(tx); err != nil {
+			return err
+		}
+		cm := models.Cart{}
+		if err := cm.DeleteCartDataInTx(tx, user.ID); err != nil {
 			return err
 		}
 		return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
@@ -121,6 +139,7 @@ func (oc *OrderController) Check(c echo.Context) error {
 	})
 	if err != nil {
 		c.Logger().Error(err)
+		// TODO: Stripe 側のキャンセル
 		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
 	}
 	return nil

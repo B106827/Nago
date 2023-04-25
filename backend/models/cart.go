@@ -79,3 +79,7 @@ func (c *Cart) Delete() error {
 	db := database.GetDB()
 	return db.Delete(c).Error
 }
+
+func (c *Cart) DeleteCartDataInTx(tx *gorm.DB, userId uint) error {
+	return tx.Model(c).Where("user_id = ?", userId).Delete(c).Error
+}

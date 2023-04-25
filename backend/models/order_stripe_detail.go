@@ -20,6 +20,6 @@ func (OrderStripeDetail) TableName() string {
 	return "order_stripe_detail"
 }
 
-func (osd *OrderStripeDetail) Create(tx *gorm.DB) error {
+func (osd *OrderStripeDetail) CreateInTx(tx *gorm.DB) error {
 	return tx.Create(osd).Error
 }
