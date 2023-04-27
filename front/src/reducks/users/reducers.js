@@ -27,6 +27,11 @@ export const UsersReducer = (state = initialState.users, action) => {
         ...state,
         cartList: Array.isArray(action.payload) ? [...action.payload] : [],
       };
+    case Actions.RESET_CART:
+      return {
+        ...state,
+        cartList: [],
+      };
     case Actions.FETCH_ORDERS_HISTORY:
       return {
         ...state,

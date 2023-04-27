@@ -134,13 +134,12 @@ func (oc *OrderController) Check(c echo.Context) error {
 			return err
 		}
 		return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
-			"message": "お支払いが完了しました",
+			"message": "お支払いが正常に完了しました",
 		}))
 	})
 	if err != nil {
 		c.Logger().Error(err)
-		// TODO: Stripe 側のキャンセル
-		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
+		return c.JSON(http.StatusOK, serverErrorResponse([]string{"決済に失敗しました。管理者に問い合わせてください"}))
 	}
 	return nil
 }

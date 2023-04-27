@@ -11,6 +11,7 @@ import (
 
 type StripeHandler struct{}
 
+// Stripe Checkout セッションを開始する
 func (*StripeHandler) CreateSession(orderId uint, price uint) (*stripe.CheckoutSession, error) {
 	conf := config.GetConfig()
 	stripe.Key = conf.GetString("stripe.testKey")
@@ -37,6 +38,7 @@ func (*StripeHandler) CreateSession(orderId uint, price uint) (*stripe.CheckoutS
 	return session.New(params)
 }
 
+// Stripe Checkout データを取得する
 func (*StripeHandler) CheckSessionResult(sessionId string) (*stripe.CheckoutSession, error) {
 	conf := config.GetConfig()
 	stripe.Key = conf.GetString("stripe.testKey")
