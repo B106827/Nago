@@ -77,6 +77,8 @@ func InitRouter(e *echo.Echo) {
 	apiO.POST("/create", orderController.Create)
 	// 決済結果確認処理
 	apiO.POST("/check", orderController.Check)
+	// 決済キャンセル処理
+	apiO.POST("/cancel", orderController.Cancel)
 
 	/*
 	  /api/master

@@ -21,7 +21,7 @@ type Order struct {
 const (
 	ORDER_STATUS_PENDING  = 0
 	ORDER_STATUS_COMPLETE = 1
-	ORDER_STATUS_FAILED   = 2
+	ORDER_STATUS_CANCEL   = 2
 )
 
 func (Order) TableName() string {
@@ -48,4 +48,9 @@ func (o *Order) CreateInTx(tx *gorm.DB) error {
 
 func (o *Order) UpdateStatusCompleteInTx(tx *gorm.DB) error {
 	return tx.Model(o).Update("status", ORDER_STATUS_COMPLETE).Error
+}
+
+func (o *Order) UpdateStatusCancel() error {
+	db := database.GetDB()
+	return db.Model(o).Update("status", ORDER_STATUS_CANCEL).Error
 }

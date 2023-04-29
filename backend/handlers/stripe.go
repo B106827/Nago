@@ -16,7 +16,7 @@ func (*StripeHandler) CreateSession(orderId uint, price uint) (*stripe.CheckoutS
 	conf := config.GetConfig()
 	stripe.Key = conf.GetString("stripe.testKey")
 	orderSuccessURL := fmt.Sprintf(conf.GetString("url.front")+constants.ORDER_SUCCESS_PATH+"?session_id={CHECKOUT_SESSION_ID}&order_id=%d", orderId)
-	orderCancelURL := conf.GetString("url.front") + constants.ORDER_CANCEL_PATH
+	orderCancelURL  := fmt.Sprintf(conf.GetString("url.front")+constants.ORDER_CANCEL_PATH+"?order_id=%d", orderId)
 
 	params := &stripe.CheckoutSessionParams{
 		Mode: stripe.String(string(stripe.CheckoutSessionModePayment)),

@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"time"
 
+	orderCancelForms "NagoBackend/forms/order"
 	orderCheckForms "NagoBackend/forms/order"
 	orderDeliveryInfoForms "NagoBackend/forms/order"
 
@@ -138,8 +139,35 @@ func (oc *OrderController) Check(c echo.Context) error {
 		}))
 	})
 	if err != nil {
+		// NOTE: 本来はここで決済キャンセルのAPIキックしたいがCheckoout Sessionはcomplete状態だとなさそう
 		c.Logger().Error(err)
 		return c.JSON(http.StatusOK, serverErrorResponse([]string{"決済に失敗しました。管理者に問い合わせてください"}))
 	}
 	return nil
+}
+
+func (oc *OrderController) Cancel(c echo.Context) error {
+	orderCancelForm := new(orderCancelForms.OrderCancelForm)
+	cc := c.(*contexts.CustomContext)
+	if err := cc.BindValidate(orderCancelForm); err != nil {
+		return c.JSON(http.StatusOK, customValidErrResponse(err))
+	}
+
+	user       := c.Get("user").(*models.User)
+	om         := models.Order{}
+	order, err := om.FindById(orderCancelForm.OrderId)
+	if err != nil || order == nil {
+		return c.JSON(http.StatusOK, serverErrorResponse([]string{"決済記録が見つかりません"}))
+	}
+	if order.Status != models.ORDER_STATUS_PENDING || order.UserID != user.ID {
+		return c.JSON(http.StatusOK, serverErrorResponse([]string{"決済情報が不正です"}))
+	}
+
+	if err := order.UpdateStatusCancel(); err != nil {
+		c.Logger().Error(err)
+		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
+	}
+	return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
+		"message": "決済をキャンセルしました",
+	}))
 }

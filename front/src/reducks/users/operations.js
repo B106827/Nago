@@ -349,3 +349,29 @@ export const checkCheckoutResult = (sessionId, orderId) => {
       });
   };
 };
+
+// 決済のキャンセル処理
+export const cancelCheckout = (orderId) => {
+  return async (dispatch) => {
+    const params = {
+      orderId: Number(orderId),
+    };
+    fetchWrapper(
+      {
+        type: 'POST',
+        url: '/order/cancel',
+        params: params,
+      },
+      dispatch
+    )
+      .then((json) => {
+        if (!json) return;
+        if (json.status === 200) {
+          dispatch(showMessageAction('success', json.result.message));
+          dispatch(push('/'));
+        } else {
+          dispatch(showMessageAction('error', json.messages));
+        }
+      });
+  };
+};

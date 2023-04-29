@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { push } from 'connected-react-router';
-import { checkCheckoutResult } from '../reducks/users/operations';
-import { showMessageAction } from '../reducks/messages/actions';
 import { useDispatch } from 'react-redux';
+import { showMessageAction } from '../reducks/messages/actions';
+import { checkCheckoutResult } from '../reducks/users/operations';
 import { useLocation } from 'react-router-dom';
+import { push } from 'connected-react-router';
 
 const OrderSuccessCallback = () => {
   const dispatch = useDispatch();

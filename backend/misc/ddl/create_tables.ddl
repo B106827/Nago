@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `order` (
   id          INT UNSIGNED NOT NULL AUTO_INCREMENT                                     COMMENT 'ID',
   user_id     INT UNSIGNED NOT NULL                                                    COMMENT 'ユーザーID',
   total_price INT UNSIGNED NOT NULL                                                    COMMENT '注文金額',
-  status      INT UNSIGNED NOT NULL DEFAULT 0                                          COMMENT 'ステータス（0:未決済、1:決済済み, 2:決済失敗)',
+  status      INT UNSIGNED NOT NULL DEFAULT 0                                          COMMENT 'ステータス（0:未決済、1:決済済み, 2:決済キャンセル)',
   ordered_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP                              COMMENT '注文日時',
   created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP                             COMMENT '作成日時',
   updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
