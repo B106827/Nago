@@ -51,6 +51,13 @@ export const updateCartAction = (updatedCartList) => {
   };
 };
 
+export const RESET_CART = 'RESET_CART';
+export const resetCartAction = () => {
+  return {
+    type: RESET_CART,
+  };
+};
+
 export const FETCH_ORDERS_HISTORY = 'FETCH_ORDERS_HISTORY';
 export const fetchOrdersHistoryAction = (history) => {
   return {

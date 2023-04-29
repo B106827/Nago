@@ -16,7 +16,7 @@ import (
 type RegisterEmailController struct{}
 
 // メールアドレス仮登録処理
-func (rec *RegisterEmailController) RegisterEmail(c echo.Context) error {
+func (rec *RegisterEmailController) Create(c echo.Context) error {
 	registerEmailForm := new(registerEmailForms.RegisterEmailForm)
 	cc := c.(*contexts.CustomContext)
 	if err := cc.BindValidate(registerEmailForm); err != nil {
@@ -45,7 +45,7 @@ func (rec *RegisterEmailController) RegisterEmail(c echo.Context) error {
 	// 本登録用URLメール送信
 	mailHandler := handlers.Mail{}
 	conf := config.GetConfig()
-	url := conf.GetString("url.front")
+	url := conf.GetString("domain.front")
 	path := "/register/" + utm.ID
 	vars := map[string]string{"Url": url + path}
 	files := []string{"views/mail/register_email.tpl", "views/mail/base.tpl"}

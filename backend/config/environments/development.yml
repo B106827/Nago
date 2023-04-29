@@ -15,6 +15,10 @@ mail:
   port: 1025
   insecureSkipVerify: true
 
-url:
+domain:
   front: "localhost:3001"
   server: "localhost:8081"
+
+url:
+  front: "http://localhost:3001"
+  server: "http://localhost:8081"

@@ -1,11 +1,13 @@
 import { push } from 'connected-react-router';
 import { fetchWrapper } from '../../utils/http';
 import { showMessageAction } from '../messages/actions';
+import { customValidErrAction } from '../utils/actions';
 import {
   loginAction,
   logoutAction,
   fetchUserTmpEmailAction,
   updateCartAction,
+  resetCartAction,
 } from './actions';
 
 export const resetPassword = (email) => {
@@ -285,6 +287,88 @@ export const deleteCart = (cartId) => {
         if (json.status === 200) {
           dispatch(updateCartAction(json.result.updatedCartList));
           dispatch(showMessageAction('success', json.result.message));
+        } else {
+          dispatch(showMessageAction('error', json.messages));
+        }
+      });
+  };
+};
+
+// 決済情報入力へ
+export const createOrder = (total, address) => {
+  const params = {
+    total,
+    ...address,
+  };
+  return (dispatch) => {
+    fetchWrapper(
+      {
+        type: 'POST',
+        url: '/order/create',
+        params: params,
+      },
+      dispatch
+    )
+      .then((json) => {
+        if (!json) return;
+        if (json.status === 200) {
+          location.href = json.result.orderSession.url;
+        } else {
+          dispatch(showMessageAction('error', json.messages));
+          if (json.isCustomValidErr) {
+            dispatch(customValidErrAction(json.result));
+          }
+        }
+      });
+  };
+};
+
+// 決済完了後の決済結果確認
+export const checkCheckoutResult = (sessionId, orderId) => {
+  return async (dispatch) => {
+    const params = {
+      sessionId,
+      orderId: Number(orderId),
+    };
+    fetchWrapper(
+      {
+        type: 'POST',
+        url: '/order/check',
+        params: params,
+      },
+      dispatch
+    )
+      .then((json) => {
+        if (!json) return;
+        if (json.status === 200) {
+          dispatch(resetCartAction());
+          dispatch(showMessageAction('success', json.result.message));
+        } else {
+          dispatch(showMessageAction('error', json.messages));
+        }
+      });
+  };
+};
+
+// 決済のキャンセル処理
+export const cancelCheckout = (orderId) => {
+  return async (dispatch) => {
+    const params = {
+      orderId: Number(orderId),
+    };
+    fetchWrapper(
+      {
+        type: 'POST',
+        url: '/order/cancel',
+        params: params,
+      },
+      dispatch
+    )
+      .then((json) => {
+        if (!json) return;
+        if (json.status === 200) {
+          dispatch(showMessageAction('success', json.result.message));
+          dispatch(push('/'));
         } else {
           dispatch(showMessageAction('error', json.messages));
         }

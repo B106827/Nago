@@ -9,9 +9,20 @@ type response struct {
 	Result interface{} `json:"result"`
 }
 
+type cveResponse struct {
+	Status   int         `json:"status"`
+	Result   interface{} `json:"result"`
+	IsCveErr bool        `json:"isCustomValidErr"`
+}
+
 // 200
 func successResponse(res interface{}) *response {
 	return &response{http.StatusOK, res}
+}
+
+// 400（カスタムバリデーションエラー）
+func customValidErrResponse(res interface{}) *cveResponse {
+	return &cveResponse{http.StatusBadRequest, res, true}
 }
 
 // 400

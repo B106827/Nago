@@ -15,7 +15,7 @@ import (
 type LoginController struct{}
 
 // ログイン処理
-func (lc *LoginController) Login(c echo.Context) error {
+func (lc *LoginController) Create(c echo.Context) error {
 	loginForm := new(loginForms.LoginForm)
 	cc := c.(*contexts.CustomContext)
 	if err := cc.BindValidate(loginForm); err != nil {

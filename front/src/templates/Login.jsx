@@ -15,7 +15,7 @@ const Login = () => {
     }
   });
 
-  const [email, setEmail] = useState(''),
+  const [email, setEmail]   = useState(''),
     [password, setPassword] = useState('');
 
   const inputEmail = useCallback(

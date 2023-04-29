@@ -5,6 +5,11 @@ const initialState = {
       width: window.innerWidth,
       height: window.innerHeight,
     },
+    prefMaster: [],
+    validation: {
+      error: false,
+      errorResult: null,
+    }
   },
   message: {
     state: false,

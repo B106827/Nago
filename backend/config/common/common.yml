@@ -3,3 +3,9 @@ jwt:
 
 mail:
   contentType: "text/plain"
+
+url:
+  stripeCheckout: "checkout.stripe.com"
+
+price:
+  taxRate: 0.1

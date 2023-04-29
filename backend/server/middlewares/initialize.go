@@ -18,7 +18,7 @@ func InitMiddleware(e *echo.Echo) {
 	e.Use(middleware.Recover())
 	// CORS
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{conf.GetString("url.front"), conf.GetString("url.server")},
+		AllowOrigins: []string{conf.GetString("domain.front"), conf.GetString("domain.server")},
 		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
 	}))
 	// CSRF

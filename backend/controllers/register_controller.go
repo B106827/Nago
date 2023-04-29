@@ -39,7 +39,7 @@ func (rc *RegisterController) UrlCheck(c echo.Context) error {
 }
 
 // 登録処理
-func (rc *RegisterController) Register(c echo.Context) error {
+func (rc *RegisterController) Create(c echo.Context) error {
 	registerForm := new(registerForms.RegisterForm)
 	cc := c.(*contexts.CustomContext)
 	if err := cc.BindValidate(registerForm); err != nil {

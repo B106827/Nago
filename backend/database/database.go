@@ -39,6 +39,23 @@ func GetDB() *gorm.DB {
 	return d
 }
 
+// トランザクション処理
+func ExecuteInTx(fn func(*gorm.DB) error) error {
+	db := GetDB()
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	err := fn(tx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit().Error
+}
+
 func Close() {
 	d.Close()
 }

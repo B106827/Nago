@@ -1,19 +1,33 @@
-import { useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMyCartList } from '../reducks/users/selectors';
 import { makeStyles } from '@material-ui/styles';
 import { CartListItem } from '../components/Products';
+import { RegisterAddress } from '../components/Orders';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import { PrimaryButton, TextDetail } from '../components/UIkit';
 import { push } from 'connected-react-router';
 import config from '../config/base';
-//import { orderProduct } from '../reducks/products/operations';
+import { getMyCartList } from '../reducks/users/selectors';
+import { createOrder } from '../reducks/users/operations';
+import { customValidErrResetAction } from '../reducks/utils/actions';
+import { showMessageAction } from '../reducks/messages/actions';
 
 const OrderConfirm = () => {
   const classes  = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
+  const [cartListOpen, setCartListOpen] = useState(false);
+
+  // カート
+  const cartListClick = () => {
+    setCartListOpen(!cartListOpen);
+  };
   const cartList = getMyCartList(selector);
   useEffect(() => {
     if (!cartList || cartList.length === 0) {
@@ -21,32 +35,68 @@ const OrderConfirm = () => {
     }
   })
 
+  // お届け先
+  const [address, setAddress] = useState({
+    name: '',
+    postcode: '',
+    prefId: 0,
+    primaryAddress: '',
+    secondaryAddress: '',
+    phoneNumber: '',
+  });
+
+  // 会計
   const subtotal = useMemo(() => {
     return cartList.reduce((sum, cart) => {
       return sum += (cart.product.price * cart.num);
     }, 0);
   }, [cartList]);
-
   const shippingFee = 0;
   const tax         = subtotal * config.taxRate;
   const total       = subtotal + shippingFee + tax;
-
-  const order = useCallback(() => {
-    //   dispatch(orderProduct(cartList, total));
-  }, [dispatch, cartList, total]);
+  const goToOrder = useCallback(() => {
+    if (
+      !address.name
+      || !address.postcode
+      || !address.prefId
+      || !address.primaryAddress
+      || !address.phoneNumber
+    ) {
+      dispatch(showMessageAction('error', 'お届け先に未入力項目があります'));
+      return;
+    }
+    dispatch(customValidErrResetAction());
+    dispatch(createOrder(total, address));
+  }, [dispatch, address, total]);
 
   return (
     <section className={classes.topSection}>
       <h2 className={classes.topSectionTitle}>注文の確認</h2>
-      <div className='p-grid__row'>
-        <div className={classes.detailBox}>
-          <List>
-            {cartList && cartList.length > 0 &&
-              cartList.map((cart) => (
-                <CartListItem key={cart.id} cart={cart} isConfirm={true} />
-              ))}
-          </List>
+      <div className={'p-grid__row' + ' ' + `${classes.topSectionWrapper}`}>
+
+        <div className={classes.cartBox}>
+
+          {/* カートの中身（アコーディオン) */}
+          <ListItem button onClick={cartListClick}>
+            <ListItemText primary="カートの中身を確認する" />
+            {cartListOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={cartListOpen} timeout='auto' unmountOnExit>
+            <List>
+              {cartList && cartList.length > 0 &&
+                cartList.map((cart) => (
+                  <CartListItem key={cart.id} cart={cart} isConfirm={true} />
+                ))}
+            </List>
+          </Collapse>
+          <div className='module-spacer--small' />
+
+          {/* 届け先 */}
+          <RegisterAddress address={address} setAddress={setAddress} />
+
         </div>
+
+        {/* 会計 */}
         <div className={classes.orderBox}>
           <TextDetail
             label={'商品合計'}
@@ -63,8 +113,9 @@ const OrderConfirm = () => {
             label={'合計(税込)'}
             value={'￥' + total.toLocaleString()}
           />
-          <PrimaryButton label={'注文する'} onClick={order} />
+          <PrimaryButton label={'支払い情報入力へ進む'} onClick={goToOrder} />
         </div>
+
       </div>
     </section>
   );
@@ -78,6 +129,11 @@ const useStyles = makeStyles((theme) => ({
       // PC
       padding: '60px 40px',
     },
+  },
+  topSectionWrapper: {
+    justifyContent: 'center',
+    maxWidth: theme.size.window.contentMaxWidth,
+    margin: '0 auto',
   },
   topSectionTitle: {
     textAlign: 'center',
@@ -96,13 +152,13 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '28px',
     },
   },
-  detailBox: {
+  cartBox: {
     margin: '0 auto',
     [theme.breakpoints.down('sm')]: {
       width: 320,
     },
     [theme.breakpoints.up('sm')]: {
-      width: 512,
+      width: 600,
     },
   },
   orderBox: {
@@ -110,9 +166,12 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 4,
     boxShadow: '0 4px 2px 2px rgba(0, 0, 0, 0.2)',
     height: 256,
-    margin: '24px auto 16px auto',
+    margin: '0 auto 16px auto',
     padding: 16,
-    width: 288,
+    width: 300,
+    [theme.breakpoints.down('sm')]: {
+      marginTop: 16,
+    },
   },
 }));
 

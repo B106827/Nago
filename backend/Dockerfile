@@ -1,4 +1,4 @@
-ARG BASE=golang:1.17-alpine
+ARG BASE=golang:1.18-alpine
 FROM ${BASE} as dev
 
 ARG ROOT=/go/src/app
@@ -16,6 +16,6 @@ RUN go mod tidy
 COPY . ./
 
 # ホットリロード
-RUN go get -u github.com/cosmtrek/air
+RUN go install github.com/cosmtrek/air@latest
 EXPOSE 8081
 CMD air -c .air.toml
