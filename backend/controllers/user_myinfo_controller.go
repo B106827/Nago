@@ -13,6 +13,6 @@ func (umc *UserMyinfoController) Index(c echo.Context) error {
 	user := c.Get("user")
 	pp.Print(user)
 	return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
-		"message": "success",
+		"message": "準備中です",
 	}))
 }

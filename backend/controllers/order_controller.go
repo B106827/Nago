@@ -50,6 +50,7 @@ func (oc *OrderController) Create(c echo.Context) error {
 		// 合計金額の確認
 		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
 	}
+	// TODO: 在庫確認
 
 	// トランザクション内で処理する
 	err = database.ExecuteInTx(func(tx *gorm.DB) error {
@@ -108,10 +109,10 @@ func (oc *OrderController) Check(c echo.Context) error {
 	om         := models.Order{}
 	order, err := om.FindById(orderCheckForm.OrderId)
 	if err != nil || order == nil {
-		return c.JSON(http.StatusOK, serverErrorResponse([]string{"決済記録が見つかりません"}))
+		return c.JSON(http.StatusOK, notFoundResponse([]string{"決済記録が見つかりません"}))
 	}
 	if order.Status != models.ORDER_STATUS_PENDING || order.UserID != user.ID || s.AmountTotal != int64(order.TotalPrice) {
-		return c.JSON(http.StatusOK, serverErrorResponse([]string{"決済情報が不正です"}))
+		return c.JSON(http.StatusOK, badRequestResponse([]string{"決済情報が不正です"}))
 	}
 
 	sJson, err := json.Marshal(s)
@@ -157,10 +158,10 @@ func (oc *OrderController) Cancel(c echo.Context) error {
 	om         := models.Order{}
 	order, err := om.FindById(orderCancelForm.OrderId)
 	if err != nil || order == nil {
-		return c.JSON(http.StatusOK, serverErrorResponse([]string{"決済記録が見つかりません"}))
+		return c.JSON(http.StatusOK, notFoundResponse([]string{"決済記録が見つかりません"}))
 	}
 	if order.Status != models.ORDER_STATUS_PENDING || order.UserID != user.ID {
-		return c.JSON(http.StatusOK, serverErrorResponse([]string{"決済情報が不正です"}))
+		return c.JSON(http.StatusOK, badRequestResponse([]string{"決済情報が不正です"}))
 	}
 
 	if err := order.UpdateStatusCancel(); err != nil {
@@ -169,5 +170,21 @@ func (oc *OrderController) Cancel(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
 		"message": "決済をキャンセルしました",
+	}))
+}
+
+func (oc *OrderController) GetOrderHistory(c echo.Context) error {
+	user                := c.Get("user").(*models.User)
+	om                  := models.Order{}
+	orderHistories, err := om.FindByUserIdWithDetail(user.ID)
+	if err != nil {
+		c.Logger().Error(err)
+		return c.JSON(http.StatusOK, serverErrorResponse([]string{"エラーが発生しました"}))
+	}
+	if orderHistories == nil {
+		return c.JSON(http.StatusOK, notFoundResponse([]string{"購入履歴が存在しません"}))
+	}
+	return c.JSON(http.StatusOK, successResponse(map[string]interface{}{
+		"orderHistories": orderHistories,
 	}))
 }

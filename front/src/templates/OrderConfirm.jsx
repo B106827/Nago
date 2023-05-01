@@ -51,6 +51,7 @@ const OrderConfirm = () => {
       return sum += (cart.product.price * cart.num);
     }, 0);
   }, [cartList]);
+  // NOTE: 送料は仮で0円
   const shippingFee = 0;
   const tax         = subtotal * config.taxRate;
   const total       = subtotal + shippingFee + tax;
@@ -75,7 +76,6 @@ const OrderConfirm = () => {
       <div className={'p-grid__row' + ' ' + `${classes.topSectionWrapper}`}>
 
         <div className={classes.cartBox}>
-
           {/* カートの中身（アコーディオン) */}
           <ListItem button onClick={cartListClick}>
             <ListItemText primary="カートの中身を確認する" />
@@ -93,7 +93,6 @@ const OrderConfirm = () => {
 
           {/* 届け先 */}
           <RegisterAddress address={address} setAddress={setAddress} />
-
         </div>
 
         {/* 会計 */}

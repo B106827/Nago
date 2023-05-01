@@ -21,11 +21,11 @@ const initialState = {
     product: null,
   },
   users: {
-    cartList: [],
     isLogedIn: false,
-    orders: [],
     id: '',
     name: '',
+    cartList: [],
+    orderHistoryList: [],
   },
 };
 

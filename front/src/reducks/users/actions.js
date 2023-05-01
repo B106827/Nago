@@ -58,10 +58,10 @@ export const resetCartAction = () => {
   };
 };
 
-export const FETCH_ORDERS_HISTORY = 'FETCH_ORDERS_HISTORY';
-export const fetchOrdersHistoryAction = (history) => {
+export const FETCH_ORDER_HISTORY = 'FETCH_ORDER_HISTORY';
+export const fetchOrderHistoryAction = (orderHistoryList) => {
   return {
-    type: FETCH_ORDERS_HISTORY,
-    payload: history,
+    type: FETCH_ORDER_HISTORY,
+    payload: orderHistoryList,
   };
 };
