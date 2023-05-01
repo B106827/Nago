@@ -21,7 +21,7 @@ const Config = {
     ],
     authenticated: [
       {
-        label: '注文履歴',
+        label: '購入履歴',
         icon: <HistoryIcon />,
         value: '/order/history',
       },

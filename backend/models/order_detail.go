@@ -7,13 +7,14 @@ import (
 )
 
 type OrderDetail struct {
-	ID         uint      `json:"-"  gorm:"column(id);primaryKey;autoIncrement;not null;type(uint);"`
-	OrderID    uint      `json:"-"  gorm:"column(order_id);not null;type(uint);"`
-	ProductID  uint      `json:"-"  gorm:"column(product_id);not null;type(uint);"`
-	Price      uint      `json:"-"  gorm:"column(price);not null;type(uint);"`
-	Num        uint      `json:"-"  gorm:"column(num);not null;type(uint);"`
+	ID         uint      `json:"id"       gorm:"column(id);primaryKey;autoIncrement;not null;type(uint);"`
+	OrderID    uint      `json:"-"        gorm:"column(order_id);not null;type(uint);"`
+	ProductID  uint      `json:"-"        gorm:"column(product_id);not null;type(uint);"`
+	Price      uint      `json:"price"    gorm:"column(price);not null;type(uint);"`
+	Num        uint      `json:"num"      gorm:"column(num);not null;type(uint);"`
 	CreatedAt  time.Time `json:"-"`
 	UpdatedAt  time.Time `json:"-"`
+	Product    Product   `json:"product"`
 }
 
 func (OrderDetail) TableName() string {

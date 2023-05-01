@@ -7,11 +7,6 @@ export const getIsLogedIn = createSelector(
   (state) => state.isLogedIn
 );
 
-export const getOrdersHistory = createSelector(
-  [usersSelector],
-  (state) => state.orders
-);
-
 export const getMyCartList = createSelector(
   [usersSelector],
   (state) => state.cartList
@@ -28,3 +23,9 @@ export const getUserTmpEmail = createSelector(
   [usersSelector],
   (state) => state.tmpEmail
 );
+
+export const getOrderHistoryList = createSelector(
+  [usersSelector],
+  (state) => state.orderHistoryList
+);
+

@@ -8,6 +8,7 @@ import {
   fetchUserTmpEmailAction,
   updateCartAction,
   resetCartAction,
+  fetchOrderHistoryAction,
 } from './actions';
 
 export const resetPassword = (email) => {
@@ -369,6 +370,32 @@ export const cancelCheckout = (orderId) => {
         if (json.status === 200) {
           dispatch(showMessageAction('success', json.result.message));
           dispatch(push('/'));
+        } else {
+          dispatch(showMessageAction('error', json.messages));
+        }
+      });
+  };
+};
+
+// 購入履歴
+export const fetchOrderHistory = () => {
+  return async (dispatch) => {
+    fetchWrapper(
+      {
+        type: 'GET',
+        url: '/order/history',
+      },
+      dispatch
+    )
+      .then((json) => {
+        if (!json) return;
+        if (json.status === 200) {
+          const orderHistoryList = json.result.orderHistories;
+          if (Array.isArray(orderHistoryList) && orderHistoryList.length > 0) {
+            dispatch(
+              fetchOrderHistoryAction(orderHistoryList)
+            );
+          }
         } else {
           dispatch(showMessageAction('error', json.messages));
         }
