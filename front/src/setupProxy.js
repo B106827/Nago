@@ -5,7 +5,7 @@ if (process.env.REACT_APP_ENV === 'development') {
     app.use(
       '/api',
       createProxyMiddleware({
-        target: 'http://localhost:80',
+        target: 'http://nago-nginx:80',
         changeOrigin: true,
       })
     );
