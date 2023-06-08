@@ -1,5 +1,25 @@
 version: '3.8'
 services:
+  nginx:
+    container_name: nago-nginx
+    build:
+      context: .
+      dockerfile: ./etc/nginx/Dockerfile
+    volumes:
+      - ./etc/nginx/conf/nago.conf:/etc/nginx/templates/default.conf.template
+    ports:
+      - 80:80
+    environment:
+      - TZ=Asia/Tokyo
+      - NGINX_PORT=80
+    depends_on:
+      - api
+      - front
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "3m"
+        max-file: "5"
   api:
     container_name: nago-backend
     build:
@@ -31,6 +51,11 @@ services:
       - front-node-modules:/usr/src/app/node_modules
     ports:
       - 3001:3001
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "3m"
+        max-file: "5"
   mysql:
     container_name: nago-mysql
     image: mysql:8.0.27

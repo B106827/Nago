@@ -17,4 +17,6 @@
 | service     | link                  |
 |:------------|:----------------------|
 | front       | http://localhost:3001 |
-| api         | http://localhost:8081 |
+| nginx+api   | http://localhost:80   |
+| mysql       | http://localhost:3036 |
+| maildev     | http://localhost:1080 |
