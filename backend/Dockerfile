@@ -1,5 +1,5 @@
 ARG BASE=golang:1.18-alpine
-FROM ${BASE} as dev
+FROM ${BASE}
 
 ARG ROOT=/go/src/app
 WORKDIR ${ROOT}
