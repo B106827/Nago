@@ -1,3 +1,4 @@
 /backend/tmp
 node_modules
 /backend/config/common/private.yml
+/front/build
