@@ -19,7 +19,7 @@ services:
     container_name: nago-backend
     build:
       context: ./backend
-      dockerfile: ./Dockerfile
+      dockerfile: ./docker/dev/Dockerfile
     restart: always
     tty: true
     volumes:

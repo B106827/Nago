@@ -2,6 +2,8 @@ ARG BASE=nginx:latest
 FROM ${BASE}
 
 ENV NGINX_PORT=80
+# ECSの同一タスク定義内のコンテナ間はlocalhostで通信可能である
+ENV NGINX_PROXY_API=localhost
 ENV TZ=Asia/Tokyo
 
 RUN echo "${TZ}" > /etc/timezone \
