@@ -26,7 +26,7 @@ func InitMiddleware(e *echo.Echo) {
 		ContextKey:     constants.CSRF_CONTEXT_KEY_NAME,
 		CookieName:     constants.CSRF_COOKIE_KEY_NAME,
 		CookieMaxAge:   constants.TIME_SECONDS_A_DAY,
-		CookieSecure:   true,
+		CookieSecure:   false, // TODO: https化したら戻す
 		CookieHTTPOnly: true,
 		TokenLookup:    "cookie:" + constants.CSRF_COOKIE_KEY_NAME,
 	}))

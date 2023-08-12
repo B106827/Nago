@@ -36,7 +36,7 @@ func (*Auth) Login(c echo.Context, userid uint) error {
 	cookie := &http.Cookie{
 		Expires:  time.Now().Add(time.Hour * time.Duration(conf.GetInt("jwt.expireHour"))),
 		HttpOnly: true,
-		Secure:   true,
+		Secure:   false, // TODO: https化したら戻す
 		Name:     constants.SESSION_COOKIE_KEY_NAME,
 		Value:    t,
 	}

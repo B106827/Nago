@@ -344,6 +344,7 @@ export const checkCheckoutResult = (sessionId, orderId) => {
         if (json.status === 200) {
           dispatch(resetCartAction());
           dispatch(showMessageAction('success', json.result.message));
+          dispatch(push('/'));
         } else {
           dispatch(showMessageAction('error', json.messages));
         }
