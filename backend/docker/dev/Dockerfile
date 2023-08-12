@@ -1,8 +1,6 @@
-ARG BASE=golang:1.18-alpine
-FROM ${BASE} as dev
+FROM golang:1.18-alpine
 
-ARG ROOT=/go/src/app
-WORKDIR ${ROOT}
+WORKDIR /go/src/app
 
 RUN apk update \
     && apk add git \
@@ -15,7 +13,8 @@ RUN go mod download
 RUN go mod tidy
 COPY . ./
 
+EXPOSE 8081
+
 # ホットリロード
 RUN go install github.com/cosmtrek/air@latest
-EXPOSE 8081
 CMD air -c .air.toml

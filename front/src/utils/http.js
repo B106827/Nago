@@ -75,7 +75,7 @@ export const fetchWrapper = (args, dispatch) => {
   };
 
   const handleStatus400 = (res) => {
-    console.log(localStorage.getItem('persist:development:root'));
+    console.log('400:bad request', res);
     // TODO: API側でmissing or malformed jwtの場合のレスポンスをリファクタリングし、resをthenで繋げなくても判別するようにする
     res.json().then(data => {
       if (data.message && data.message === 'missing or malformed jwt') {
@@ -85,7 +85,7 @@ export const fetchWrapper = (args, dispatch) => {
         throw new Error('不正なリクエストです');
       }
     }).catch((e) => {
-      throw new Error(e.message);
+      dispatch(showMessageAction('error', e.message));
     });
   };
 

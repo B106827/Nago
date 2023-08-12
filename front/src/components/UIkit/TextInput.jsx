@@ -30,13 +30,13 @@ const TextInput = (props) => {
 const useStyles = makeStyles({
   root: {
     '& .MuiInputLabel-root': {
-      fontSize: '1.3rem'
+      fontSize: '1.5rem',
     },
     '& .MuiInput-input': {
-      paddingTop: 10
+      paddingTop: 10,
     },
     '& .MuiFormHelperText-root': {
-      fontSize: '0.9rem'
+      fontSize: '1.0rem',
     },
   },
 });

@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 // 画像を変更した場合フラッシュメッセージの表示位置を変更する
-//import logo from '../../assets/img/icons/logo.svg';
+import logo from '../../assets/img/icons/logo.svg';
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import { HeaderMenus, ClosableDrawer } from './index';
@@ -32,7 +32,7 @@ const Header = () => {
       <AppBar position='fixed' className={classes.menuBar}>
         <Toolbar className={classes.toolBar}>
           <img
-            //src={logo}
+            src={logo}
             onClick={() => dispatch(push('/'))}
             className={'cursor-pointer' + ' ' + `${classes.logo}`}
           />
