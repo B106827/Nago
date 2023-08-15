@@ -12,11 +12,11 @@ phases:
       - COMMIT_HASH=$(echo ${CODEBUILD_RESOLVED_SOURCE_VERSION})
       - IMAGE_TAG=${COOMIT_HASH:=latest}
       - CONTAINER_NAME=nago-app-container
-      - cd front && yarn install
+      - (cd front && yarn install)
   build:
     commands:
       - echo Build started on `date`
-      - cd front && yarn build
+      - (cd front && yarn build)
       - docker build -f etc/nginx/Dockerfile -t ${REPOSITORY_URI}:latest .
       - docker tag ${REPOSITORY_URI}:latest ${REPOSITORY_URI}:${IMAGE_TAG}
   post_build:
