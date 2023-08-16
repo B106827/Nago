@@ -1,0 +1,5 @@
+jwt:
+  secret: "qFsMnunj87WPesc31OWoPmWbBVSjqv9u"
+
+stripe:
+  testKey: "sk_test_uSulkkzFxWPELicylSa7jMb6"
