@@ -1,17 +1,21 @@
 version: 0.2
 
+env:
+  variables:
+    AWS_ACCOUNT_ID: 167907275771
+    REPOSITORY_NAME: nago_app
+    REPOSITORY_URI: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${REPOSITORY_NAME}
+    CONTAINER_NAME: nago-app-container
+    DOCKER_BUILDKIT: 1
+
 phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      - AWS_ACCOUNT_ID=167907275771
       - aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
-      - REPOSITORY_NAME=nago_app
-      - REPOSITORY_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${REPOSITORY_NAME}
       - COMMIT_HASH=$(echo ${CODEBUILD_RESOLVED_SOURCE_VERSION})
       - IMAGE_TAG=${COOMIT_HASH:=latest}
-      - CONTAINER_NAME=nago-app-container
       - (cd front && yarn install)
   build:
     commands:
