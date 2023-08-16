@@ -21,7 +21,6 @@ func Init() {
 		c.GetString("db.dbname"),
 	)
 	d, err = gorm.Open(c.GetString("db.provider"), connString)
-	fmt.Println("test loggggggggggg")
 	if err != nil {
 		fmt.Println("db connection error")
 		panic(err)
