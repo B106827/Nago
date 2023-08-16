@@ -27,7 +27,7 @@ phases:
       - docker build -f etc/nginx/Dockerfile -t ${REPOSITORY_APP_URI}:latest .
       - docker tag ${REPOSITORY_APP_URI}:latest ${REPOSITORY_APP_URI}:${IMAGE_TAG}
       - echo Build nago_api started on `date`
-      - docker build -f backend/docker/prod/Dockerfile -t ${REPOSITORY_API_URI}:latest .
+      - docker build -f backend/docker/prod/Dockerfile -t ${REPOSITORY_API_URI}:latest ./backend
       - docker tag ${REPOSITORY_API_URI}:latest ${REPOSITORY_API_URI}:${IMAGE_TAG}
   post_build:
     commands:
