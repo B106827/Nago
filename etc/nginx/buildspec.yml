@@ -36,10 +36,8 @@ phases:
       - docker push ${REPOSITORY_APP_URI}:${IMAGE_TAG}
       - docker push ${REPOSITORY_API_URI}:latest
       - docker push ${REPOSITORY_API_URI}:${IMAGE_TAG}
-      - printf '[{"name":"%s", "imageUri":"%s"}]' "${CONTAINER_APP_NAME}" "${REPOSITORY_APP_URI}:${IMAGE_TAG}" > imagedefinitions_app.json
-      - printf '[{"name":"%s", "imageUri":"%s"}]' "${CONTAINER_API_NAME}" "${REPOSITORY_API_URI}:${IMAGE_TAG}" > imagedefinitions_api.json
+      - printf '[{"name":"%s", "imageUri":"%s"},{"name":"%s","imageUri":"%s"}]' "${CONTAINER_APP_NAME}" "${REPOSITORY_APP_URI}:${IMAGE_TAG}" "${CONTAINER_API_NAME}" "${REPOSITORY_API_URI}:${IMAGE_TAG}" > imagedefinitions.json
 
 artifacts:
   files:
-    - imagedefinitions_app.json
-    - imagedefinitions_api.json
+    - imagedefinitions.json
