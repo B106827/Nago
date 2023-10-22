@@ -1,9 +1,9 @@
 db:
   provider: "mysql"
-  host: "nago.ckylqwra3xqd.ap-northeast-1.rds.amazonaws.com"
+  host: "nago-prd-rds.ckylqwra3xqd.ap-northeast-1.rds.amazonaws.com"
   port: 3306
-  user: "root"
-  password: "bongo2204"
+  user: "www"
+  password: "NFc58T&4!EFk1"
   dbname: "nago"
 
 server:
