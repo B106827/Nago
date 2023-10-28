@@ -4,7 +4,7 @@ services:
     container_name: nago-nginx
     build:
       context: .
-      dockerfile: ./etc/nginx/Dockerfile
+      dockerfile: ./etc/nginx/docker/dev/Dockerfile
     ports:
       - 80:80
     depends_on:
@@ -16,7 +16,7 @@ services:
         max-size: "3m"
         max-file: "5"
   api:
-    container_name: nago-backend
+    container_name: nago-api
     build:
       context: ./backend
       dockerfile: ./docker/dev/Dockerfile
