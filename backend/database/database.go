@@ -5,11 +5,13 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/gorm"
+	"github.com/labstack/echo/v4"
 )
 
 var d *gorm.DB
 
 func Init() {
+	e := echo.New()
 	c := config.GetConfig()
 	var err error
 	connString := fmt.Sprintf(
@@ -23,13 +25,13 @@ func Init() {
 	d, err = gorm.Open(c.GetString("db.provider"), connString)
 	if err != nil {
 		fmt.Println("db connection error")
-		panic(err)
+		e.Logger.Fatal(err)
 	}
 	// 応答確認
 	err = d.DB().Ping()
 	if err != nil {
 		fmt.Println("db no response")
-		panic(err)
+		e.Logger.Fatal(err)
 	}
 	// SQLログ出力
 	d.LogMode(true)

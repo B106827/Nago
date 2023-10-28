@@ -1,13 +1,14 @@
 package main
 
 import (
-    "flag"
-    "fmt"
+	"flag"
+	"fmt"
 
-    _ "github.com/jinzhu/gorm/dialects/mysql"
-    "NagoBackend/config"
-    "NagoBackend/database"
-    "NagoBackend/server"
+	"NagoBackend/config"
+	"NagoBackend/database"
+	"NagoBackend/server"
+
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 func main() {
