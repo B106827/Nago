@@ -33,7 +33,7 @@
   },
   "scripts": {
     "start": "PORT=3001 react-scripts start",
-    "build": "NODE_OPTIONS='--openssl-legacy-provider' react-scripts build",
+    "build": "react-scripts build",
     "lint": "run-p lint:*",
     "lint:prettier": "prettier --check .",
     "lint:eslint": "eslint --ext .js,.jsx src",
