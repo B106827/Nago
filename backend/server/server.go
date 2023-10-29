@@ -1,12 +1,13 @@
 package server
 
 import (
-	"fmt"
-	"github.com/labstack/echo/v4"
 	"NagoBackend/config"
-	"NagoBackend/server/routes"
-	"NagoBackend/server/middlewares"
 	"NagoBackend/server/contexts"
+	"NagoBackend/server/middlewares"
+	"NagoBackend/server/routes"
+	"fmt"
+
+	"github.com/labstack/echo/v4"
 )
 
 func Init() error {
@@ -20,6 +21,6 @@ func Init() error {
 
 	c := config.GetConfig()
 	// server start
-	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", c.GetInt("server.port"))))
+	e.Logger.Error(e.Start(fmt.Sprintf(":%d", c.GetInt("server.port"))))
 	return nil
 }
