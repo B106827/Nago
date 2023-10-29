@@ -25,13 +25,13 @@ func Init() {
 	d, err = gorm.Open(c.GetString("db.provider"), connString)
 	if err != nil {
 		fmt.Println("db connection error")
-		e.Logger.Fatal(err)
+		e.Logger.Error(err)
 	}
 	// 応答確認
 	err = d.DB().Ping()
 	if err != nil {
 		fmt.Println("db no response")
-		e.Logger.Fatal(err)
+		e.Logger.Error(err)
 	}
 	// SQLログ出力
 	d.LogMode(true)
