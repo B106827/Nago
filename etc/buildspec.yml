@@ -2,12 +2,10 @@ version: 0.2
 
 env:
   variables:
-    AWS_ACCOUNT_ID: 167907275771
-    REPOSITORY_APP_NAME: nago_app
+    REPOSITORY_APP_NAME: nginx
     CONTAINER_APP_NAME: nago-app-container
-    REPOSITORY_API_NAME: nago_api
+    REPOSITORY_API_NAME: api
     CONTAINER_API_NAME: nago-api-container
-    DOCKER_BUILDKIT: 1
 
 phases:
   pre_build:
@@ -17,26 +15,20 @@ phases:
       - aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
       - REPOSITORY_APP_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${REPOSITORY_APP_NAME}
       - REPOSITORY_API_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${REPOSITORY_API_NAME}
-      - COMMIT_HASH=$(echo ${CODEBUILD_RESOLVED_SOURCE_VERSION})
-      - IMAGE_TAG=${COOMIT_HASH:=latest}
       - (cd front && yarn install)
   build:
     commands:
       - echo Build nago_app started on `date`
       - (cd front && yarn build)
-      - docker build -f etc/nginx/docker/prod/Dockerfile -t ${REPOSITORY_APP_URI}:latest .
-      - docker tag ${REPOSITORY_APP_URI}:latest ${REPOSITORY_APP_URI}:${IMAGE_TAG}
+      - docker build -f etc/nginx/docker/prod/Dockerfile -t ${REPOSITORY_APP_URI} .
       - echo Build nago_api started on `date`
-      - docker build -f backend/docker/prod/Dockerfile -t ${REPOSITORY_API_URI}:latest ./backend
-      - docker tag ${REPOSITORY_API_URI}:latest ${REPOSITORY_API_URI}:${IMAGE_TAG}
+      - docker build -f backend/docker/prod/Dockerfile -t ${REPOSITORY_API_URI} ./backend
   post_build:
     commands:
       - echo Build complete on `date`
       - docker push ${REPOSITORY_APP_URI}:latest
-      - docker push ${REPOSITORY_APP_URI}:${IMAGE_TAG}
       - docker push ${REPOSITORY_API_URI}:latest
-      - docker push ${REPOSITORY_API_URI}:${IMAGE_TAG}
-      - printf '[{"name":"%s", "imageUri":"%s"},{"name":"%s","imageUri":"%s"}]' "${CONTAINER_APP_NAME}" "${REPOSITORY_APP_URI}:${IMAGE_TAG}" "${CONTAINER_API_NAME}" "${REPOSITORY_API_URI}:${IMAGE_TAG}" > imagedefinitions.json
+      - printf '[{"name":"%s", "imageUri":"%s"},{"name":"%s","imageUri":"%s"}]' "${CONTAINER_APP_NAME}" "${REPOSITORY_APP_URI}:latest" "${CONTAINER_API_NAME}" "${REPOSITORY_API_URI}:latest" > imagedefinitions.json
 
 artifacts:
   files:
