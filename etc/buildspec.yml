@@ -20,9 +20,9 @@ phases:
     commands:
       - echo Build nago_app started on `date`
       - (cd front && yarn build)
-      - docker build -f etc/nginx/docker/prod/Dockerfile -t ${REPOSITORY_APP_URI} .
+      - docker build -f ./etc/nginx/docker/prod/Dockerfile -t ${REPOSITORY_APP_URI} .
       - echo Build nago_api started on `date`
-      - docker build -f backend/docker/prod/Dockerfile -t ${REPOSITORY_API_URI} ./backend
+      - docker build -f ./backend/docker/prod/Dockerfile -t ${REPOSITORY_API_URI} ./backend
   post_build:
     commands:
       - echo Build complete on `date`
