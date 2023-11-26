@@ -15,7 +15,6 @@ phases:
       - aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
       - REPOSITORY_APP_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${REPOSITORY_APP_NAME}
       - REPOSITORY_API_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${REPOSITORY_API_NAME}
-      - (cd front && yarn install)
   build:
     commands:
       - echo Build nago_app started on `date`
