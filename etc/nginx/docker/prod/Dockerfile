@@ -17,4 +17,4 @@ COPY etc/nginx/conf/common/ltsv.conf /etc/nginx/conf.d/00_ltsv.conf
 RUN sed -i 's/keepalive_timeout/#keepalive_timeout/' /etc/nginx/nginx.conf
 RUN sed -i 's/access_log/#access_log/' /etc/nginx/nginx.conf
 # （本番用）フロント側コードを展開
-COPY ../front/build/ /var/www/html/public/
+COPY ./front/build/ /var/www/html/public/
