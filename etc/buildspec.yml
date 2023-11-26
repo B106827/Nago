@@ -6,6 +6,7 @@ env:
     CONTAINER_APP_NAME: nago-app-container
     REPOSITORY_API_NAME: nago-prd/api
     CONTAINER_API_NAME: nago-api-container
+    DOCKER_HUB_LOGIN_USER: b106827
 
 phases:
   pre_build:
@@ -13,6 +14,7 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+      - echo ${DOCKER_HUB_MY_ACCESS_TOKEN} | docker login -u ${DOCKER_HUB_LOGIN_USER} --password-stdin
       - REPOSITORY_APP_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${REPOSITORY_APP_NAME}
       - REPOSITORY_API_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${REPOSITORY_API_NAME}
       - (cd front && yarn install)
