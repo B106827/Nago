@@ -2,9 +2,9 @@ version: 0.2
 
 env:
   variables:
-    REPOSITORY_APP_NAME: nginx
+    REPOSITORY_APP_NAME: nago-prd/nginx
     CONTAINER_APP_NAME: nago-app-container
-    REPOSITORY_API_NAME: api
+    REPOSITORY_API_NAME: nago-prd/api
     CONTAINER_API_NAME: nago-api-container
 
 phases:
