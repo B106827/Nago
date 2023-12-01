@@ -7,6 +7,7 @@ env:
     REPOSITORY_API_NAME: nago-prd/api
     CONTAINER_API_NAME: nago-api-container
     DOCKER_HUB_LOGIN_USER: b106827
+    DOCKER_BUILDKIT: "1"
 
 phases:
   pre_build:
