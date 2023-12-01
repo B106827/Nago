@@ -8,7 +8,7 @@ env:
     DOCKER_BUILDKIT: "1"
 
 phases:
-  instatll:
+  install:
     runtime-versions:
       docker: ${RUNTIME_DOCKER_VERSION}
     commands:
