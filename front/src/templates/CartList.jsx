@@ -31,7 +31,7 @@ const CartList = () => {
               <CartListItem key={cart.id} cart={cart} />
             ))
           ) : (
-            <p className={classes.topSectionEmptyCartMsg}>カートは空です</p>
+            <p className={classes.topSectionEmptyCartMsg}>（カートは空です）</p>
           )}
         </List>
         <div className='module-spacer--medium' />
