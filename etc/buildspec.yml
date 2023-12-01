@@ -4,13 +4,10 @@ env:
   variables:
     BUILD_LOG_APP_NAME: nago-app-container
     BUILD_LOG_API_NAME: nago-api-container
-    RUNTIME_DOCKER_VERSION: 18
     DOCKER_BUILDKIT: "1"
 
 phases:
   install:
-    runtime-versions:
-      docker: ${RUNTIME_DOCKER_VERSION}
     commands:
       # ecs-deployのインストール
       - yum install -y jq which
