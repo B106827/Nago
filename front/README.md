@@ -13,15 +13,15 @@ npm run lint:eslint
 
 3. 最後にコード整形を行う
 
-3-1. どのコードにコード整形が行われるかを確認
-```
-npm run lint:prettier
-```
+    3-1. どのコードにコード整形が行われるかを確認
+    ```
+    npm run lint:prettier
+    ```
 
-3-2. 下記で Prettier によるコード整形
-```
-npm run fix:prettier
-```
+    3-2. 下記で Prettier によるコード整形
+    ```
+    npm run fix:prettier
+    ```
 
 ### 自動
 1. コード保存時に Prettier によるコード整形が行われる
