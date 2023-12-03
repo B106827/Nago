@@ -1,4 +1,4 @@
-# nago Client
+# Nago（フロント側）
 
 ## コード確認とコード整形
 
@@ -21,5 +21,5 @@ npm run fix:prettier
 ```
 
 ### 自動
-1. コード保存時(vim)に Prettier によるコード整形が行われる
+1. コード保存時に Prettier によるコード整形が行われる
 2. commit 時に ESLint によるコード確認が行われる
