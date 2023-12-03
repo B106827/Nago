@@ -6,7 +6,7 @@ Dockerを使用している
 ## 各種コマンド
 |                      |                                                              |
 |:---------------------|:-------------------------------------------------------------|
-| 起動                 | `$ docker-compose up` ( -d: daemon )                         |
+| 起動                 | `$ docker-compose up` `( -d: daemon )`                       |
 | 停止                 | `$ docker-compsoe down`                                      |
 | 再起動               | `$ docker-compose restart api`                               |
 | 各コンテナにアクセス | `$ docker-compose exec api sh`                               |
@@ -22,8 +22,7 @@ Dockerを使用している
 | maildev     | http://localhost:1080 |
 
 ## 本番環境
-- URL
+- URL（※ 使用時以外はコンテナ停止しているため注意）
     - https://ec.bon-go.net
-	※ 使用時以外はコンテナ停止している
-- インフラ環境
+- インフラ環境管理リポジトリ
     - https://github.com/B106827/NagoTerraform
